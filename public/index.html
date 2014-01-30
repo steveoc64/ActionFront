@@ -1,0 +1,65 @@
+<html ng-app="unitEditor">
+<head>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body ng-controller="editCtrl">
+
+<ul class="nav nav-pills">
+  <li class="active"><a href="#/units">Unit Types</a></li>
+</ul>
+
+<ui-view>
+	<div class="jumbotron">
+		<h1>Unit Editor</h1>	
+		<!-- <i class="fa fa-spinner fa-spin"></i> -->
+	</div>
+</ui-view>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.0/angular-ui-router.min.js"></script>
+
+<input type="text" placeholder="Enter Message" ng-model="msg"><button class="btn btn-primary" ng-click="send()">Send</button>
+<script>
+var app = angular.module("unitEditor", ["ui.router"])
+ .config(function ($stateProvider, $urlRouterProvider) {
+ 	$stateProvider
+ 		.state('units', {
+ 			url: '/units',
+ 			templateUrl: 'units.html'
+ 		});
+ })
+ .controller("editCtrl", ["$scope", function($scope){
+ 	$scope.messages = [];
+ 	var conn = new WebSocket("ws://localhost:8080/socket");
+
+ 	conn.onclose = function(e) {
+ 		$scope.$apply(function(){
+ 			$scope.messages.push("Disconnected")
+ 		});
+ 	}
+
+ 	conn.onopen = function(e) {
+ 		$scope.$apply(function(){
+ 			$scope.messages.push("Connected")
+ 		});
+ 	}
+
+ 	conn.onmessage = function(e) {
+ 		$scope.$apply(function(){
+ 			$scope.messages.push(e.data)
+ 		});
+ 	}
+
+ 	$scope.send = function(){
+ 		conn.send($scope.msg);
+ 		$scope.msg = '';
+ 	}
+	
+}]);
+
+</script>
+</body>
+</html>
