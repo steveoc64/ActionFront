@@ -131,14 +131,6 @@ func wsHandler(w http.ResponseWriter, r *http.Request, unitTypes *db.Col) {
 		sendMsg(conn, msg)
 	}
 
-	// send the unitTypes to the new socket
-	if err := conn.WriteMessage(websocket.TextMessage, []byte("all unit types")); err != nil {
-		log.Println(err)
-		delete(connections, conn)
-		log.Println("Removed connection ", connections)
-		return
-	}
-
 	// loop forever
 	for {
 		_, msg, err := conn.ReadMessage()
