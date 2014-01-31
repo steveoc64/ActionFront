@@ -19,11 +19,39 @@ var (
 	port = flag.Int("port", 8080, "port to access the unitEditor")
 )
 
+type UnitType struct {
+	Name      string
+	Rating    string
+	Men       uint16
+	Size      string
+	Firepower int8
+	DrillBook string
+}
+
+func (ut UnitType) toJSON() []byte {
+	var retval, err = json.Marshal(ut)
+	if err != nil {
+		panic(err)
+	}
+	return retval
+}
+
+func toMap(thing interface{}) map[string]interface{} {
+	var jsonThing, err = json.Marshal(thing)
+	if err != nil {
+		panic(err)
+	}
+	var retval = map[string]interface{}{}
+	json.Unmarshal(jsonThing, &retval)
+	return retval
+}
+
 // init the DB, and return a ref to the UnitTypes collection
 func initUnitTypesDB() *db.Col {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	// Create and open database
+	os.RemoveAll("database")
 	dir := "database/types"
 	os.MkdirAll(dir, os.ModePerm)
 
@@ -35,13 +63,15 @@ func initUnitTypesDB() *db.Col {
 	if err := myDB.Create("UnitTypes", 1); err == nil {
 		// This is a fresh DB so insert some default unit types
 		ut := myDB.Use("UnitTypes")
-		ut.Insert(map[string]interface{}{"name": "French Ligne", "rating": "Veteran", "size": "2L 1E"})
-		ut.Insert(map[string]interface{}{"name": "French Legere", "rating": "Elite", "size": "3E"})
-		ut.Insert(map[string]interface{}{"name": "French Conscript", "rating": "Conscript", "size": "3L"})
-		ut.Insert(map[string]interface{}{"name": "Prussian Line", "rating": "CrackLine", "size": "4L"})
-		ut.Insert(map[string]interface{}{"name": "Prussian Fusilier", "rating": "CrackLine", "size": "1L 3E"})
-		ut.Insert(map[string]interface{}{"name": "Prussian Reserve", "rating": "Regular", "size": "4L"})
-		ut.Insert(map[string]interface{}{"name": "Prussian Landwehr", "rating": "Landwehr", "size": "4L"})
+
+		ut.Insert(toMap(UnitType{"French Ligne", "Veteran", 720, "2L 1E", 10, "French Veteran"}))
+		ut.Insert(toMap(UnitType{"French Legere", "Elite", 720, "3E", 12, "French Veteran"}))
+		ut.Insert(toMap(UnitType{"French Provisional", "Regular", 720, "3L", 10, "French Conscript"}))
+		ut.Insert(toMap(UnitType{"French Conscript", "Conscript", 720, "3L", 8, "French Conscript"}))
+		ut.Insert(toMap(UnitType{"Prussian Line", "CrackLine", 960, "4L 1S", 10, "Prussian"}))
+		ut.Insert(toMap(UnitType{"Prussian Fusilier", "CrackLine", 960, "2L 2E", 12, "Prussian"}))
+		ut.Insert(toMap(UnitType{"Prussian Reserve", "Regular", 960, "4L 1S", 8, "Prussian"}))
+		ut.Insert(toMap(UnitType{"Prussian Landwehr", "Landwehr", 960, "4L", 6, "Landwehr"}))
 	}
 	myDB.Scrub("UnitTypes")
 	return myDB.Use("UnitTypes")
@@ -53,33 +83,25 @@ var connections map[*websocket.Conn]bool
 // Send message to all known connections
 func sendAll(msg []byte) {
 	for conn := range connections {
-		if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
-			delete(connections, conn)
-			return
-		}
+		sendMsg(conn, msg)
+	}
+}
+
+func sendMsg(conn *websocket.Conn, msg []byte) {
+	if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+		delete(connections, conn)
+		return
 	}
 }
 
 // Get all unit types into a slice of bytes
-func getAllUnitTypes(col *db.Col) []byte {
-	var query interface{}
-	json.Unmarshal([]byte("[all]"), &query)
-
+func getAllUnitTypes(col *db.Col) map[uint64]struct{} {
 	queryResult := make(map[uint64]struct{}) // query result (document IDs) goes into map keys
 
-	if err := db.EvalQuery(query, col, &queryResult); err != nil {
+	if err := db.EvalAllIDs(col, &queryResult); err != nil {
 		panic(err)
 	}
-	log.Println(queryResult)
-
-	// Query results are physical document IDs
-	var readBack interface{}
-	for id := range queryResult {
-		log.Printf("Query returned document ID %d\n", id)
-		col.Read(id, &readBack)
-		log.Println(readBack)
-	}
-	return []byte("all")
+	return queryResult
 }
 
 // Martini handler for incoming socket request - runs forever until socket connection is closed
@@ -100,7 +122,14 @@ func wsHandler(w http.ResponseWriter, r *http.Request, unitTypes *db.Col) {
 	log.Println("New Websocket connection ", connections)
 	defer conn.Close()
 
-	getAllUnitTypes(unitTypes)
+	// kick the new connection off by sending a list of unit types
+	allUnitTypes := getAllUnitTypes(unitTypes)
+	var utMap interface{}
+	for id := range allUnitTypes {
+		unitTypes.Read(id, &utMap)
+		msg, _ := json.Marshal(utMap)
+		sendMsg(conn, msg)
+	}
 
 	// send the unitTypes to the new socket
 	if err := conn.WriteMessage(websocket.TextMessage, []byte("all unit types")); err != nil {
