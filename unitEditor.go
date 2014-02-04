@@ -119,17 +119,24 @@ func wsHandler(w http.ResponseWriter, r *http.Request, unitTypes *db.Col) {
 
 	// record new connection in our map
 	connections[conn] = true
-	log.Println("New Websocket connection ", connections)
+	log.Println("New UnitTypes Websocket connection ", connections)
 	defer conn.Close()
 
-	// kick the new connection off by sending a list of unit types
-	allUnitTypes := getAllUnitTypes(unitTypes)
+	// kick the new connection off by sending a list of unit types in a single message
+	allUnitTypeIds := getAllUnitTypes(unitTypes)
 	var utMap interface{}
-	for id := range allUnitTypes {
+	var allUnits []interface{}
+
+	for id := range allUnitTypeIds {
 		unitTypes.Read(id, &utMap)
-		msg, _ := json.Marshal(utMap)
-		sendMsg(conn, msg)
+		allUnits = append(allUnits, utMap)
+		//		bytes, _ := json.Marshal(utMap)
+		//		log.Printf("bytes = %s", bytes)
+		//		allUnits = append(allUnits, bytes)
 	}
+	//log.Printf("All units %+v", allUnits)
+	allUnitsMsg, _ := json.Marshal(allUnits)
+	sendMsg(conn, allUnitsMsg)
 
 	// loop forever
 	for {
@@ -154,7 +161,7 @@ func main() {
 	// Classic defaults for webserver - serve up files from public dir
 	m := martini.Classic()
 	m.Map(initUnitTypesDB())
-	m.Get("/socket", wsHandler)
+	m.Get("/UnitTypeSocket", wsHandler)
 
 	// Run the actual webserver
 	addr := fmt.Sprintf(":%d", *port)
