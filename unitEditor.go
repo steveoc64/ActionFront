@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -87,6 +88,14 @@ func sendAll(msg []byte) {
 	}
 }
 
+func sendOthers(fromConn *websocket.Conn, msg []byte) {
+	for conn := range connections {
+		if conn != fromConn {
+			sendMsg(conn, msg)
+		}
+	}
+}
+
 func sendMsg(conn *websocket.Conn, msg []byte) {
 	if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
 		delete(connections, conn)
@@ -130,13 +139,12 @@ func wsHandler(w http.ResponseWriter, r *http.Request, unitTypes *db.Col) {
 	for id := range allUnitTypeIds {
 		unitTypes.Read(id, &utMap)
 		allUnits = append(allUnits, utMap)
-		//		bytes, _ := json.Marshal(utMap)
-		//		log.Printf("bytes = %s", bytes)
-		//		allUnits = append(allUnits, bytes)
 	}
 	//log.Printf("All units %+v", allUnits)
 	allUnitsMsg, _ := json.Marshal(allUnits)
 	sendMsg(conn, allUnitsMsg)
+
+	var myUnitData map[string]interface{}
 
 	// loop forever
 	for {
@@ -146,8 +154,41 @@ func wsHandler(w http.ResponseWriter, r *http.Request, unitTypes *db.Col) {
 			log.Println("Removed connection ", connections)
 			return
 		}
-		log.Println(string(msg))
-		sendAll(msg)
+		log.Printf("Received Message %s", msg)
+		json.Unmarshal(msg, &myUnitData)
+		//log.Printf("myUnitData %+v", myUnitData)
+		docID := myUnitData["@id"]
+		delete(myUnitData, "@id")
+		//log.Printf("myUnitData truncated %+v", myUnitData)
+		myDocID, _ := strconv.ParseUint(docID.(string), 0, 64)
+		//log.Printf("myDoc ID as uint64 = %d", myDocID)
+
+		// Insert or Update or Delete ?
+		switch myDocID {
+		case 0:
+			log.Println("Insert New Record")
+			if myDocID, err = unitTypes.Insert(myUnitData); err != nil {
+				panic(err)
+			}
+			log.Printf("Inserted as ID %d", myDocID)
+			unitTypes.Read(myDocID, &utMap)
+			msg, _ := json.Marshal(utMap)
+			sendAll(msg)
+		default:
+			switch myUnitData["Name"] {
+			case "":
+				log.Println("Deleting Record", myDocID)
+				unitTypes.Delete(myDocID)
+				sendAll([]byte(fmt.Sprintf("%d", myDocID)))
+			default:
+				log.Println("Update Record", myDocID)
+				if err := unitTypes.Update(myDocID, myUnitData); err != nil {
+					panic(err)
+				}
+				// Tell other connected clients about the updated UnitType
+				sendOthers(conn, msg)
+			}
+		}
 	}
 }
 
