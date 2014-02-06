@@ -5,18 +5,24 @@
 	<link href="//cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.7/ng-grid.min.css" rel="stylesheet">
 	<link href="app.css" rel="stylesheet">
 </head>
-<body>
+<body ng-app="app">
 
-<div class="container" ng-app="unitEditor">
-	<header ng-include="'navbar.html'"></header>
+<header ng-include="'navbar.html'"></header>
+
+<section class="container">
 	<ui-view>
 		<div class="jumbotron">
-			<h1>Unit Editor</h1>	
-			<!-- <i class="fa fa-spinner fa-spin"></i> -->
+			<h1>ActionFront</h1>	
+			<small>
+			For Tabletop Miniatures Battles in the Napoleonic Era.
+			<br>
+			Using 'Revolution&Empire' by Todd Fisher & Matt DeLaMater.
+			</small>
 		</div>
 	</ui-view>
-	<footer ng-include="'footer.html'"></footer>
-</div>
+</section>
+
+<footer ng-include="'footer.html'"></footer>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>

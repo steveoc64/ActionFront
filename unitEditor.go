@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -155,38 +156,51 @@ func wsHandler(w http.ResponseWriter, r *http.Request, unitTypes *db.Col) {
 			return
 		}
 		log.Printf("Received Message %s", msg)
-		json.Unmarshal(msg, &myUnitData)
-		//log.Printf("myUnitData %+v", myUnitData)
-		docID := myUnitData["@id"]
-		delete(myUnitData, "@id")
-		//log.Printf("myUnitData truncated %+v", myUnitData)
-		myDocID, _ := strconv.ParseUint(docID.(string), 0, 64)
-		//log.Printf("myDoc ID as uint64 = %d", myDocID)
+		if bytes.Equal(msg, []byte("init")) {
+			log.Println("Received INIT message - send all records")
+			allUnitTypeIds := getAllUnitTypes(unitTypes)
 
-		// Insert or Update or Delete ?
-		switch myDocID {
-		case 0:
-			log.Println("Insert New Record")
-			if myDocID, err = unitTypes.Insert(myUnitData); err != nil {
-				panic(err)
+			allUnits = make([]interface{}, 0)
+			for id := range allUnitTypeIds {
+				unitTypes.Read(id, &utMap)
+				allUnits = append(allUnits, utMap)
 			}
-			log.Printf("Inserted as ID %d", myDocID)
-			unitTypes.Read(myDocID, &utMap)
-			msg, _ := json.Marshal(utMap)
-			sendAll(msg)
-		default:
-			switch myUnitData["Name"] {
-			case "":
-				log.Println("Deleting Record", myDocID)
-				unitTypes.Delete(myDocID)
-				sendAll([]byte(fmt.Sprintf("%d", myDocID)))
-			default:
-				log.Println("Update Record", myDocID)
-				if err := unitTypes.Update(myDocID, myUnitData); err != nil {
+			allUnitsMsg, _ := json.Marshal(allUnits)
+			sendMsg(conn, allUnitsMsg)
+		} else {
+			json.Unmarshal(msg, &myUnitData)
+			//log.Printf("myUnitData %+v", myUnitData)
+			docID := myUnitData["@id"]
+			delete(myUnitData, "@id")
+			//log.Printf("myUnitData truncated %+v", myUnitData)
+			myDocID, _ := strconv.ParseUint(docID.(string), 0, 64)
+			//log.Printf("myDoc ID as uint64 = %d", myDocID)
+
+			// Insert or Update or Delete ?
+			switch myDocID {
+			case 0:
+				log.Println("Insert New Record")
+				if myDocID, err = unitTypes.Insert(myUnitData); err != nil {
 					panic(err)
 				}
-				// Tell other connected clients about the updated UnitType
-				sendOthers(conn, msg)
+				log.Printf("Inserted as ID %d", myDocID)
+				unitTypes.Read(myDocID, &utMap)
+				msg, _ := json.Marshal(utMap)
+				sendAll(msg)
+			default:
+				switch myUnitData["Name"] {
+				case "":
+					log.Println("Deleting Record", myDocID)
+					unitTypes.Delete(myDocID)
+					sendAll([]byte(fmt.Sprintf("%d", myDocID)))
+				default:
+					log.Println("Update Record", myDocID)
+					if err := unitTypes.Update(myDocID, myUnitData); err != nil {
+						panic(err)
+					}
+					// Tell other connected clients about the updated UnitType
+					sendOthers(conn, msg)
+				}
 			}
 		}
 	}
@@ -202,7 +216,7 @@ func main() {
 	// Classic defaults for webserver - serve up files from public dir
 	m := martini.Classic()
 	m.Map(initUnitTypesDB())
-	m.Get("/UnitTypeSocket", wsHandler)
+	m.Get("/Socket", wsHandler)
 
 	// Run the actual webserver
 	addr := fmt.Sprintf(":%d", *port)

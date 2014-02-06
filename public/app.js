@@ -3,27 +3,50 @@ function socketUrl(s) {
     return ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "") + l.pathname + s;
 }
 
-angular.module("unitEditor", ['ui.router', 'ngGrid'])
+angular.module("app", ['ui.router', 'ngGrid'])
  .config(['$urlRouterProvider', '$stateProvider', function ($urlRouterProvider, $stateProvider) {
- 	$urlRouterProvider.otherwise('/unittype');
+ 	$urlRouterProvider.otherwise('/');
  	$stateProvider
- 		.state('unittype', {
- 			url: '/unittype',
- 			templateUrl: 'unittype.html',
- 			controller: 'UnitTypeCtrl'
+ 		.state('unittypes', {
+ 			url: '/unittypes',
+ 			templateUrl: 'unittypes.html'
  		})
- 		.state('drillbook', {
- 			url: '/drillbook',
- 			templateUrl: 'drillbook.html'
+ 		.state('unittypes.cavalerie', {
+ 			url: '/cavalerie',
+ 			templateUrl: 'unittypes.cavalerie.html',
+ 			controller: 'CavalryCtrl'
+ 		})
+ 		.state('unittypes.infanterie', {
+ 			url: '/infanterie',
+ 			templateUrl: 'unittypes.infanterie.html',
+ 			controller: 'InfantryCtrl'
+ 		})
+ 		.state('unittypes.artillerie', {
+ 			url: '/artillerie',
+ 			templateUrl: 'unittypes.artillerie.html',
+ 			controller: 'ArtilleryCtrl'
+ 		})
+ 		.state('unittypes.etat', {
+ 			url: '/etat',
+ 			templateUrl: 'unittypes.etat.html',
+ 			controller: 'EtatCtrl'
+ 		})
+ 		.state('unittypes.reglement', {
+ 			url: '/reglement',
+ 			templateUrl: 'drillbook.html',
+ 			controller: 'DrillBookCtrl'
  		});
  }])
-.factory('UnitTypeSocket', function() {
+.factory('Socket', function() {
   var service = {};
  
   service.connect = function() {
-    if(service.ws) { return; }
+    if(service.ws) { 
+    	service.ws.send("init");
+    	return; 
+    }
 
-    var ws = new WebSocket(socketUrl('UnitTypeSocket'));
+    var ws = new WebSocket(socketUrl('Socket'));
   
     ws.onmessage = function(message) {
       service.callback(message.data);
@@ -42,17 +65,16 @@ angular.module("unitEditor", ['ui.router', 'ngGrid'])
  
   return service;
 })
-.controller("UnitTypeCtrl", ["$scope", "UnitTypeSocket", function($scope, UnitTypeSocket){
-	$scope.UnitTypes = [];
+.controller("InfantryCtrl", ["$scope", "Socket", function($scope, Socket){
+	$scope.Data = [];
 	$scope.Ratings = ['OldGuard','Guard','Grenadier','Elite','CrackLine','Veteran','Regular','Conscript','Landwehr','Militia','Rabble'];
 	$scope.DrillBooks = ['Light Infantry','French','Prussian','Russian','Austrian','British','Old School','Conscript','Militia','Mob'];
-	$scope.title = 'Unit Types'
+	$scope.title = "L'Infanterie";
 
-	UnitTypeSocket.connect();
-	//UnitTypeSocket.send('Get')
+	Socket.connect();
 
 	$scope.gridOptions = { 
-		data: 'UnitTypes',
+		data: 'Data',
 		enableCellSelection: true,
         enableRowSelection: false,
         enableCellEdit: true,
@@ -64,15 +86,16 @@ angular.module("unitEditor", ['ui.router', 'ngGrid'])
         showColumnMenu: true,
         showFilter: true,
         showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
-        	fields: ['Name','Rating'],
-        	directions: ['asc','asc']
+        	fields: ['Name'],
+        	directions: ['asc']
         },
 
         columnDefs: [
-        	{field:'Name'}, 
-        	{field:'Rating', editableCellTemplate: 'ratingTemplate.html'},
-        	{field:'DrillBook', editableCellTemplate: 'drillBookTemplate.html'},
+        	{field:'Name', width: 120}, 
+        	{field:'Rating', width: 100, editableCellTemplate: 'ratingTemplate.html'},
+        	{field:'DrillBook', width: 100, editableCellTemplate: 'drillBookTemplate.html'},
         	{field:'Men'},
         	{field:'Size'},
         	{field:'Firepower'}
@@ -80,86 +103,69 @@ angular.module("unitEditor", ['ui.router', 'ngGrid'])
 	};
 
 	$scope.update = function(row) {
-		//console.log(row);
 		console.log("Updated -> ",row.entity);
-		UnitTypeSocket.send(JSON.stringify(row.entity));
+		Socket.send(JSON.stringify(row.entity));
 	}
-
-/*
-    $scope.$on('ngGridEventEndCellEdit', function(evt){
-    	$scope.update(evt.targetScope.row);
-    });
-*/
 
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		$scope.update(evt.targetScope.row);
-		//console.log(evt);
-		//console.log("Updated -> ",$scope.UnitTypes[evt.targetScope.row.entity]);
-		//UnitTypeSocket.send(JSON.stringify($scope.UnitTypes[evt.targetEvt]));
     });
 
 
     $scope.newRow = function() {
-    	$scope.UnitTypes.push({"@id": '0', Name: '~ New ~', Rating: 'Regular', Men: 720, Size: '3L', Firepower: '10', DrillBook: ''})
+    	$scope.Data.push({"@id": '0', Name: '~ New ~', Rating: 'Regular', Men: 720, Size: '3L', Firepower: '10', DrillBook: ''})
     }
 
-	UnitTypeSocket.subscribe (function(e) {
+	Socket.subscribe (function(e) {
 		var data = JSON.parse(e);
 		console.log($scope)
-		console.log("New ->", data);
+		console.log("Msg ->", data);
 
 		if (data instanceof Array) {
-			$scope.UnitTypes = data;
+			// On Rx an array of data - set the whole dataset to the array
+			$scope.Data = data;
 		} else if (data instanceof Object) {
-			//console.log("Single Record", data);
+			// On Rx a single record 
 			var gotSome = false;
-			for (var i = 0; i < $scope.UnitTypes.length; i++) {
-				if (data["@id"] === $scope.UnitTypes[i]["@id"]) {
-					console.log("Updating record at pos ",i,"to",data);
-					$scope.UnitTypes[i].Name = data.Name;
-					$scope.UnitTypes[i].Rating = data.Rating;
-					$scope.UnitTypes[i].Men = data.Men;
-					$scope.UnitTypes[i].Size = data.Size;
-					$scope.UnitTypes[i].Firepower = data.Firepower;
-					$scope.UnitTypes[i].DrillBook = data.DrillBook;
-					gotSome = true;
-					$scope.$apply();
-				}
 
-			}
+			// If the ID of the record exists, update the record in the dataset
+			angular.forEach($scope.Data, function(v,i){
+				if (data["@id"] === v["@id"]) {
+					console.log("Updating record at pos",i,"to",data);
+					angular.copy(data,$scope.Data[i]);
+					gotSome = true;
+				}
+			});
+
+			// else if any of our records have a blank ID, overwrite that as the new record
 			if (!gotSome) {
 				console.log("Add New Record");
-				// First - overwrite any record in the list that has a blank ID		
-				for (var i = 0; i < $scope.UnitTypes.length; i++) {
-					//console.log("Pos",i,"id = ",$scope.UnitTypes[i]["@id"]);
-					if ($scope.UnitTypes[i]["@id"] === "0") {
-						console.log("Overwriting blank record at pos",i);
-						$scope.UnitTypes[i]["@id"] = data["@id"];
-						$scope.UnitTypes[i].Name = data.Name;
-						$scope.UnitTypes[i].Rating = data.Rating;
-						$scope.UnitTypes[i].Men = data.Men;
-						$scope.UnitTypes[i].Size = data.Size;
-						$scope.UnitTypes[i].Firepower = data.Firepower;
-						$scope.UnitTypes[i].DrillBook = data.DrillBook;
+				angular.forEach($scope.Data, function(v,i){
+					if (v["@id"] === "0") {
+						console.log("Overwriting Blank record at pos",i);
+						angular.copy(data,$scope.Data[i]);
 						gotSome = true;
 					}
-				}
+				});
+			}
 
-				// otherwise - just append to the list
-				if (!gotSome) {
-					console.log("Adding new record");
-					$scope.UnitTypes.push(data);
-				}
-			}
+			// otherwise - just append to the list
+			if (!gotSome) {
+				console.log("Adding new record");
+				$scope.UnitTypes.push(data);
+			}			
 		} else {
+			// On Rx a single ID 
 			console.log("Deleting record ",data)
-			for (var i = 0; i < $scope.UnitTypes.length; i++) {
-				if ($scope.UnitTypes[i]["@id"] == data) {
-					console.log("delete row at index",i)
-					$scope.UnitTypes.splice(i,1);
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == data) {
+					console.log("Delete row at pos",i);
+					$scope.Data.splice(i,1);
 				}
-			}
+			});
 		}
+
+		// Sync the scope and the DOM
 		$scope.$apply();
 	});
 	
