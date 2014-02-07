@@ -21,21 +21,19 @@ var (
 	port = flag.Int("port", 8080, "port to access the unitEditor")
 )
 
-type UnitType struct {
+type InfantryType struct {
+	Nation    string
+	From      uint16
+	To        uint16
 	Name      string
 	Rating    string
-	Men       uint16
-	Size      string
-	Firepower int8
 	DrillBook string
-}
-
-func (ut UnitType) toJSON() []byte {
-	var retval, err = json.Marshal(ut)
-	if err != nil {
-		panic(err)
-	}
-	return retval
+	Layout    string
+	Fire      int8
+	Elite     int8
+	Equip     string
+	Skirmish  string
+	Street    string
 }
 
 func toMap(thing interface{}) map[string]interface{} {
@@ -66,14 +64,39 @@ func initUnitTypesDB() *db.Col {
 		// This is a fresh DB so insert some default unit types
 		ut := myDB.Use("UnitTypes")
 
-		ut.Insert(toMap(UnitType{"French Ligne", "Veteran", 720, "2L 1E", 10, "French Veteran"}))
-		ut.Insert(toMap(UnitType{"French Legere", "Elite", 720, "3E", 12, "French Veteran"}))
-		ut.Insert(toMap(UnitType{"French Provisional", "Regular", 720, "3L", 10, "French Conscript"}))
-		ut.Insert(toMap(UnitType{"French Conscript", "Conscript", 720, "3L", 8, "French Conscript"}))
-		ut.Insert(toMap(UnitType{"Prussian Line", "CrackLine", 960, "4L 1S", 10, "Prussian"}))
-		ut.Insert(toMap(UnitType{"Prussian Fusilier", "CrackLine", 960, "2L 2E", 12, "Prussian"}))
-		ut.Insert(toMap(UnitType{"Prussian Reserve", "Regular", 960, "4L 1S", 8, "Prussian"}))
-		ut.Insert(toMap(UnitType{"Prussian Landwehr", "Landwehr", 960, "4L", 6, "Landwehr"}))
+		// Range of French line infantry types for various years
+		ut.Insert(toMap(InfantryType{"France", 1805, 1807, "Elite Ligne", "Elite", "French", "5L 1S", 0, 2, "Musket", "Excellent", "Excellent"}))
+		ut.Insert(toMap(InfantryType{"France", 1805, 1807, "Crack Ligne", "CrackLine", "French", "5L 1S", 0, 2, "Musket", "Excellent", "Excellent"}))
+		ut.Insert(toMap(InfantryType{"France", 1805, 1807, "Veteran Ligne", "Veteran", "French", "5L 1S", 0, 2, "Musket", "Average", "Good"}))
+
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Elite Ligne", "Elite", "French", "3L 1E", 0, 2, "Musket", "Excellent", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Crack Ligne", "CrackLine", "French", "3L 1E", 0, 2, "Musket", "Excellent", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Veteran Ligne", "Veteran", "French", "3L 1E", 0, 2, "Musket", "Good", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Regular Ligne", "Veteran", "French", "3L 1E", 0, 2, "Musket", "Average", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Conscript Ligne", "Veteran", "Conscript", "4L", 0, 2, "Musket", "Poor", "Good"}))
+
+		ut.Insert(toMap(InfantryType{"France", 1813, 1814, "Veteran Ligne", "Veteran", "French", "2L 1E", 0, 2, "Musket", "Average", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1813, 1814, "Conscript Ligne", "Conscript", "Conscript", "3L", 0, 2, "Musket", "Poor", "Poor"}))
+		ut.Insert(toMap(InfantryType{"France", 1813, 1814, "Provisional Ligne", "Veteran", "French", "2L", 0, 2, "Musket", "Poor", "Poor"}))
+
+		ut.Insert(toMap(InfantryType{"France", 1815, 1815, "Elites", "Elite", "French", "2L 1E", 0, 2, "Musket", "Excellent", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1815, 1815, "Crack Ligne", "CrackLine", "French", "2L 1E", 0, 2, "Musket", "Excellent", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1815, 1815, "Veteran Ligne", "Veteran", "French", "2L 1E", 0, 2, "Musket", "Good", "Good"}))
+
+		ut.Insert(toMap(InfantryType{"France", 1805, 1807, "Elite Legere", "Elite", "French", "5E", 0, 2, "Musket", "Excellent", "Excellent"}))
+		ut.Insert(toMap(InfantryType{"France", 1805, 1807, "Crack Legere", "CrackLine", "French", "5E", 0, 2, "Musket", "Excellent", "Excellent"}))
+
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Elite Legere", "Elite", "French", "4E", 0, 2, "Musket", "Excellent", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Crack Legere", "CrackLine", "French", "4E", 0, 2, "Musket", "Excellent", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Veteran Legere", "Elite", "French", "3E", 0, 2, "Musket", "Good", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1808, 1812, "Regular Legere", "CrackLine", "French", "3E", 0, 2, "Musket", "Average", "Average"}))
+
+		ut.Insert(toMap(InfantryType{"France", 1813, 1814, "Crack Legere", "CrackLine", "French", "3E", 0, 2, "Musket", "Excellent", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1813, 1814, "Veteran Legere", "Veteran", "French", "3E", 0, 2, "Musket", "Good", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1813, 1814, "Conscript Legere", "Conscript", "French", "3E", 0, 2, "Musket", "Poor", "Poor"}))
+
+		ut.Insert(toMap(InfantryType{"France", 1815, 1815, "Elite Legere", "Elite", "French", "3E", 0, 2, "Musket", "Excellent", "Good"}))
+		ut.Insert(toMap(InfantryType{"France", 1815, 1815, "Veteran Legere", "Veteran", "French", "3E", 0, 2, "Musket", "Excellent", "Good"}))
 	}
 	myDB.Scrub("UnitTypes")
 	return myDB.Use("UnitTypes")

@@ -69,6 +69,8 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.Data = [];
 	$scope.Ratings = ['OldGuard','Guard','Grenadier','Elite','CrackLine','Veteran','Regular','Conscript','Landwehr','Militia','Rabble'];
 	$scope.DrillBooks = ['Light Infantry','French','Prussian','Russian','Austrian','British','Old School','Conscript','Militia','Mob'];
+	$scope.Equips = ['Musket','Carbine','Superior Musket','Poor Musket','Rifle','Bayonet Only','Pike'];
+	$scope.SkirmishRatings = ['Superior','Excellent','Good','Average','Poor'];
 	$scope.title = "L'Infanterie";
 
 	Socket.connect();
@@ -88,17 +90,23 @@ angular.module("app", ['ui.router', 'ngGrid'])
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
-        	fields: ['Name'],
+        	fields: ['From'],
         	directions: ['asc']
         },
 
         columnDefs: [
-        	{field:'Name', width: 120}, 
+           	{field:'Nation', width: 80}, 
+           	{field:'From', width: 50}, 
+           	{field:'To', width: 50}, 
+        	{field:'Name', width: 160}, 
         	{field:'Rating', width: 100, editableCellTemplate: 'ratingTemplate.html'},
         	{field:'DrillBook', width: 100, editableCellTemplate: 'drillBookTemplate.html'},
-        	{field:'Men'},
-        	{field:'Size'},
-        	{field:'Firepower'}
+        	{field:'Layout', width: 80},
+        	{field:'Fire', width: 40},
+        	{field:'Elite', width: 40},
+        	{field:'Equip', width: 100, editableCellTemplate: 'equipTemplate.html'},
+        	{field:'Skirmish', width: 100, editableCellTemplate: 'skirmishRatingTemplate.html'},
+        	{field:'Street', width: 100, editableCellTemplate: 'streetRatingTemplate.html'}
         ]
 	};
 
@@ -113,7 +121,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
 
     $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Name: '~ New ~', Rating: 'Regular', Men: 720, Size: '3L', Firepower: '10', DrillBook: ''})
+    	$scope.Data.push({"@id": '0', Nation: '~ ??? ~'})
     }
 
 	Socket.subscribe (function(e) {
