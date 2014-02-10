@@ -1,3 +1,12 @@
+var Ratings = ['OldGuard','Guard','Grenadier','Elite','CrackLine','Veteran','Regular','Conscript','Landwehr','Militia','Rabble'];
+var DrillBooks = ['Light Infantry','French','Prussian','Russian','Austrian','British','Old School','Conscript','Militia','Mob'];
+var Equips = ['Musket','Carbine','Superior Musket','Poor Musket','Rifle','Bayonet Only','Pike'];
+var SkirmishRatings = ['Superior','Excellent','Good','Average','Poor'];
+var CavMoveTypes = ['Heavy','Medium','Light','Lancer'];
+var GunneryClasses = [0,1,2,3];
+var GunTypes = ['12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
+var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
+
 function socketUrl(s) {
     var l = window.location;
     return ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "") + l.pathname + s;
@@ -37,26 +46,97 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			controller: 'DrillBookCtrl'
  		});
  }])
-.factory('Socket', function() {
+.factory('DataSocket', function() {
   var service = {};
  
-  service.connect = function() {
+  service.connect = function(scope) {
+  	service.scope = scope;
+  	service.Entity = scope.Entity;
+  	service.Data = scope.Data;
+   	service.initMessage = JSON.stringify({"Action":"List", "Entity":service.Entity});
+
     if(service.ws) { 
-    	service.ws.send("init");
+		service.ws.send(service.initMessage);
     	return; 
     }
 
-    var ws = new WebSocket(socketUrl('Socket'));
+    var ws = new WebSocket(socketUrl('GameData'));
+    service.isOpen = false;
   
-    ws.onmessage = function(message) {
-      service.callback(message.data);
-    };
- 
+    ws.onmessage = function(e) {
+    	console.log(e);
+		var RxMsg = JSON.parse(e.data);
+	
+		if (RxMsg.Entity == service.Entity) {
+			// console.log($scope)
+			console.log("Msg ->", RxMsg);
+
+			switch (RxMsg.Action) {
+				case "List":
+					service.Data = RxMsg.Data;	
+					break;
+				case "Update":
+					var gotSome = false;
+					var data = RxMsg.Data;
+
+					// If the ID of the record exists, update the record in the dataset
+					angular.forEach(service.Data, function(v,i){
+						if (data["@id"] === v["@id"]) {
+							console.log("Updating record at pos",i,"to",data);
+							angular.copy(data,service.Data[i]);
+							gotSome = true;
+						}
+					});
+
+					// else if any of our records have a blank ID, overwrite that as the new record
+					if (!gotSome) {
+						console.log("Add New Record");
+						angular.forEach(service.Data, function(v,i){
+							if (v["@id"] === "0") {
+								console.log("Overwriting Blank record at pos",i);
+								angular.copy(data,service.Data[i]);
+								gotSome = true;
+							}
+						});
+					}
+					// otherwise - just append to the list
+					if (!gotSome) {
+						console.log("Adding new record");
+						service.Data.push(data);
+					}			
+
+			}
+		}
+	    //service.callback(e.data);
+	    service.scope.Data = service.Data;
+	    service.scope.$apply();
+    }
+
+	ws.onopen = function() {
+		service.ws.send(service.initMessage)
+		service.isOpen = true;
+	}
+
+	ws.onclose = function(e) {
+		console.log("Socket closed ?", e);
+		service.isOpen = false;
+		service.ws = null;
+	}
+
+	ws.onerror = function(e) {
+		console.log("Socket error ?", e);
+	}
+
     service.ws = ws;
   }
  
   service.send = function(message) {
-    service.ws.send(message);
+  	if (!service.isOpen) {
+  		// if we are dead, try to reopen the connection on demand
+  		service.connect(service.entity);
+  	} else {
+    	service.ws.send(message); 		
+  	}
   }
  
   service.subscribe = function(callback) {
@@ -65,15 +145,16 @@ angular.module("app", ['ui.router', 'ngGrid'])
  
   return service;
 })
-.controller("InfantryCtrl", ["$scope", "Socket", function($scope, Socket){
+.controller("InfantryCtrl", ["$scope", "DataSocket", function($scope, DataSocket){
 	$scope.Data = [];
-	$scope.Ratings = ['OldGuard','Guard','Grenadier','Elite','CrackLine','Veteran','Regular','Conscript','Landwehr','Militia','Rabble'];
-	$scope.DrillBooks = ['Light Infantry','French','Prussian','Russian','Austrian','British','Old School','Conscript','Militia','Mob'];
-	$scope.Equips = ['Musket','Carbine','Superior Musket','Poor Musket','Rifle','Bayonet Only','Pike'];
-	$scope.SkirmishRatings = ['Superior','Excellent','Good','Average','Poor'];
+	$scope.Ratings = Ratings;
+	$scope.DrillBooks = DrillBooks;
+	$scope.Equips = Equips;
+	$scope.SkirmishRatings = SkirmishRatings;
 	$scope.title = "L'Infanterie";
+	$scope.Entity = "Infantry";
 
-	Socket.connect();
+	DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -111,70 +192,124 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	};
 
 	$scope.update = function(row) {
-		console.log("Updated -> ",row.entity);
-		Socket.send(JSON.stringify(row.entity));
+		console.log("InfUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		$scope.update(evt.targetScope.row);
     });
 
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Nation: '~ ??? ~'})
+    }
+	
+}])
+.controller("CavalryCtrl", ["$scope", "DataSocket", function($scope, DataSocket){
+	$scope.Data = [];
+	$scope.Ratings = Ratings;
+	$scope.CavMoveTypes = CavMoveTypes;
+	$scope.SkirmishRatings = SkirmishRatings;
+	$scope.title = "La Cavalerie";
+	$scope.Entity = "Cavalry";
+
+
+	DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields: ['From'],
+        	directions: ['asc']
+        },
+
+        columnDefs: [
+           	{field:'Nation', width: 80}, 
+           	{field:'From', width: 50}, 
+           	{field:'To', width: 50}, 
+        	{field:'Name', width: 160}, 
+        	{field:'Rating', width: 100, editableCellTemplate: 'ratingTemplate.html'},
+        	{field:'Shock', width: 80},
+        	{field:'Squadrons', width: 80},
+        	{field:'Move', width: 100, editableCellTemplate: 'cavMovesTemplate.html'},
+        	{field:'Skirmish', width: 100, editableCellTemplate: 'skirmishRatingTemplate.html'}
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("CavUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
 
     $scope.newRow = function() {
     	$scope.Data.push({"@id": '0', Nation: '~ ??? ~'})
     }
+	
+}])
+.controller("ArtilleryCtrl", ["$scope", "DataSocket", function($scope, DataSocket){
+	$scope.Data = [];
+	$scope.Ratings = Ratings;
+	$scope.GunTypes = GunTypes;
+	$scope.HWTypes = HWTypes;
+	$scope.title = "L'Artillerie";
+	$scope.Entity = "Artillery";
 
-	Socket.subscribe (function(e) {
-		var data = JSON.parse(e);
-		console.log($scope)
-		console.log("Msg ->", data);
+	DataSocket.connect($scope);
 
-		if (data instanceof Array) {
-			// On Rx an array of data - set the whole dataset to the array
-			$scope.Data = data;
-		} else if (data instanceof Object) {
-			// On Rx a single record 
-			var gotSome = false;
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields: ['From'],
+        	directions: ['asc']
+        },
 
-			// If the ID of the record exists, update the record in the dataset
-			angular.forEach($scope.Data, function(v,i){
-				if (data["@id"] === v["@id"]) {
-					console.log("Updating record at pos",i,"to",data);
-					angular.copy(data,$scope.Data[i]);
-					gotSome = true;
-				}
-			});
+        columnDefs: [
+           	{field:'Nation', width: 80}, 
+           	{field:'From', width: 50}, 
+           	{field:'To', width: 50}, 
+        	{field:'Name', width: 160}, 
+        	{field:'Rating', width: 100, editableCellTemplate: 'ratingTemplate.html'},
+        	{field:'Class', width: 60},
+        	{field:'Guns', width: 100, editableCellTemplate: 'gunTypeTemplate.html'},
+        	{field:'HW', width: 100, editableCellTemplate: 'hwTemplate.html'},
+        	{field:'Sections', width: 80},
+        	{field:'Horse', width: 100}
+        ]
+	};
 
-			// else if any of our records have a blank ID, overwrite that as the new record
-			if (!gotSome) {
-				console.log("Add New Record");
-				angular.forEach($scope.Data, function(v,i){
-					if (v["@id"] === "0") {
-						console.log("Overwriting Blank record at pos",i);
-						angular.copy(data,$scope.Data[i]);
-						gotSome = true;
-					}
-				});
-			}
+	$scope.update = function(row) {
+		console.log("GunsUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
 
-			// otherwise - just append to the list
-			if (!gotSome) {
-				console.log("Adding new record");
-				$scope.UnitTypes.push(data);
-			}			
-		} else {
-			// On Rx a single ID 
-			console.log("Deleting record ",data)
-			angular.forEach($scope.Data, function(v,i){
-				if (v["@id"] == data) {
-					console.log("Delete row at pos",i);
-					$scope.Data.splice(i,1);
-				}
-			});
-		}
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
 
-		// Sync the scope and the DOM
-		$scope.$apply();
-	});
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Nation: '~ ??? ~'})
+    }
 	
 }]);
