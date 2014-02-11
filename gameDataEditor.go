@@ -175,7 +175,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			sendMsg(conn, msg)
 
 		case "Update":
-			log.Println("UPDATE request:", theEntity)
+			log.Println("UPDATE request:", theEntity, RxMsg["Data"])
 			myGameData = RxMsg["Data"].(map[string]interface{})
 			docID := myGameData["@id"]
 			delete(myGameData, "@id") // strip the ID out of this record
@@ -189,7 +189,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				}
 				log.Printf("Inserted as ID %d", myDocID)
 				gameData.Read(myDocID, &myGameData)
-				msg, _ := json.Marshal(messageFormat{"Update", theEntity, myGameData["Data"]})
+				msg, _ := json.Marshal(messageFormat{"Update", theEntity, myGameData})
 				sendAll(msg)
 
 			default:

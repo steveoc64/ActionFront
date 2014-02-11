@@ -1,13 +1,23 @@
+	<div class="input-group">
+		<span class="input-group-addon">Nation</span>
+  		<input type="text" class="form-control" ng-model="Nation" ng-change="FilterUpdate()">
+		<span class="input-group-addon">Year</span>
+  		<input type="number" class="form-control" ng-model="Year" ng-change="FilterUpdate()">
+		<span class="input-group-addon">Name</span>
+  		<input type="text" class="form-control" ng-model="Name" ng-change="FilterUpdate()">
+	</div>
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container-fluid">
 	<!-- Brand and toggle get grouped for better mobile display -->
-		<ul class="nav nav-tabs pull-right">
-			<li ui-sref-active="active"><a ui-sref='unittypes.cavalerie'>La Cavalerie</a></li>
-			<li ui-sref-active="active"><a ui-sref='unittypes.infanterie'>L'Infanterie</a></li>
-			<li ui-sref-active="active"><a ui-sref='unittypes.artillerie'>L'Artillerie</a></li>
-			<li ui-sref-active="active"><a ui-sref='unittypes.etat'>L'Etat-Major</a></li>
-			<li ui-sref-active="active"><a ui-sref='unittypes.reglement'>Reglements</a></li>
-		</ul>
+	<ul class="nav nav-tabs pull-right">
+		<li ui-sref-active="active"><a ui-sref='unittypes.cavalerie'>La Cavalerie</a></li>
+		<li ui-sref-active="active"><a ui-sref='unittypes.infanterie'>L'Infanterie</a></li>
+		<li ui-sref-active="active"><a ui-sref='unittypes.artillerie'>L'Artillerie</a></li>
+		<li ui-sref-active="active"><a ui-sref='unittypes.etat'>L'Etat-Major</a></li>
+		<li ui-sref-active="active"><a ui-sref='unittypes.reglement'>Reglements</a></li>
+	</ul>
+
+</div>
 </nav>
 <p>
 <ui-view>
