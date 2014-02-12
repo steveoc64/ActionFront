@@ -7,9 +7,39 @@ var GunneryClasses = [0,1,2,3];
 var GunTypes = ['12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
 var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
 
+var defaultGridOptions = { 
+		data: 'FilteredData',
+		enableCellSelection: true,
+        enableRowSelection: false,
+        enableCellEdit: true,
+        showGroupPanel: false,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableRowReordering: false,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        groupsCollapsedByDefault: false
+};
+
 function socketUrl(s) {
     var l = window.location;
     return ((l.protocol === "https:") ? "wss://" : "ws://") + l.hostname + (((l.port != 80) && (l.port != 443)) ? ":" + l.port : "") + l.pathname + s;
+}
+
+function contains(haystack,needle) {
+	if (typeof needle != 'string') {
+		return true;
+	}
+	if (typeof haystack != 'string') {
+		return true;
+	}
+
+	var h1 = haystack.toLowerCase();
+	var n1 = needle.toLowerCase();
+	return (h1.indexOf(n1) != -1);
 }
 
 angular.module("app", ['ui.router', 'ngGrid'])
@@ -166,29 +196,14 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
 	DataSocket.connect($scope);
 
-	$scope.gridOptions = { 
-		data: 'FilteredData',
-		enableCellSelection: true,
-        enableRowSelection: false,
-        enableCellEdit: true,
-        showGroupPanel: false,
-        enableColumnResize: true,
-        enableColumnReordering: true,
-        enableRowReordering: false,
-        enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
-        showFooter: true,
-        footerTemplate: 'gridFooterTemplate.html',
-        sortInfo: {
+	$scope.gridOptions = angular.copy(defaultGridOptions);
+    $scope.gridOptions.sortInfo = {
         	fields: ['From'],
         	directions: ['asc']
-        },
-        filterOptions: $scope.filterOptions,
-        groups: ['Nation'],
-
-        columnDefs: [
-           	{field:'Nation', width: 80}, 
+        };
+    $scope.gridOptions.groups = ['Nation'];
+    $scope.gridOptions.columnDefs = [
+           	{field:'Nation', width: 80, visible: false}, 
            	{field:'From', width: 50}, 
            	{field:'To', width: 50}, 
         	{field:'Name', width: 160}, 
@@ -201,8 +216,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
         	{field:'Skirmish', width: 100, editableCellTemplate: 'skirmishRatingTemplate.html'},
         	{field:'Street', width: 100, editableCellTemplate: 'streetRatingTemplate.html'},
         	{field:'Shock', width: 100, editableCellTemplate: 'shockTemplate.html'}
-        ]
-	};
+        ];
 
 	$scope.$on('FilterUpdate', function(e,data) {
 		console.log('FilterUpdate event',data);
@@ -214,12 +228,14 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		angular.forEach($scope.Data, function(v,i){
 			var ok = true;
 			if ('Nation' in $rootScope.FilterValues) {
-				if ($rootScope.FilterValues.Nation && v.Nation.indexOf($rootScope.FilterValues.Nation) == -1) {
+				if (!contains(v.Nation,$rootScope.FilterValues.Nation)) {
 					ok = false;
 				}
 			}
 			if (ok && 'Name' in $rootScope.FilterValues) {
-				if ($rootScope.FilterValues.Name && v.Name.indexOf($rootScope.FilterValues.Name) == -1) {
+				var needle = $rootScope.FilterValues.Name;
+				if (!contains(v.Name,needle) &&
+					!contains(v.Rating,needle)) {
 					ok = false;
 				}
 			}
@@ -262,25 +278,14 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
 	DataSocket.connect($scope);
 
-	$scope.gridOptions = { 
-		data: 'FilteredData',
-		enableCellSelection: true,
-        enableCellEdit: true,
-        enableColumnResize: true,
-        enableColumnReordering: true,
-        enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
-        showFooter: true,
-        footerTemplate: 'gridFooterTemplate.html',
-        sortInfo: {
+	$scope.gridOptions = angular.copy(defaultGridOptions);
+    $scope.gridOptions.sortInfo = {
         	fields: ['From'],
         	directions: ['asc']
-        },
-        groups: ['Nation'],
-
-        columnDefs: [
-           	{field:'Nation', width: 80}, 
+        };
+    $scope.gridOptions.groups = ['Nation'];
+    $scope.gridOptions.columnDefs = [
+           	{field:'Nation', width: 80, visible: false}, 
            	{field:'From', width: 50}, 
            	{field:'To', width: 50}, 
         	{field:'Name', width: 160}, 
@@ -289,8 +294,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
         	{field:'Squadrons', width: 80},
         	{field:'Move', width: 100, editableCellTemplate: 'cavMovesTemplate.html'},
         	{field:'Skirmish', width: 100, editableCellTemplate: 'skirmishRatingTemplate.html'}
-        ]
-	};
+        ];
 
 	$scope.update = function(row) {
 		console.log("CavUpdated -> ",row.entity);
@@ -307,12 +311,19 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		angular.forEach($scope.Data, function(v,i){
 			var ok = true;
 			if ('Nation' in $rootScope.FilterValues) {
-				if ($rootScope.FilterValues.Nation && v.Nation.indexOf($rootScope.FilterValues.Nation) == -1) {
+				if (!contains(v.Nation,$rootScope.FilterValues.Nation)) {
 					ok = false;
 				}
 			}
 			if (ok && 'Name' in $rootScope.FilterValues) {
-				if ($rootScope.FilterValues.Name && v.Name.indexOf($rootScope.FilterValues.Name) == -1) {
+				if (!contains(v.Name,$rootScope.FilterValues.Name)) {
+					ok = false;
+				}
+			}
+			if (ok && 'Name' in $rootScope.FilterValues) {
+				var needle = $rootScope.FilterValues.Name;
+				if (!contains(v.Name,needle) &&
+					!contains(v.Rating,needle)) {
 					ok = false;
 				}
 			}
@@ -366,6 +377,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
         	directions: ['asc']
         },
         groups: ['Nation'],
+        groupsCollapsedByDefault: false,
 
         columnDefs: [
            	{field:'Nation', width: 80}, 
@@ -377,7 +389,8 @@ angular.module("app", ['ui.router', 'ngGrid'])
         	{field:'Guns', width: 100, editableCellTemplate: 'gunTypeTemplate.html'},
         	{field:'HW', width: 100, editableCellTemplate: 'hwTemplate.html'},
         	{field:'Sections', width: 80},
-        	{field:'Horse', width: 100}
+        	{field:'Horse', width: 100, editableCellTemplate: 'horseArtyTemplate.html'}
+
         ]
 	};
 
@@ -391,20 +404,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		angular.forEach($scope.Data, function(v,i){
 			var ok = true;
 			if ('Nation' in $rootScope.FilterValues) {
-				if ($rootScope.FilterValues.Nation && v.Nation.indexOf($rootScope.FilterValues.Nation) == -1) {
+				if (!contains(v.Nation,$rootScope.FilterValues.Nation)) {
 					ok = false;
 				}
 			}
 			if (ok && 'Name' in $rootScope.FilterValues) {
-				if ($rootScope.FilterValues.Name && v.Name.indexOf($rootScope.FilterValues.Name) == -1) {
-					ok = false;
-				}
-			}
-			if (ok && 'Year' in $rootScope.FilterValues) {
-				theYear = parseInt($rootScope.FilterValues.Year);
-				yearFrom = parseInt(v.From);
-				yearTo = parseInt(v.To);
-				if (theYear < yearFrom || theYear > yearTo) {
+				var needle = $rootScope.FilterValues.Name;
+				if (!contains(v.Name,needle) &&
+					!contains(v.Guns,needle) &&
+					!contains(v.HW,needle)) {
 					ok = false;
 				}
 			}
