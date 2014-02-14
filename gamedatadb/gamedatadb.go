@@ -89,28 +89,27 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Drill", DrillBook{"Militia", map[string]Drill{
 		"MarchColumn":  Drill{8, 1, 0, 0},
 		"ClosedColumn": Drill{5, 1, 0, 0},
-		"MassedColumn": Drill{5, 2, 1, 0}}}))
+		"Screen":       Drill{4, 1, 2, 2}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"Mob", map[string]Drill{
-		"MarchColumn": Drill{7, 1, 0, 0},
-		"Mob":         Drill{5, 2, 2, 0}}}))
+		"MarchColumn":   Drill{6, 1, 0, 0},
+		"DisorderedMob": Drill{4, 2, 2, 0}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"French", map[string]Drill{
-		"Line":         Drill{8, 3, 0, 0},
-		"MarchColumn":  Drill{10, 1, 0, 0},
-		"AttackColumn": Drill{9, 1, 1, 1},
-		"ClosedColumn": Drill{8, 1, 0, 1},
-		"Square":       Drill{7, 1, 0, 1}}}))
-
-	gameData.Insert(DataMap("Drill", DrillBook{"Light Infantry", map[string]Drill{
-		"FullSK":       Drill{7, 12, 0, 0},
-		"HalfSK":       Drill{8, 6, 0, 0},
-		"Screen":       Drill{8, 6, 0, 0},
 		"Line":         Drill{7, 3, 0, 0},
 		"MarchColumn":  Drill{10, 1, 0, 0},
 		"AttackColumn": Drill{9, 1, 1, 1},
 		"ClosedColumn": Drill{8, 1, 0, 1},
 		"Square":       Drill{6, 1, 0, 1}}}))
+
+	gameData.Insert(DataMap("Drill", DrillBook{"Light Infantry", map[string]Drill{
+		"Skirmish":     Drill{7, 8, 4, 4},
+		"Screen":       Drill{8, 6, 3, 3},
+		"Line":         Drill{7, 3, 2, 1},
+		"MarchColumn":  Drill{10, 1, 0, 1},
+		"AttackColumn": Drill{9, 1, 1, 1},
+		"ClosedColumn": Drill{8, 1, 0, 1},
+		"Square":       Drill{5, 1, 0, 1}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"Prussian", map[string]Drill{
 		"Line":         Drill{7, 4, 0, 1},
@@ -119,29 +118,38 @@ func CreateGameData(gameData *db.Col) {
 		"MarchColumn":  Drill{9, 1, 0, 0},
 		"AttackColumn": Drill{8, 2, 1, 1},
 		"ClosedColumn": Drill{7, 2, 0, 0},
-		"Square":       Drill{6, 1, 0, 0}}}))
+		"Square":       Drill{5, 1, 0, 0}}}))
+
+	gameData.Insert(DataMap("Drill", DrillBook{"British", map[string]Drill{
+		"Line":         Drill{7, 4, 0, 1},
+		"ScreenedLine": Drill{7, 3, 1, 1},
+		"MarchColumn":  Drill{10, 1, 0, 0},
+		"AttackColumn": Drill{8, 1, 1, 1},
+		"ClosedColumn": Drill{7, 1, 0, 0},
+		"Square":       Drill{5, 1, 0, 0}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"OldSchool", map[string]Drill{
 		"Line":         Drill{6, 4, 0, 0},
 		"Oblique":      Drill{5, 4, 0, 0},
 		"ScreenedLine": Drill{6, 4, 0, 1},
-		"MarchColumn":  Drill{8, 1, 0, 0},
+		"MarchColumn":  Drill{9, 1, 0, 0},
+		"AttackColumn": Drill{7, 1, 0, 0},
 		"Square":       Drill{4, 1, 0, 0}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"Russian", map[string]Drill{
 		"Line":         Drill{7, 2, 0, 0},
 		"MarchColumn":  Drill{9, 1, 0, 0},
 		"AttackColumn": Drill{8, 1, 0, 0},
-		"Square":       Drill{6, 1, 0, 0}}}))
+		"Square":       Drill{5, 1, 0, 0}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"Austrian", map[string]Drill{
 		"Line":         Drill{6, 6, 0, 1},
-		"ScreenedLine": Drill{7, 5, 1, 1},
+		"ScreenedLine": Drill{6, 5, 1, 1},
 		"MarchColumn":  Drill{9, 1, 0, 0},
 		"AttackColumn": Drill{8, 2, 1, 1},
 		"ClosedColumn": Drill{7, 2, 0, 0},
 		"Mass":         Drill{6, 3, 2, 0},
-		"Square":       Drill{6, 1, 0, 0}}}))
+		"Square":       Drill{4, 1, 0, 0}}}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Add some Infantry
@@ -397,6 +405,20 @@ func CreateGameData(gameData *db.Col) {
 	// Kingdom of Spain - Guard
 	gameData.Insert(DataMap("Infantry", Infantry{"Spain Guard", 1792, 1814, "Guard", "Elite", "OldSchool", "4L", 0, 0, "Musket", "", "Good", true}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Spain Guard", 1808, 1814, "Guard Joseph Napoleon", "CrackLine", "French", "3L 1E", 0, 0, "Musket", "Average", "Good", true}))
+
+	// Ottoman Empire
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Veteran Janissaries", "Veteran", "Conscript", "5L", 0, 0, "Poor Musket", "Poor", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Regular Janissaries", "Regular", "Conscript", "5L", 0, 0, "Poor Musket", "Poor", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Janissaries", "Conscript", "Militia", "5L", 0, 0, "Poor Musket", "", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Untrained Janissaries", "Landwehr", "Militia", "5L", 0, 0, "Poor Musket", "", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Sekhans", "Landwehr", "Militia", "4L", 0, 0, "Poor Musket", "", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Rayas", "Veteran", "Light Infantry", "2S", 0, 0, "Poor Musket", "Excellent", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Martolo", "Regular", "Light Infantry", "3E", 0, 1, "Poor Musket", "Good", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Derbant", "Militia", "Militia", "4E", 0, 0, "Poor Musket", "Poor", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Fellihin", "Rabble", "Mob", "3L", 0, 0, "Poor Musket", "", "Poor", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Guard Janissaries", "CrackLine", "Conscript", "4L", -1, 0, "Poor Musket", "Poor", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Crack Nizam-I Jadid", "CrackLine", "Conscript", "4L", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Nizam-I Jadid", "Veteran", "Conscript", "4L", 0, 0, "Musket", "Average", "Average", false}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Add some Cavalry
