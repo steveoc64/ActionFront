@@ -406,6 +406,19 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Infantry", Infantry{"Spain Guard", 1792, 1814, "Guard", "Elite", "OldSchool", "4L", 0, 0, "Musket", "", "Good", true}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Spain Guard", 1808, 1814, "Guard Joseph Napoleon", "CrackLine", "French", "3L 1E", 0, 0, "Musket", "Average", "Good", true}))
 
+	// Portugal
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1800, 1808, "Line", "Militia", "Militia", "4L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1809, 1811, "Line", "Regular", "Militia", "4L", 0, 0, "Musket", "Poor", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1812, 1814, "Crack Line", "CrackLine", "British", "3L 1E", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1812, 1814, "Line", "Veteran", "British", "3L 1E", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1792, 1815, "Militia", "Militia", "Militia", "3L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1800, 1808, "Cacadore", "Militia", "Militia", "4L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1809, 1811, "Cacadore", "Veteran", "Light Infantry", "4E", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1812, 1814, "Cacadore", "CrackLine", "Light Infantry", "4E", 0, 0, "Musket", "Good", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1810, 1811, "1/3 Cacadore", "CrackLine", "Light Infantry", "4E", 0, 0, "Musket", "Excellent", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1812, 1814, "1/3 Cacadore", "Elite", "Light Infantry", "4E", 0, 0, "Musket", "Excellent", "Average", true}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Portugal", 1808, 1811, "Lusitanian Legion", "Regular", "British", "4L 1E", 0, 0, "Musket", "Average", "Average", false}))
+
 	// Ottoman Empire
 	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Veteran Janissaries", "Veteran", "Conscript", "5L", 0, 0, "Poor Musket", "Poor", "Poor", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Regular Janissaries", "Regular", "Conscript", "5L", 0, 0, "Poor Musket", "Poor", "Poor", false}))
@@ -419,6 +432,159 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Guard Janissaries", "CrackLine", "Conscript", "4L", -1, 0, "Poor Musket", "Poor", "Average", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Crack Nizam-I Jadid", "CrackLine", "Conscript", "4L", 0, 0, "Musket", "Average", "Average", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Ottoman", 1790, 1815, "Nizam-I Jadid", "Veteran", "Conscript", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Sweden
+	gameData.Insert(DataMap("Infantry", Infantry{"Sweden", 1792, 1815, "Line", "Veteran", "Prussian", "3L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Sweden", 1792, 1815, "Light", "Veteran", "Prussian", "3L", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Sweden", 1792, 1815, "Jager", "CrackLine", "Prussian", "3E", 0, 0, "Musket", "Good", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Sweden", 1792, 1815, "Guard", "Grenadier", "Prussian", "3L", 0, 0, "Musket", "Average", "Average", true}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Sweden", 1792, 1815, "Guard Light", "Grenadier", "Prussian", "3E", 0, 0, "Musket", "Good", "Average", true}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Sweden", 1792, 1815, "Leib Grenadier", "Grenadier", "Prussian", "3L", 0, 0, "Musket", "Average", "Average", true}))
+
+	// Denmark
+	gameData.Insert(DataMap("Infantry", Infantry{"Denmark", 1792, 1815, "Line", "Veteran", "French", "3L", 0, 2, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Denmark", 1792, 1815, "Light", "Regular", "French", "2L 1E", 0, 2, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Denmark", 1792, 1815, "Guard", "Grenadier", "French", "2L", 0, 2, "Musket", "Average", "Average", true}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Denmark", 1792, 1815, "Leib Grenadier", "Elite", "French", "2L 2E", 0, 2, "Musket", "Average", "Average", false}))
+
+	// United States
+	gameData.Insert(DataMap("Infantry", Infantry{"United States", 1812, 1815, "Crack Line", "CrackLine", "French", "2E", 0, 1, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"United States", 1812, 1815, "Veteran Line", "Veteran", "French", "2E", 0, 1, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"United States", 1812, 1815, "Line", "Regular", "French", "2E", 0, 1, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"United States", 1812, 1815, "Volunteer", "Regular", "French", "2E", 0, 1, "Musket", "Poor", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"United States", 1812, 1815, "Northern Militia", "Militia", "French", "2E", 0, 2, "Musket", "Poor", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"United States", 1812, 1815, "Southern Militia", "Landwehr", "French", "2E", 0, 3, "Musket", "Poor", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"United States", 1812, 1815, "Kentucky Militia", "Conscript", "French", "2E", 0, 4, "Rifle", "Good", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"United States", 1812, 1815, "Marines", "Grenadier", "French", "2E", 0, 2, "Musket", "Good", "Average", true}))
+
+	// Dutch Belgian
+	gameData.Insert(DataMap("Infantry", Infantry{"Dutch Belgian", 1815, 1815, "Line", "Landwehr", "Conscript", "3L 1S", 0, 1, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Dutch Belgian", 1815, 1815, "Light", "Conscript", "Light Infantry", "2L 3S", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Dutch Belgian", 1815, 1815, "Militia", "Militia", "Militia", "4L", 0, 0, "Musket", "", "Average", false}))
+
+	// Hannover
+	gameData.Insert(DataMap("Infantry", Infantry{"Hannover", 1815, 1815, "Line", "Conscript", "Conscript", "4L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hannover", 1815, 1815, "Landwehr", "Landwehr", "Militia", "4L", 0, 0, "Musket", "", "Average", false}))
+
+	// Grand Duchy of Brunswick
+	gameData.Insert(DataMap("Infantry", Infantry{"Brunswick", 1792, 1806, "Line", "Conscript", "Conscript", "3L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Brunswick", 1815, 1815, "Line", "Conscript", "Conscript", "3L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Brunswick", 1792, 1806, "Light", "Conscript", "Conscript", "2L 1E", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Brunswick", 1815, 1815, "Light", "Conscript", "Conscript", "2L 1E", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Brunswick", 1815, 1815, "Avant Guard", "Veteran", "Light Infantry", "3E", 0, 0, "Musket", "Good", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Brunswick", 1809, 1811, "Oels", "CrackLine", "Light Infantry", "3E", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Brunswick", 1812, 1814, "Oels", "Veteran", "Light Infantry", "3E", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Electorate of Hessen-Kassel
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1792, 1806, "Line", "Veteran", "OldSchool", "4L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1809, 1809, "Line", "Conscript", "Conscript", "3L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1813, 1815, "Line", "Regular", "French", "2L 1E", 0, 0, "Musket", "Poor", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1795, 1806, "Grenadier", "CrackLine", "OldSchool", "3L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1809, 1809, "Grenadier", "Veteran", "OldSchool", "3L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1793, 1806, "Jager", "Veteran", "OldSchool", "2L", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1813, 1815, "Jager", "Veteran", "Light Infantry", "3E", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1793, 1806, "Guard Regiment", "Elite", "OldSchool", "3L", 0, 0, "Musket", "", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1813, 1815, "Guard Regiment", "CrackLine", "OldSchool", "2L 1E", 0, 0, "Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Kassel", 1813, 1815, "Landwehr", "Landwehr", "Conscript", "4L", 0, 0, "Musket", "", "Average", false}))
+
+	// Kingdom of Northern Italy
+	gameData.Insert(DataMap("Infantry", Infantry{"Northern Italy", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Grand Duchy of Warsaw
+	gameData.Insert(DataMap("Infantry", Infantry{"Warsaw", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Poland
+	gameData.Insert(DataMap("Infantry", Infantry{"Poland", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Switzerland
+	gameData.Insert(DataMap("Infantry", Infantry{"Swiss", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Kingdom of Holland
+	gameData.Insert(DataMap("Infantry", Infantry{"Holland", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Batavian Republic
+	gameData.Insert(DataMap("Infantry", Infantry{"Batavia", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Kingdom of Two Sicilies
+	gameData.Insert(DataMap("Infantry", Infantry{"Sicily", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Kingdom of Naples
+	gameData.Insert(DataMap("Infantry", Infantry{"Naples", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Papal States
+	gameData.Insert(DataMap("Infantry", Infantry{"Papal States", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Sardinia Piedmont
+	gameData.Insert(DataMap("Infantry", Infantry{"Sardinia Piedmont", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Helvetian Republic
+	gameData.Insert(DataMap("Infantry", Infantry{"Helvetian", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Cisalpine Republic
+	gameData.Insert(DataMap("Infantry", Infantry{"Cisalpine", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Cispandane Republic
+	gameData.Insert(DataMap("Infantry", Infantry{"Cispandane", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Irish Rebels
+	gameData.Insert(DataMap("Infantry", Infantry{"Irish Rebel", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Persian Empire
+	gameData.Insert(DataMap("Infantry", Infantry{"Persian Empire", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Indian States
+	gameData.Insert(DataMap("Infantry", Infantry{"Indian States", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Maharatta
+	gameData.Insert(DataMap("Infantry", Infantry{"Maharatta", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// East India Company
+	gameData.Insert(DataMap("Infantry", Infantry{"East India Company", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Hyderabad
+	gameData.Insert(DataMap("Infantry", Infantry{"Hyderabad", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Anhalt
+	gameData.Insert(DataMap("Infantry", Infantry{"Anhalt", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Westphalia
+	gameData.Insert(DataMap("Infantry", Infantry{"Westphalia", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Wurttemburg
+	gameData.Insert(DataMap("Infantry", Infantry{"Wurttemburg", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Oldenburg
+	gameData.Insert(DataMap("Infantry", Infantry{"Oldenburg", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Baden
+	gameData.Insert(DataMap("Infantry", Infantry{"Baden", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Bavaria
+	gameData.Insert(DataMap("Infantry", Infantry{"Bavaria", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Saxony
+	gameData.Insert(DataMap("Infantry", Infantry{"Saxony", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Hessen-Darmstadt
+	gameData.Insert(DataMap("Infantry", Infantry{"Hessen-Darmstadt", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Nassau
+	gameData.Insert(DataMap("Infantry", Infantry{"Nassau", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Wurzburg
+	gameData.Insert(DataMap("Infantry", Infantry{"Wurzburg", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Kleve-Berg
+	gameData.Insert(DataMap("Infantry", Infantry{"Denmark", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Frankfurt
+	gameData.Insert(DataMap("Infantry", Infantry{"Frankfurt", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Lippe
+	gameData.Insert(DataMap("Infantry", Infantry{"Lippe", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
+
+	// Mecklenburg
+	gameData.Insert(DataMap("Infantry", Infantry{"Mecklenburg", 1792, 1815, "Name", "Rating", "Drill", "4L", 0, 0, "Musket", "Average", "Average", false}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Add some Cavalry
@@ -608,7 +774,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Cavalry", Cavalry{"Mysorean", 1792, 1815, "Kuzzaks", "Conscript", 12, 4, "Light", "Poor"}))
 	gameData.Insert(DataMap("Cavalry", Cavalry{"Mysorean", 1792, 1815, "Silahdars", "Conscript", 14, 4, "Heavy", ""}))
 	gameData.Insert(DataMap("Cavalry", Cavalry{"Mysorean", 1792, 1815, "Sawar Askars", "Conscript", 14, 4, "Lancer", "Poor"}))
-	gameData.Insert(DataMap("Cavalry", Cavalry{"East India Coy", 1792, 1815, "Madras", "CrackLine", 20, 4, "Light", "Average"}))
+	gameData.Insert(DataMap("Cavalry", Cavalry{"East India Company", 1792, 1815, "Madras", "CrackLine", 20, 4, "Light", "Average"}))
 	gameData.Insert(DataMap("Cavalry", Cavalry{"Nizam of Hyderbad", 1792, 1815, "Line", "Conscript", 12, 4, "Light", ""}))
 	gameData.Insert(DataMap("Cavalry", Cavalry{"Nizam of Hyderbad", 1792, 1815, "Levi", "Militia", 7, 4, "Light", ""}))
 	gameData.Insert(DataMap("Cavalry", Cavalry{"Nizam of Hyderbad", 1792, 1815, "Jats", "CrackLine", 18, 4, "Lancer", ""}))
