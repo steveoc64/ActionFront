@@ -89,6 +89,18 @@ type OrderArrival struct {
 	DGrids uint16
 }
 
+type OrderActivation struct {
+	Dice   uint8
+	Points int8
+}
+
+type OrderActivationMod struct {
+	Code        string
+	Description string
+	Points      int8
+	CorpsPoints int8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -1067,5 +1079,43 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("OrderArrival", OrderArrival{39, 5, 27}))
 	gameData.Insert(DataMap("OrderArrival", OrderArrival{48, 6, 34}))
 	gameData.Insert(DataMap("OrderArrival", OrderArrival{57, 7, 40}))
+
+	// Order Activation Points and Modifiers
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{0, -1}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{1, 0}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{3, 1}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{6, 2}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{8, 3}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{9, 4}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{11, 5}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{13, 6}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{16, 7}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{18, 8}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{19, 9}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{30, 10}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"CC1", "Both Commanders in same grid", 4, 6}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"CU1", "CA to urge order and commanders are within 2 grids", 3, 5}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"NLOS", "No Line of Sight between commanders", -1, -1}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"RVAN", "Receiving Commander has superior vantage point", 0, 2}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"CHAR", "Charismatic Commander activating Attack Order", 4, 4}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"INSP", "Inspirational Commander activating Attack Order", 2, 2}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"UINS", "Uninspiring Commander activating Attack Order", -2, -2}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"RETR", "ME Retreat Order during Corps withdrawal", 5, 0}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"TIRD", "ME is Tired, and ordered to March or Attack", -2, 0}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"BRK", "ME Break off order", 4, 0}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"CORP", "Corps Order", 0, 8}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"GRDB", "Form Grande Battery", 0, -6}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"GSTF", "Good Staff Work", 1, 2}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"PSTF", "Poor Staff Work", -1, -3}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"SNOW", "Snow or Heavy Rain", -2, -4}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"RAIN", "Miserable Rain", -1, -2}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"RIVL", "Commander Rivalry", -2, -12}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"ELIT", "Order to Elite ME", 4, 0}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C1", "Order is from a Superior Commander", 3, 3}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C2", "Order is from an Excellent Commander", 2, 2}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C3", "Order is from a Good Commander", 1, 1}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C4", "Order is from an Average Commander", 0, 0}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C5", "Order is from a Poor Commander", -1, -1}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C6", "Order is from a Despicable", -2, -2}))
 
 }

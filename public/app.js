@@ -54,17 +54,17 @@ angular.module("app", ['ui.router', 'ngGrid'])
  		})
  		.state('unitTypes.cavalerie', {
  			url: '/cavalerie',
- 			templateUrl: 'unittypes.cavalerie.html',
+ 			templateUrl: 'unitTypes.cavalerie.html',
  			controller: 'CavalryCtrl'
  		})
  		.state('unitTypes.infanterie', {
  			url: '/infanterie',
- 			templateUrl: 'unittypes.infanterie.html',
+ 			templateUrl: 'unitTypes.infanterie.html',
  			controller: 'InfantryCtrl'
  		})
  		.state('unitTypes.artillerie', {
  			url: '/artillerie',
- 			templateUrl: 'unittypes.artillerie.html',
+ 			templateUrl: 'unitTypes.artillerie.html',
  			controller: 'ArtilleryCtrl'
  		})
  		.state('unitTypes.etat', {
@@ -97,20 +97,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'orderArrival.html',
  			controller: 'OrderArrivalCtrl'
  		})
+ 		.state('orderActivation', {
+ 			url: '/orderActivation',
+ 			templateUrl: 'orderActivation.html',
+ 			controller: 'OrderActivationCtrl'
+ 		})
+ 		.state('commanderAction', {
+ 			url: '/commanderAction',
+ 			templateUrl: 'commanderAction.html',
+ 			controller: 'CommanderActionCtrl'
+ 		})
  		;
  }])
 .factory('DataSocket', ["$rootScope", function($rootScope) {
   var service = {};
   $rootScope.FilterValues = {};
 
-  service.connect = function(scope) {
-  	service.scope = scope;
-  	service.Entity = scope.Entity;
-  	service.Data = scope.Data;
-   	service.initMessage = JSON.stringify({"Action":"List", "Entity":service.Entity});
+  service.connect = function(subscriptions) {
+  	//service.scope = scope;
+  	//service.Entity = scope.Entity;
+  	//service.Data = scope.Data;
+
+  	// subscriptions is an array of objects in the form
+  	// Entity, Data, Callback
+  	service.subscriptions = subscriptions;
+
+  	console.log("Subs = ",subscriptions);
+   	//service.initMessage = JSON.stringify({"Action":"List", "Entity":service.Entity});
 
     if(service.ws) { 
-		service.ws.send(service.initMessage);
+    	angular.forEach(service.subscriptions, function(v,i){
+    		initMsg = JSON.stringify({"Action":"List", "Entity":v.Entity});
+    		service.ws.send(initMsg);
+    	});
+		//service.ws.send(service.initMessage);
     	return; 
     }
 
@@ -121,54 +141,59 @@ angular.module("app", ['ui.router', 'ngGrid'])
     	console.log(e);
 		var RxMsg = JSON.parse(e.data);
 	
-		if (RxMsg.Entity == service.Entity) {
-			// console.log($scope)
-			console.log("Msg ->", RxMsg);
+		angular.forEach(service.subscriptions, function(sub,isub) {
+			if (RxMsg.Entity == sub.Entity) {
+				// console.log($scope)
+				console.log("Msg ->", RxMsg);
+				var gotSome = false;
 
-			switch (RxMsg.Action) {
-				case "List":
-					service.Data = RxMsg.Data;	
-					break;
-				case "Update":
-					var gotSome = false;
-					var data = RxMsg.Data;
+				switch (RxMsg.Action) {
+					case "List":
+						//sub.Data = RxMsg.Data;	
+						angular.copy(RxMsg.Data,sub.Data);
+						gotSome = true;
+						break;
+					case "Update":
+						var data = RxMsg.Data;
 
-					// If the ID of the record exists, update the record in the dataset
-					angular.forEach(service.Data, function(v,i){
-						if (data["@id"] === v["@id"]) {
-							console.log("Updating record at pos",i,"to",data);
-							angular.copy(data,service.Data[i]);
-							gotSome = true;
-						}
-					});
-
-					// else if any of our records have a blank ID, overwrite that as the new record
-					if (!gotSome) {
-						console.log("Add New Record");
-						angular.forEach(service.Data, function(v,i){
-							if (v["@id"] === "0") {
-								console.log("Overwriting Blank record at pos",i);
-								angular.copy(data,service.Data[i]);
+						// If the ID of the record exists, update the record in the dataset
+						angular.forEach(sub.Data, function(v,i){
+							if (data["@id"] === v["@id"]) {
+								console.log("Updating record at pos",i,"to",data);
+								angular.copy(data,sub.Data[i]);
 								gotSome = true;
 							}
 						});
-					}
-					// otherwise - just append to the list
-					if (!gotSome) {
-						console.log("Adding new record");
-						service.Data.push(data);
-					}			
 
-			}
-		}
-	    //service.callback(e.data);
-	    service.scope.Data = service.Data;
-    	service.scope.updateFilters();
-	    service.scope.$apply();
+						// else if any of our records have a blank ID, overwrite that as the new record
+						if (!gotSome) {
+							console.log("Add New Record");
+							angular.forEach(sub.Data, function(v,i){
+								if (v["@id"] === "0") {
+									console.log("Overwriting Blank record at pos",i);
+									angular.copy(data,sub.Data[i]);
+									gotSome = true;
+								}
+							});
+						}
+						// otherwise - just append to the list
+						if (!gotSome) {
+							console.log("Adding new record");
+							sub.Data.push(data);
+						}			
+				} // switch
+				if (gotSome) {
+					sub.Callback(sub.Data);
+				}
+			} // if msg entity = this entity
+		});
     }
 
 	ws.onopen = function() {
-		service.ws.send(service.initMessage)
+    	angular.forEach(service.subscriptions, function(v,i){
+    		initMsg = JSON.stringify({"Action":"List", "Entity":v.Entity});
+    		service.ws.send(initMsg);
+    	});
 		service.isOpen = true;
 	}
 
@@ -216,7 +241,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.title = "L'Infanterie";
 	$scope.Entity = "Infantry";
 
-	DataSocket.connect($scope);
+	//DataSocket.connect($scope);
 
 	$scope.gridOptions = angular.copy(defaultGridOptions);
     $scope.gridOptions.sortInfo = {
@@ -287,6 +312,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
     $scope.newRow = function() {
     	$scope.FilteredData.push({"@id": '0', Nation: '~ ??? ~'})
     }
+
+    $scope.changeData = function(d) {
+    	$scope.updateFilters();
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": "Infantry", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);	
 	
 }])
 .controller("CavalryCtrl", ["$scope", "DataSocket", "$rootScope", function($scope, DataSocket, $rootScope){
@@ -298,7 +332,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.title = "La Cavalerie";
 	$scope.Entity = "Cavalry";
 
-	DataSocket.connect($scope);
+	//DataSocket.connect($scope);
 
 	$scope.gridOptions = angular.copy(defaultGridOptions);
     $scope.gridOptions.sortInfo = {
@@ -370,6 +404,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
     $scope.newRow = function() {
     	$scope.FilteredData.push({"@id": '0', Nation: '~ ??? ~'})
     }
+
+    $scope.changeData = function(d) {
+    	$scope.updateFilters();
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": "Cavalry", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);	
 	
 }])
 .controller("ArtilleryCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
@@ -381,7 +424,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.title = "L'Artillerie";
 	$scope.Entity = "Artillery";
 
-	DataSocket.connect($scope);
+	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'FilteredData',
@@ -456,6 +499,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
     $scope.newRow = function() {
     	$scope.FilteredData.push({"@id": '0', Nation: '~ ??? ~'})
     }
+
+    $scope.changeData = function(d) {
+    	$scope.updateFilters();
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": "Artillery", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);	
 	
 }])
 .controller("InitTablesCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
@@ -463,7 +515,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.title = "Initiative Modifiers";
 	$scope.Entity = "InitTable";
 
-	DataSocket.connect($scope);
+	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -501,6 +553,14 @@ angular.module("app", ['ui.router', 'ngGrid'])
     $scope.newRow = function() {
     	$scope.Data.push({"@id": '0', Factor: '~ ??? ~'})
     }
+
+    $scope.changeData = function(d) {
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": "InitTable", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);	
 	
 }])
 .controller("CorpsOrdersCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
@@ -509,7 +569,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.title = "Corps Orders";
 	$scope.Entity = "CorpsOrder";
 
-	DataSocket.connect($scope);
+	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -549,7 +609,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
     $scope.newRow = function() {
     	$scope.Data.push({"@id": '0', Order: '~ ??? ~'})
     }
-	
+
+    $scope.changeData = function(d) {
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": "CorpsOrder", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);	
+
 }])
 .controller("MEOrdersCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
 	$scope.Data = [];
@@ -557,7 +625,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.title = "ME Orders";
 	$scope.Entity = "MEOrder";
 
-	DataSocket.connect($scope);
+	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -583,7 +651,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	};
 
 	$scope.update = function(row) {
-		console.log("CorpsOrderUpdated -> ",row.entity);
+		console.log("MEOrderUpdated -> ",row.entity);
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
@@ -597,15 +665,22 @@ angular.module("app", ['ui.router', 'ngGrid'])
     $scope.newRow = function() {
     	$scope.Data.push({"@id": '0', Order: '~ ??? ~'})
     }
-	
+
+    $scope.changeData = function(d) {
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": "MEOrder", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);
+
 }])
 .controller("OrderArrivalCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
 	$scope.Data = [];
-	$scope.MEOrders = MEOrders;
 	$scope.title = "Order Arrival Calculation";
 	$scope.Entity = "OrderArrival";
 
-	DataSocket.connect($scope);
+	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -644,5 +719,129 @@ angular.module("app", ['ui.router', 'ngGrid'])
     $scope.newRow = function() {
     	$scope.Data.push({"@id": '0', Grids: '~ ??? ~'})
     }
+
+    $scope.changeData = function(d) {
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": "OrderArrival", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);
 	
-}]);
+}])
+.controller("OrderActivationCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.ModData = [];
+	$scope.maintitle = "Order Activation";
+	$scope.modtitle = "Activation Modifiers";
+	$scope.Entity = "OrderActivation";
+	$scope.ModEntity = "OrderActivationMod";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Dice'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Dice', width: 120}, 
+           	{field:'Points', displayName: 'Activation Points', width: 200}
+        ]
+	};
+
+	$scope.gridOptionsMods = { 
+		data: 'ModData',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields:['Code'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 120}, 
+           	{field:'Description', width: 300},
+           	{field:'Points', displayName: 'ME', width: 60},
+           	{field:'CorpsPoints', displayName: 'Corps', width: 80}
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("row = ",row);
+		console.log("CorpsOrderUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		console.log(row);
+		targetID = row["@id"];
+		console.log("Looking for ID ",targetID);
+		gotSome = false;
+		angular.forEach($scope.Data, function(v,i){
+			if (v["@id"] == targetID) {
+				console.log("The update is on the first grid");
+				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+				gotSome = true;
+			}
+		});
+		if (!gotSome) { 
+				angular.forEach($scope.ModData, function(v,i){
+				if (v["@id"] == targetID) {
+					console.log("The update is on the mod data grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					gotSome = true;
+				}
+			})
+		}
+		if (!gotSome) {
+			if ('Code' in row) {
+				console.log("The update is on the mod data grid because it hase a property called Code");
+				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+			} else {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Dice: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		console.log("Change Data Callback",d);
+		$scope.$apply();
+	}
+
+	$scope.changeModData = function(d) {
+		console.log("Change Mod Data Callback",d)
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: "OrderActivation", Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: "OrderActivationMod", Data: $scope.ModData, Callback: $scope.changeModData}
+	]);
+	
+}])
+;
