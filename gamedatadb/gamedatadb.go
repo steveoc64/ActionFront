@@ -101,6 +101,22 @@ type OrderActivationMod struct {
 	CorpsPoints int8
 }
 
+type CommanderAction struct {
+	Who    string
+	Code   string
+	Action string
+	Cost   uint8
+}
+
+type CAScore struct {
+	Code        string
+	Description string
+	A1          uint8
+	A2          uint8
+	A3          uint8
+	A4          uint8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -1118,4 +1134,52 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C5", "Order is from a Poor Commander", -1, -1}))
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C6", "Order is from a Despicable", -2, -2}))
 
+	// Commander Actions
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "MV1", "Move 1 grid", 0}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "MV3", "Move 3 grids", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "MSG", "Send Message if Unengaged", 0}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "ORD", "Issue Orders", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "EMG", "Send Message if Engaged", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "BTY", "Commit battery from Corps reserve to ME reserve", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "BRR", "Form Brigade Reserve", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "AME", "Attach to ME within 2 grids", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "DME", "Detach from ME and move 2 grids", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "DEF", "Convert Maneuvre to Defend during GT movement", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "INI", "Boost Initiative for ME within 2 grids", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "FGB", "Form Grand Battery", 2}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "DGB", "Dissolve Grand Battery", 2}))
+
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "MV", "Move 1 grid if unattached", 0}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "GI", "Gain Impetus", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "CB", "Commit Battery from ME reserve", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "RA", "Rally any 1 unit in same grid", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "CC", "Commit subordinate to unit", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "CS", "Commit sappers", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "AT", "Attach to unit within 1 grid", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "DT", "Detach from unit and move 1 grid", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "SK", "Commit skirmishers to screen", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "FM", "Follow Me", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "WB", "Withdraw Battery to reserve", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "BA", "Form bridge assault formation", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "RG", "Form Battery from regimental guns", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "RD", "Re-Mount Dragoons", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "CR", "Commit reserve", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "RS", "Resupply 1 unit", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Initiative", "BG", "Form cavalry battle group", 1}))
+
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "MV", "Move 1 grid if unattached", 0}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "FC", "Adjust facing or formation for 1 unit within 1 grid", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "GI", "Attempt to gain impetus", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "AT", "Attach to unit within 1 grid", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "DT", "Detach from unit and move 1 grid", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "PB", "Pull back 1 unit", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "SK", "Commit skirmishers to screen", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "RA", "Rally any 1 unit in same grid", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "CV", "Order ME support cavalry to opportunity charge up to 1 grid", 1}))
+	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "BG", "Form cavalry battle group", 1}))
+
+	gameData.Insert(DataMap("CAScore", CAScore{"A", "Army Commander", 6, 9, 12, 16}))
+	gameData.Insert(DataMap("CAScore", CAScore{"B", "Corps Commander", 8, 11, 14, 18}))
+	gameData.Insert(DataMap("CAScore", CAScore{"C", "Brigade Leader", 11, 15, 18, 20}))
+	gameData.Insert(DataMap("CAScore", CAScore{"D", "Replacement", 13, 15, 18, 20}))
 }
