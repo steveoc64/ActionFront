@@ -47,50 +47,55 @@ angular.module("app", ['ui.router', 'ngGrid'])
  .config(['$urlRouterProvider', '$stateProvider',function ($urlRouterProvider, $stateProvider) {
  	$urlRouterProvider.otherwise('/');
  	$stateProvider
- 		.state('unittypes', {
- 			url: '/unittypes',
- 			templateUrl: 'unittypes.html',
+ 		.state('unitTypes', {
+ 			url: '/unitTypes',
+ 			templateUrl: 'unitTypes.html',
  			controller: 'UnitTypesCtrl'
  		})
- 		.state('unittypes.cavalerie', {
+ 		.state('unitTypes.cavalerie', {
  			url: '/cavalerie',
  			templateUrl: 'unittypes.cavalerie.html',
  			controller: 'CavalryCtrl'
  		})
- 		.state('unittypes.infanterie', {
+ 		.state('unitTypes.infanterie', {
  			url: '/infanterie',
  			templateUrl: 'unittypes.infanterie.html',
  			controller: 'InfantryCtrl'
  		})
- 		.state('unittypes.artillerie', {
+ 		.state('unitTypes.artillerie', {
  			url: '/artillerie',
  			templateUrl: 'unittypes.artillerie.html',
  			controller: 'ArtilleryCtrl'
  		})
- 		.state('unittypes.etat', {
+ 		.state('unitTypes.etat', {
  			url: '/etat',
  			templateUrl: 'unittypes.etat.html',
  			controller: 'EtatCtrl'
  		})
- 		.state('unittypes.reglement', {
+ 		.state('unitTypes.reglement', {
  			url: '/reglement',
  			templateUrl: 'drillbook.html',
  			controller: 'DrillBookCtrl'
  		})
- 		.state('inittables', {
- 			url: '/inittables',
+ 		.state('initTables', {
+ 			url: '/initTables',
  			templateUrl: 'inittables.html',
  			controller: 'InitTablesCtrl'
  		})
- 		.state('corpsorders', {
- 			url: '/corpsorders',
+ 		.state('corpsOrders', {
+ 			url: '/corpsOrders',
  			templateUrl: 'corpsorders.html',
  			controller: 'CorpsOrdersCtrl'
  		})
- 		.state('meorders', {
- 			url: '/meorders',
+ 		.state('meOrders', {
+ 			url: '/meOrders',
  			templateUrl: 'meorders.html',
  			controller: 'MEOrdersCtrl'
+ 		})
+		.state('orderArrival', {
+ 			url: '/orderArrival',
+ 			templateUrl: 'orderArrival.html',
+ 			controller: 'OrderArrivalCtrl'
  		})
  		;
  }])
@@ -591,6 +596,53 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
     $scope.newRow = function() {
     	$scope.Data.push({"@id": '0', Order: '~ ??? ~'})
+    }
+	
+}])
+.controller("OrderArrivalCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.MEOrders = MEOrders;
+	$scope.title = "Order Arrival Calculation";
+	$scope.Entity = "OrderArrival";
+
+	DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+           	fields: ['Grids'],
+        	directions: ['asc']    	
+        },
+        columnDefs: [
+           	{field:'Grids', width: 120}, 
+           	{field:'Delay', width: 400},
+           	{field:'DGrids', displayName:'Diagonal Grids', width: 300}
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("CorpsOrderUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.updateFilters = function() {
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Grids: '~ ??? ~'})
     }
 	
 }]);

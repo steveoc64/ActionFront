@@ -83,6 +83,12 @@ type MEOrder struct {
 	ShakenIfEngaged bool
 }
 
+type OrderArrival struct {
+	Grids  uint16
+	Delay  uint16
+	DGrids uint16
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -1051,5 +1057,15 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("MEOrder", MEOrder{"Screen", "The ME is to screen the advance and conduct reconnaissance", "Convert to Defend when enemy is at 2 grids. Choose pending order of Attack, RearGuard or BreakOff on contact", true, false, true, false, false}))
 	gameData.Insert(DataMap("MEOrder", MEOrder{"ReDeploy", "The ME is to perform a general change of facing, formation and relative position", "Shaken if engaged. Recieve 3D6 GT adjustments per half hour", true, false, false, true, true}))
 	gameData.Insert(DataMap("MEOrder", MEOrder{"Rest", "The ME is to rest and rally", "Shaken if engaged.", true, false, false, true, true}))
+
+	// Order Arrival Delay
+	gameData.Insert(DataMap("OrderArrival", OrderArrival{2, 0, 1}))
+	gameData.Insert(DataMap("OrderArrival", OrderArrival{6, 1, 4}))
+	gameData.Insert(DataMap("OrderArrival", OrderArrival{12, 2, 8}))
+	gameData.Insert(DataMap("OrderArrival", OrderArrival{21, 3, 15}))
+	gameData.Insert(DataMap("OrderArrival", OrderArrival{30, 4, 21}))
+	gameData.Insert(DataMap("OrderArrival", OrderArrival{39, 5, 27}))
+	gameData.Insert(DataMap("OrderArrival", OrderArrival{48, 6, 34}))
+	gameData.Insert(DataMap("OrderArrival", OrderArrival{57, 7, 40}))
 
 }
