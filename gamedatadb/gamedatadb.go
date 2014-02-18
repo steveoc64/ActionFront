@@ -72,6 +72,17 @@ type CorpsOrder struct {
 	Stipulation string
 }
 
+type MEOrder struct {
+	Order           string
+	Purpose         string
+	Notes           string
+	IfNonEngaged    bool
+	IfEngaged       bool
+	CavalryOnly     bool
+	DefendIfEngaged bool
+	ShakenIfEngaged bool
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -1027,5 +1038,18 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CorpsOrder", CorpsOrder{"Defend", []string{"Defend", "Support/Intercept", "March", "Rest", "Redeploy", "BreakOff"}, "At least 1 ME must have a Defend order"}))
 	gameData.Insert(DataMap("CorpsOrder", CorpsOrder{"Maneuver", []string{"Support/Intercept", "March"}, ""}))
 	gameData.Insert(DataMap("CorpsOrder", CorpsOrder{"Withdraw", []string{"Rearguard", "Defend", "Support/Intercept", "March", "Rest", "BreakOff"}, "The Corps must try to have most of its MEs disengaged until it reaches the destination"}))
+
+	// ME Orders
+	gameData.Insert(DataMap("MEOrder", MEOrder{"Attack", "The ME is to engage the enemy", "The ME advances to contact", true, false, false, false, false}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"Engaged", "Attacking ME is to take the objective", "The ME is to fight through to the objective grid", false, true, false, false, false}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"Bombard", "The ME conducts softening up of the objective", "The ME will advance to within 3 grids of the objective and conduct bombardment and skirmish attacks. Pending order of Attack after a specified period.", true, false, false, true, false}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"Defend", "The ME is to hold its ground", "The ME must remain within 1 grid of the defended objective", true, true, false, false, false}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"Support/Intercept", "The ME is to support another ME", "Intercept order may be activated when enemy is within 3 grids", true, false, true, true, false}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"Maneuver", "The ME is to march to a new position", "Will move up to 2 grids off line to avoid contact. Revert to Defend or BreakOff if engaged", true, false, false, true, true}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"RearGuard", "The ME is to fight a delaying action", "Half the units of the ME may fall back 1 grid during GT movement", false, true, false, false, false}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"BreakOff", "The ME is to attempt to disenage and withdraw to a new position", "Receive a full GT movement to disengage. Convert to defend when objective is reached", false, true, false, true, false}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"Screen", "The ME is to screen the advance and conduct reconnaissance", "Convert to Defend when enemy is at 2 grids. Choose pending order of Attack, RearGuard or BreakOff on contact", true, false, true, false, false}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"ReDeploy", "The ME is to perform a general change of facing, formation and relative position", "Shaken if engaged. Recieve 3D6 GT adjustments per half hour", true, false, false, true, true}))
+	gameData.Insert(DataMap("MEOrder", MEOrder{"Rest", "The ME is to rest and rally", "Shaken if engaged.", true, false, false, true, true}))
 
 }

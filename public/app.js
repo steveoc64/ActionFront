@@ -86,7 +86,13 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			url: '/corpsorders',
  			templateUrl: 'corpsorders.html',
  			controller: 'CorpsOrdersCtrl'
- 		});
+ 		})
+ 		.state('meorders', {
+ 			url: '/meorders',
+ 			templateUrl: 'meorders.html',
+ 			controller: 'MEOrdersCtrl'
+ 		})
+ 		;
  }])
 .factory('DataSocket', ["$rootScope", function($rootScope) {
   var service = {};
@@ -520,6 +526,54 @@ angular.module("app", ['ui.router', 'ngGrid'])
            	 cellTemplate: '<ul><li ng-repeat="i in row.entity.MEOrders">{{i}}</li></ul>'
            	},
            	{field: 'Stipulation', width: 400}
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("CorpsOrderUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.updateFilters = function() {
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Order: '~ ??? ~'})
+    }
+	
+}])
+.controller("MEOrdersCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.MEOrders = MEOrders;
+	$scope.title = "ME Orders";
+	$scope.Entity = "MEOrder";
+
+	DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        columnDefs: [
+           	{field:'Order', width: 120}, 
+           	{field:'Purpose', width: 400},
+           	{field:'Notes', width: '40%'},
+           	{field:'IfNonEngaged', width: 100, editableCellTemplate: 'ifNonEngagedTemplate.html'},
+           	{field:'IfEngaged', width: 100, editableCellTemplate: 'ifEngagedTemplate.html'},
+           	{field:'CavalryOnly', width: 100, editableCellTemplate: 'cavalryOnlyTemplate.html'},
+           	{field:'DefendIfEngaged', width: 100, editableCellTemplate: 'defendIfEngagedTemplate.html'},
+           	{field:'ShakenIfEngaged', width: 100, editableCellTemplate: 'shakenIfEngagedTemplate.html'}
         ]
 	};
 
