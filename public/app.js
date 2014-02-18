@@ -880,6 +880,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
         	directions: ['asc']    	
         },
         groups: ['Who'],
+        groupsCollapsedByDefault: false,
         columnDefs: [
         	{field:'Who',visible: false},
            	{field:'Code', width: 80}, 
