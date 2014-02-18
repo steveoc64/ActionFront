@@ -6,6 +6,7 @@ var CavMoveTypes = ['Heavy','Medium','Light','Lancer'];
 var GunneryClasses = [0,1,2,3];
 var GunTypes = ['12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
 var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
+var MEOrders = ['Attack','Defend','Bombard','Support/Intercept','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
 
 var defaultGridOptions = { 
 		data: 'FilteredData',
@@ -75,6 +76,16 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			url: '/reglement',
  			templateUrl: 'drillbook.html',
  			controller: 'DrillBookCtrl'
+ 		})
+ 		.state('inittables', {
+ 			url: '/inittables',
+ 			templateUrl: 'inittables.html',
+ 			controller: 'InitTablesCtrl'
+ 		})
+ 		.state('corpsorders', {
+ 			url: '/corpsorders',
+ 			templateUrl: 'corpsorders.html',
+ 			controller: 'CorpsOrdersCtrl'
  		});
  }])
 .factory('DataSocket', ["$rootScope", function($rootScope) {
@@ -433,6 +444,99 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
     $scope.newRow = function() {
     	$scope.FilteredData.push({"@id": '0', Nation: '~ ??? ~'})
+    }
+	
+}])
+.controller("InitTablesCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Initiative Modifiers";
+	$scope.Entity = "InitTable";
+
+	DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields: ['Value'],
+        	directions: ['desc']
+        },
+        columnDefs: [
+           	{field:'Factor', width: 300}, 
+           	{field:'Value', width: 50}
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("InitUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.updateFilters = function() {
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Factor: '~ ??? ~'})
+    }
+	
+}])
+.controller("CorpsOrdersCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.MEOrders = MEOrders;
+	$scope.title = "Corps Orders";
+	$scope.Entity = "CorpsOrder";
+
+	DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        columnDefs: [
+           	{field:'Order', width: 100}, 
+           	{field:'MEOrders', 
+           	 width: 500, 
+           	 displayName: 'Allowed ME Orders',
+           	 editableCellTemplate: 'meOrdersTemplate.html', 
+           	 cellTemplate: '<ul><li ng-repeat="i in row.entity.MEOrders">{{i}}</li></ul>'
+           	},
+           	{field: 'Stipulation', width: 400}
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("CorpsOrderUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.updateFilters = function() {
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Order: '~ ??? ~'})
     }
 	
 }]);
