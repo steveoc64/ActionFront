@@ -7,6 +7,7 @@ var GunneryClasses = [0,1,2,3];
 var GunTypes = ['12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
 var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
 var MEOrders = ['Attack','Defend','Bombard','Support/Intercept','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
+var StaffRatings = ['Good','Average','Poor'];
 
 var defaultGridOptions = { 
 		data: 'FilteredData',
@@ -484,6 +485,14 @@ angular.module("app", ['ui.router', 'ngGrid'])
 					ok = false;
 				}
 			}
+			if (ok && 'Year' in $rootScope.FilterValues) {
+				theYear = parseInt($rootScope.FilterValues.Year);
+				yearFrom = parseInt(v.From);
+				yearTo = parseInt(v.To);
+				if (theYear < yearFrom || theYear > yearTo) {
+					ok = false;
+				}
+			}
 			if (ok) {
 				$scope.FilteredData.push(v);
 			}
@@ -512,6 +521,99 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		{"Entity": "Artillery", "Data": $scope.Data, "Callback": $scope.changeData}
 	]);	
 	
+}])
+.controller("EtatCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.FilteredData = [];
+	$scope.StaffRatings = StaffRatings;
+	$scope.title = "L'Etat Major";
+	$scope.docs = "Appendix G";
+	$scope.Entity = "EtatMajor";
+
+	//DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'FilteredData',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields: ['From'],
+        	directions: ['asc']
+        },
+        groups: ['Nation'],
+        groupsCollapsedByDefault: false,
+
+        columnDefs: [
+           	{field:'Nation', width: 120}, 
+           	{field:'From', width: 50}, 
+           	{field:'To', width: 50}, 
+        	{field:'Rating', width: 120, editableCellTemplate: 'staffRatingTemplate.html'},
+        	{field:'Value', width: 60}
+        ]
+	};
+
+	$scope.$on('FilterUpdate', function(e,data) {
+		console.log('FilterUpdate event',data);
+		$scope.updateFilters();
+	});
+
+	$scope.updateFilters = function() {
+		$scope.FilteredData = [];
+		angular.forEach($scope.Data, function(v,i){
+			var ok = true;
+			if ('Nation' in $rootScope.FilterValues) {
+				if (!contains(v.Nation,$rootScope.FilterValues.Nation)) {
+					ok = false;
+				}
+			}
+			if (ok && 'Name' in $rootScope.FilterValues) {
+				var needle = $rootScope.FilterValues.Name;
+				if (!contains(v.Rating,needle)) {
+					ok = false;
+				}
+			}
+			if (ok && 'Year' in $rootScope.FilterValues) {
+				theYear = parseInt($rootScope.FilterValues.Year);
+				yearFrom = parseInt(v.From);
+				yearTo = parseInt(v.To);
+				if (theYear < yearFrom || theYear > yearTo) {
+					ok = false;
+				}
+			}
+			if (ok) {
+				$scope.FilteredData.push(v);
+			}			
+		});
+	}
+
+	$scope.update = function(row) {
+		console.log("StaffUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
+
+    $scope.newRow = function() {
+    	$scope.FilteredData.push({"@id": '0', Nation: '~ ??? ~'})
+    }
+
+    $scope.changeData = function(d) {
+    	$scope.updateFilters();
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": "EtatMajor", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);		
 }])
 .controller("InitTablesCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
 	$scope.Data = [];

@@ -46,6 +46,14 @@ type Artillery struct {
 	Horse    bool
 }
 
+type EtatMajor struct {
+	Nation string
+	From   uint16
+	To     uint16
+	Rating string
+	Value  int8
+}
+
 // Names of fields here shortened to help make the JSON daatbase more sensible
 type Drill struct {
 	EF uint8 // Efficiency. Range 1-10. value 1 = 10%, value 10 = 100%
@@ -710,7 +718,7 @@ func CreateGameData(gameData *db.Col) {
 
 	// Mecklenburg
 	gameData.Insert(DataMap("Infantry", Infantry{"Mecklenburg", 1808, 1813, "Line", "Regular", "French", "2L 1E", 0, 0, "Superior Musket", "Average", "Average", false}))
-	gameData.Insert(DataMap("Infantry", Infantry{"Mecklenburg", 1808, 1813, "Guard", "Veteran", "French", "1L 1E", 0, 0, "Superior Musket", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Mecklenburg", 1808, 1813, "Guard", "Veteran", "French", "1L 1E", 0, 0, "Sucperior Musket", "Average", "Average", false}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Add some Cavalry
@@ -1093,7 +1101,124 @@ func CreateGameData(gameData *db.Col) {
 
 	//Minor Powers
 	gameData.Insert(DataMap("Artillery", Artillery{"Sweden", 1792, 1815, "Line", "CrackLine", 2, "6pdr", "5.5\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Sweden", 1792, 1815, "Horse", "Elite", 2, "6pdr", "8pdr", 3, true}))
 	gameData.Insert(DataMap("Artillery", Artillery{"Sweden", 1792, 1815, "Reserve", "CrackLine", 2, "12pdr", "", 3, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Denmark", 1792, 1815, "Line", "Regular", 2, "6pdr", "7pdr", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Denmark", 1792, 1815, "Reserve", "Veteran", 2, "10pdr", "10pdr", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Denmark", 1792, 1815, "Horse", "Veteran", 2, "3pdr", "7pdr", 4, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"United States", 1812, 1815, "Line", "CrackLine", 2, "6pdr", "5.5\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"United States", 1812, 1815, "Marine", "Guard", 2, "6pdr", "5.5\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"United States", 1812, 1815, "Horse", "Veteran", 2, "3pdr", "", 2, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Portugal", 1792, 1815, "Line", "Veteran", 2, "6pdr", "6\"", 3, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Spain", 1792, 1815, "Line", "Veteran", 3, "6pdr", "6\"", 3, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Dutch Belgium", 1815, 1815, "Line", "Conscript", 2, "6pdr", "5.5\"", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Dutch Belgium", 1815, 1815, "Horse", "Veteran", 2, "6pdr", "5.5\"", 4, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Hannover", 1815, 1815, "Line", "Conscript", 2, "6pdr", "5.5\"", 4, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Brunswick", 1815, 1815, "Line", "Conscript", 2, "6pdr", "", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Brunswick", 1815, 1815, "Horse", "Veteran", 2, "6pdr", "", 3, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Switzerland", 1812, 1812, "Line", "CrackLine", 1, "4pdr", "", 2, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Neuchatel", 1812, 1812, "Line", "CrackLine", 1, "4pdr", "", 1, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Northern Italy", 1792, 1815, "Line", "Veteran", 2, "6pdr", "5.5\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Northern Italy", 1792, 1815, "Reserve", "Veteran", 2, "12pdr", "6\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Northern Italy", 1812, 1812, "Regt Guns", "", 2, "3pdr", "", 1, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Northern Italy", 1792, 1815, "Horse", "CrackLine", 2, "6pdr", "5.5\"", 3, true}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Northern Italy", 1792, 1815, "Guard", "Grenadier", 2, "6pdr", "5.5\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Northern Italy", 1805, 1806, "Guard", "Grenadier", 2, "8pdr", "5.5\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Northern Italy", 1806, 1814, "Guard", "Grenadier", 2, "6pdr", "5.5\"", 3, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Holland", 1792, 1815, "Line", "Conscript", 2, "6pdr", "5.5\"", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Holland", 1792, 1815, "Heavy", "Conscript", 2, "12pdr", "6\"", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Holland", 1792, 1815, "Horse", "Regular", 2, "6pdr", "5.5\"", 3, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Naples", 1792, 1815, "Line", "Rating", 2, "6pdr", "6\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Naples", 1792, 1815, "Horse", "Rating", 2, "6pdr", "6\"", 3, true}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Naples", 1792, 1815, "Guard", "Rating", 2, "6pdr", "6\"", 3, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Warsaw", 1792, 1815, "Line", "Veteran", 2, "8pdr", "7pdr", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Warsaw", 1792, 1815, "Reserve", "Veteran", 2, "12pdr", "7pdr", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Warsaw", 1812, 1812, "Bn Guns", "Veteran", 2, "3pdr", "", 1, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Warsaw", 1792, 1815, "Horse", "CrackLine", 2, "6pdr", "7pdr", 3, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Ottoman", 1792, 1815, "Line", "Conscript", 3, "6pdr", "9pdr", 5, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Ottoman", 1792, 1815, "Topijis", "Conscript", 2, "6pdr", "9pdr", 5, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Ottoman", 1792, 1815, "French Mercenary", "Veteran", 2, "6pdr", "9pdr", 5, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Bavaria", 1792, 1815, "Line", "Veteran", 2, "6pdr", "7pdr", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Bavaria", 1792, 1815, "Reserve", "Veteran", 2, "12pdr", "7pdr", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Bavaria", 1812, 1812, "Battalion Guns", "Veteran", 2, "3pdr", "", 1, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Bavaria", 1792, 1815, "Horse", "Veteran", 2, "6pdr", "7pdr", 3, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Saxony", 1792, 1815, "Line", "Regular", 2, "6pdr", "7pdr", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Saxony", 1792, 1815, "Horse", "Regular", 2, "6pdr", "7pdr", 3, true}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Saxony", 1805, 1812, "Battalion Guns", "Veteran", 2, "4pdr", "", 1, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Hessen-Darmstadt", 1792, 1815, "Line", "CrackLine", 2, "6pdr", "7pdr", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Hessen-Darmstadt", 1792, 1815, "Horse", "CrackLine", 2, "6pdr", "7pdr", 3, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Westphalia", 1792, 1815, "Line", "Veteran", 2, "8pdr", "5.5\"", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Westphalia", 1792, 1815, "Horse", "Veteran", 2, "6pdr", "5.5\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Westphalia", 1792, 1815, "Battalion Guns", "Veteran", 2, "6pdr", "", 1, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Westphalia", 1792, 1815, "Guard", "Elite", 2, "6pdr", "5.5\"", 3, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Wurttemburg", 1792, 1815, "Line", "Veteran", 1, "6pdr", "7pdr", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Wurttemburg", 1792, 1815, "Heavy", "Veteran", 1, "12pdr", "7pdr", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Wurttemburg", 1792, 1815, "Horse", "Veteran", 1, "6pdr", "7pdr", 3, true}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Wurttemburg", 1792, 1815, "Guard", "Elite", 1, "6pdr", "7pdr", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Wurttemburg", 1792, 1815, "Guard Heavy", "Elite", 1, "12pdr", "7pdr", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Wurttemburg", 1792, 1815, "Guard Horse", "Elite", 1, "6pdr", "7pdr", 3, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Baden", 1792, 1815, "Line", "Veteran", 1, "6pdr", "7pdr", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Baden", 1792, 1815, "Heavy", "Veteran", 1, "12pdr", "7pdr", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Baden", 1792, 1815, "Horse", "CrackLine", 1, "6pdr", "7pdr", 3, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Mecklenburg", 1792, 1815, "Line", "Conscript", 3, "6pdr", "5.5\"", 4, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Kleve-Berg", 1792, 1815, "Line", "Veteran", 1, "6pdr", "7pdr", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Kleve-Berg", 1792, 1815, "Horse", "CrackLine", 1, "6pdr", "7pdr", 3, true}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Persian Empire", 1792, 1815, "Line (Zamburechki)", "CrackLine", 2, "6pdr", "", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Persian Empire", 1792, 1815, "Position", "CrackLine", 3, "12pdr", "7pdr", 6, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"East India Company", 1792, 1815, "Line", "Veteran", 2, "6pdr", "5.5\"", 4, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Mysorean", 1792, 1815, "Line", "Regular", 3, "6pdr", "5.5\"", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Mysorean", 1792, 1815, "Heavy", "Regular", 3, "12pdr", "5.5\"", 4, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Mysorean", 1792, 1815, "Levi", "Landwehr", 3, "18pdr", "", 4, false}))
+
+	gameData.Insert(DataMap("Artillery", Artillery{"Indian States", 1792, 1815, "Line", "Conscript", 3, "6pdr", "6\"", 3, false}))
+	gameData.Insert(DataMap("Artillery", Artillery{"Indian States", 1792, 1815, "Levi", "Landwehr", 3, "18pdr", "", 3, false}))
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Staff Ratings
+
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"France", 1792, 1795, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"France under Napoleon", 1796, 1800, "Good", 2}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"France", 1796, 1800, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"France", 1801, 1814, "Good", 1}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"France", 1815, 1815, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Britain", 1792, 1815, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Prussia", 1792, 1810, "Poor", -1}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Prussia", 1811, 1815, "Good", 1}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Austria", 1792, 1809, "Poor", -1}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Austria", 1810, 1815, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Russia", 1792, 1805, "Poor", -1}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Russia", 1806, 1815, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Spain", 1792, 1808, "Poor", -1}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Spain", 1809, 1815, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Sweden", 1792, 1810, "Poor", -1}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Sweden", 1811, 1815, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"United States", 1812, 1815, "Average", 0}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Ancien Regimes", 1792, 1815, "Poor", -1}))
+	gameData.Insert(DataMap("EtatMajor", EtatMajor{"Other Divisional", 1792, 1815, "Average", 0}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Command and Control Tables
