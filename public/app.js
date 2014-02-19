@@ -83,6 +83,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'unitTypes.reglement.html',
  			controller: 'DrillBookCtrl'
  		})
+ 		.state('unitTypes.equip', {
+ 			url: '/equip',
+ 			templateUrl: 'unitTypes.equip.html',
+ 			controller: 'EquipCtrl'
+ 		})
  		.state('initTables', {
  			url: '/initTables',
  			templateUrl: 'initTables.html',
@@ -173,7 +178,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
 						// else if any of our records have a blank ID, overwrite that as the new record
 						if (!gotSome) {
-							console.log("Add New Record");
+							console.log("Add New Record", data);
 							angular.forEach(sub.Data, function(v,i){
 								if (v["@id"] === "0") {
 									console.log("Overwriting Blank record at pos",i);
@@ -700,6 +705,115 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
 	DataSocket.connect([
 		{"Entity": "EtatMajor", "Data": $scope.Data, "Callback": $scope.changeData}
+	]);		
+}])
+.controller("DrillBookCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "L'Reglement / Drill Book";
+	$scope.docs = "";
+	$scope.Entity = "Drill";
+
+	//DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: false,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields: ['Name'],
+        	directions: ['asc']
+        },
+        columnDefs: [
+           	{field:'Name', width: 200}, 
+            {field:'Entries', 
+           	 width: 500, 
+           	 displayName: 'Formations',
+           	 editableCellTemplate: 'meOrdersTemplate.html', 
+           	 cellTemplate: 'reglementTable.html'
+           	},
+
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("DrillUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
+
+    $scope.newRow = function() {
+    	$scope.FilteredData.push({"@id": '0', Name: '~ ??? ~'})
+    }
+
+    $scope.changeData = function(d) {
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
+	]);		
+}])
+.controller("EquipCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Equipment Types";
+	$scope.docs = "";
+	$scope.Entity = "Equip";
+
+	//DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields: ['Name'],
+        	directions: ['asc']
+        },
+        columnDefs: [
+           	{field:'Name', width: 200}, 
+           	{field:'SK', displayName: 'Skirmish', width: 200}, 
+           	{field:'Volley', width: 200}, 
+           	{field:'Close', width: 200}, 
+           	{field:'Long', width: 200}, 
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("EquipUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
+
+    $scope.newRow = function() {
+    	$scope.FilteredData.push({"@id": '0', Name: '~ ??? ~'})
+    }
+
+    $scope.changeData = function(d) {
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);		
 }])
 .controller("InitTablesCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){

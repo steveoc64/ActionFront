@@ -58,13 +58,21 @@ type EtatMajor struct {
 type Drill struct {
 	EF uint8 // Efficiency. Range 1-10. value 1 = 10%, value 10 = 100%
 	FR uint8 // Max frontage of this unit in line
-	SS uint8 // How many Semi skirmish elements allowed
+	OO uint8 // How many Semi skirmish elements allowed
 	SK uint8 // How many full skirmish elements allowed
 }
 
 type DrillBook struct {
 	Name    string
 	Entries map[string]Drill
+}
+
+type Equip struct {
+	Name   string
+	SK     int8
+	Volley int8
+	Close  int8
+	Long   int8
 }
 
 // Command and Control tables
@@ -225,6 +233,20 @@ func CreateGameData(gameData *db.Col) {
 		"ClosedColumn": Drill{7, 2, 0, 0},
 		"Mass":         Drill{6, 3, 2, 0},
 		"Square":       Drill{4, 1, 0, 0}}}))
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Add some Equipment Types
+
+	gameData.Insert(DataMap("Equip", Equip{"Musket", 0, 10, 5, 0}))
+	gameData.Insert(DataMap("Equip", Equip{"Carbine", 1, 8, 2, 0}))
+	gameData.Insert(DataMap("Equip", Equip{"Superior Musket", 1, 12, 6, 1}))
+	gameData.Insert(DataMap("Equip", Equip{"Poor Musket", -1, 8, 4, 0}))
+	gameData.Insert(DataMap("Equip", Equip{"Rifle", 3, 8, 6, 2}))
+	gameData.Insert(DataMap("Equip", Equip{"Minie", 4, 9, 6, 3}))
+	gameData.Insert(DataMap("Equip", Equip{"Bayonet", 0, 0, 0, 0}))
+	gameData.Insert(DataMap("Equip", Equip{"Pike", 0, 0, 0, 0}))
+	gameData.Insert(DataMap("Equip", Equip{"Breechloader", 4, 14, 7, 4}))
+	gameData.Insert(DataMap("Equip", Equip{"Chasspot", 5, 15, 8, 6}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Add some Infantry
