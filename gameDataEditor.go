@@ -188,7 +188,8 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 					panic(err)
 				}
 				log.Printf("Inserted as ID %d", myDocID)
-				gameData.Read(myDocID, &myGameData)
+				myGameData["@id"] = myDocID
+				//gameData.Read(myDocID, &myGameData)
 				msg, _ := json.Marshal(messageFormat{"Update", theEntity, myGameData})
 				sendAll(msg)
 

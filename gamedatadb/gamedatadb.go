@@ -125,6 +125,15 @@ type CAScore struct {
 	A4          uint8
 }
 
+type NationalOrg struct {
+	Nation     string
+	From       uint16
+	To         uint16
+	InfantryME string
+	CavalryME  string
+	Corps      string
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -1345,4 +1354,48 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CAScore", CAScore{"B", "Corps Commander", 8, 11, 14, 18}))
 	gameData.Insert(DataMap("CAScore", CAScore{"C", "Brigade Leader", 11, 15, 18, 20}))
 	gameData.Insert(DataMap("CAScore", CAScore{"D", "Replacement", 13, 15, 18, 20}))
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// National Organisations
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Austria", 1796, 1808, "Bde of 4-8 Bn", "Regt or Bde", "Ad Hoc columns of 1-4 Bde"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Austria", 1809, 1815, "Div of 1-3 Bde", "Bde of 2 Regt", "Corps of 1 Light, 2 Line Div"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Britain", 1792, 1807, "Bde of 2-4 Bn", "Bde of 2 Regt", "Ad Hoc 1-4 Bde"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Britain", 1808, 1814, "Div of 1-3 Bde", "Bde of 2 Regt", "Divisional"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Anglo Allied", 1815, 1815, "Div of 2-3 Bde", "Bdes", "Wing Commanders"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"France", 1792, 1804, "Div of 1-3 Demi Bde", "Div of 2-6 Regt", "Divisional"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"France", 1805, 1815, "Div of 6-15 Bn, 1-2 Bty", "Lt Bde of 2-3 Regt, Res Bde of 2-8 Regt, H Bty", "Full Corps Structure"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Preussen", 1792, 1807, "Bde of 4-6 Bn", "Bde of 1-2 Regt", "Ad Hoc columns"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Preussen", 1812, 1815, "Bde of 3 Line, 3 Res, 3 LW Bn, Bty, Cav Regt", "Bde of 2-3 Reg", "Corps of 4 Bde, Cav Bde, Res Artillery"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Russia", 1792, 1805, "Bde of 4-6 Bn", "Bde of 1-2 Regt", "Ad Hoc columns"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Russia", 1806, 1811, "Div of 2-3 Bde", "Bde of 1-2 Regt", "Ad Hoc columns"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Russia", 1812, 1815, "Div of 4 Line, 2 Jager Regt, 2-3 Bty", "Div of 2 Bde of 1-2 Regt", "Corps of 2 Div"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Spain", 1792, 1806, "Bde of 4-8 Bn", "Regt or Bde", "Ad Hoc column of 1-4 Bde"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Spain", 1807, 1815, "Div of 2-3 Bde", "Bde of 1-2 Regt", "Col of 1-2 Div, no formal Corps structure"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Turkey", 1792, 1815, "Bde of 4-10 Bn", "Command of 1-6 Regt", "Ad Hoc columns"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"German States", 1792, 1806, "Bde of 4-8 Bn", "Regt or Bde", "Ad Hoc columns of 1-4 Bde"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"German States", 1805, 1815, "Div of 2-3 Bde", "Bde of 1-3 Regt", "Integrated in French Corps"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Italian States", 1792, 1804, "Bde of 4-6 Bn", "Regt or Bde", "Ad Hoc columns of 1-4 Bde"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Italian States", 1805, 1815, "Div of 6-15 Bn, 1-2 Bty", "Lt Bde of 2-3 Regt, H Bty", "French Corps Sysstem"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Denmark", 1792, 1805, "Bde of 4-8 Bn", "Bde of 1-2 Regt", "Ad Hoc columns of 1-4 Bde"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Denmark", 1806, 1815, "Div of 2-3 Bde", "Bde of 1-2 Regt", "Col of 1-2 Div"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"American", 1812, 1815, "Bde of 4-8 Bn", "Bde of 1-2 Regt", "Column of 1-4 Bde"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Indian", 1792, 1815, "Bde of 4-10 Bn, some attached Cav", "Feudal levee of various size", "Ad Hoc column of 1-4 Bde"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Duchy of Warsaw", 1807, 1814, "Div of 6-15 Bn, 1-2 Bty", "Lt Bde of 2-3 Regt, Res Bde of 2-8 Regt, H Bty", "Full Corps Structure"}))
+
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Sweden", 1792, 1809, "Bde of 4-8 Bn", "Bde of 1-3 Regt", "Ad Hoc column of 1-4 Bde"}))
+	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Sweden", 1810, 1815, "Div of 2-3 Bde", "Bde of 1-3 Regt", "Corps structure"}))
+
 }
