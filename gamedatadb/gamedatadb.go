@@ -75,6 +75,15 @@ type Equip struct {
 	Long   int8
 }
 
+type NationalOrg struct {
+	Nation     string
+	From       uint16
+	To         uint16
+	InfantryME string
+	CavalryME  string
+	Corps      string
+}
+
 // Command and Control tables
 
 type InitTable struct {
@@ -112,7 +121,7 @@ type OrderActivation struct {
 
 type OrderActivationMod struct {
 	Code        string
-	Description string
+	Descr       string
 	Points      int8
 	CorpsPoints int8
 }
@@ -125,21 +134,79 @@ type CommanderAction struct {
 }
 
 type CAScore struct {
-	Code        string
-	Description string
-	A1          uint8
-	A2          uint8
-	A3          uint8
-	A4          uint8
+	Code  string
+	Descr string
+	A1    uint8
+	A2    uint8
+	A3    uint8
+	A4    uint8
 }
 
-type NationalOrg struct {
-	Nation     string
-	From       uint16
-	To         uint16
-	InfantryME string
-	CavalryME  string
-	Corps      string
+// ME Morale Tables
+
+type MEMoraleTest struct {
+	Score   uint8
+	Descr   string
+	Broken  bool
+	Retreat bool
+	Shaken  bool
+	Steady  bool
+	Fatigue uint8
+}
+
+type MEMoraleMods struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type MEPanicTest struct {
+	Rating  string
+	Broken  uint8
+	Shaken  uint8
+	CarryOn uint8
+}
+
+type MEPanicMods struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type UnitMoraleTest struct {
+	Rating string
+	Pass   int8
+}
+
+type UnitMoraleMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type FireDisciplineTest struct {
+	Rating string
+	Pass   int8
+	Fire   int8
+}
+
+type FireDisciplineMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type InitialBadMorale struct {
+	Score int8
+	Descr string
+	Hits  uint8
+	Stay  bool
+}
+
+type InitialBadMods struct {
+	Code  string
+	Descr string
+	Value int8
 }
 
 // Create a DataMap envelope with type name and a JSON representation of the thing
@@ -1419,5 +1486,138 @@ func CreateGameData(gameData *db.Col) {
 
 	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Sweden", 1792, 1809, "Bde of 4-8 Bn", "Bde of 1-3 Regt", "Ad Hoc column of 1-4 Bde"}))
 	gameData.Insert(DataMap("NationalOrg", NationalOrg{"Sweden", 1810, 1815, "Div of 2-3 Bde", "Bde of 1-3 Regt", "Corps structure"}))
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Morale and Fatigue tables
+
+	gameData.Insert(DataMap("MEMoraleTest", MEMoraleTest{0, "ME Breaks, and falls back 2 grids in Bad Morale", true, true, true, false, 1}))
+	gameData.Insert(DataMap("MEMoraleTest", MEMoraleTest{6, "Retreat Shaken. Convert to BreakOff order, and fall back 2 grids", false, true, true, false, 1}))
+	gameData.Insert(DataMap("MEMoraleTest", MEMoraleTest{9, "Shaken. Attacks without impetus fall back 2 grids, revert to Defend", false, false, true, false, 0}))
+	gameData.Insert(DataMap("MEMoraleTest", MEMoraleTest{11, "Steady", false, false, false, true, 0}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"OldGuard", "OldGuard Morale Grade", 10}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Guard", "Guard Morale Grade", 9}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Grenadier", "Grenadier Morale Grade", 8}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Elite", "Elite Morale Grade", 7}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"CrackLine", "CrackLine Morale Grade", 6}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Veteran", "Veteran Morale Grade", 5}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Regular", "Regular Morale Grade", 4}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Conscript", "Conscript Morale Grade", 3}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Landwehr", "Landwehr Morale Grade", 2}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Militia", "Militia Morale Grade", 1}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Rabble", "Rabble Morale Grade", 0}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"BADI", "Per Infantry Unit in Bad Morale", -2}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"BADC", "Per Cavalry Unit in Bad Morale", -3}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"BADA", "Per Artillery Unit in Bad Morale", -6}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"GOOD", "Per Unit in Good Morale with Full Ammo", 1}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"CAW", "Per Close Action won this turn", 2}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"CAD", "Per Close Action lost this turn", -2}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"Fatigue", "Per Fatigue level past Fresh", -1}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"SQP", "Adjacent ME elected to Sauve qui Peut", -4}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"SP", "Enemy Strongpoint within 3 grids has fallen in the last hour", 4}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"SPH", "Per Structure still held", 1}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"SPL", "Per Structure lost", -1}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"INTER", "Interpenetrated by another ME", -2}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"SHK", "Previously Shaken", -3}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"F1", "Hit in Flank during GT move, in March Column", -2}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"F2", "Hit in Flank during GT move, in Extended March Column", -8}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"F3", "Hit in Flank during GT move, in Regular March Column", -6}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"F4", "Hit in Flank during GT move, in Condensed March Column", -4}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"CF1", "Campaign Fatigue - Weary", -1}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"CF2", "Campaign Fatigue - Haggard", -2}))
+	gameData.Insert(DataMap("MEMoraleMods", MEMoraleMods{"CF3", "Campaign Fatigue - Spent", -5}))
+
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"OldGuard", 2, 3, 4}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Guard", 3, 5, 6}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Grenadier", 4, 6, 7}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Elite", 5, 6, 7}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"CrackLine", 5, 7, 8}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Veteran", 6, 7, 8}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Regular", 7, 8, 9}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Conscript", 8, 9, 10}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Landwehr", 9, 10, 11}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Militia", 10, 11, 12}))
+	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Rabble", 11, 12, 13}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"OG1", "Old Guard Broken within 3 grids", -5}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"OG2", "Old Guard Shaken within 3 grids", -3}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"50", "50%+ Units broken or destroyed", -6}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"25", "25% Units broken or destroyed", -3}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"Fatigue", "Each Fatigue level over Fresh", -1}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"SHK", "Already Shaken", -2}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"TRAP", "Enemy blocks line of retreat", -2}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"SP", "Each fallen strongpoint within 3 grids", -2}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"WTH", "ME is under a Withdraw Order", -1}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"CF1", "Campaign Fatigue - Weary", -2}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"CF2", "Campaign Fatigue - Haggard", -4}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"CF3", "Campaign Fatigue - Spent", -6}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"INTER", "Interpenetrated by another ME", -2}))
+	gameData.Insert(DataMap("MEPanicMods", MEPanicMods{"GOOD", "All units of ME are in good morale", 2}))
+
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"OldGuard", -2}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Guard", 0}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Grenadier", 1}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Elite", 2}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"CrackLine", 3}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Veteran", 4}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Regular", 5}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Conscript", 6}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Landwehr", 7}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Militia", 8}))
+	gameData.Insert(DataMap("UnitMoraleTest", UnitMoraleTest{"Rabble", 10}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"C1", "Light Cover", 1}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"C2", "Medium Cover", 2}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"C3", "Heavy Cover", 3}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"C4", "Very Heavy Cover", 4}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"F1", "Enfilade Fire by Infantry at Close Range", -2}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"F2", "Enfilade Fire by Infantry at Point Range", -5}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"F3", "Enfilade Fire by Artillery within 1 grid", -5}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"DIS", "Disordered", -2}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"HIT", "Per Hit currently carried by unit", -1}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"GC", "Charged by Guard unit", -2}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"KL", "Unformed attempting to form Klumpen", -3}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"HW", "Unit in Heavy Woods", -1}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"CX", "Caisson explodes in same grid", -4}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"BB", "Checking vs Bombardment only", 3}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"L1", "Veteran in Line", -1}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"L2", "Regular in Line", -2}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"L3", "Conscript or lower in Line, per base of frontage", -1}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"SQ", "Unit is in square", 3}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"CC", "Unit is in closed column", 1}))
+
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"OldGuard", 1, -2}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Guard", 5, 2}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Grenadier", 6, 4}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Elite", 7, 5}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"CrackLine", 9, 6}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Veteran", 10, 8}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Regular", 11, 7}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Conscript", 12, 8}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Landwehr", 13, 9}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Militia", 17, 13}))
+	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Rabble", 20, 16}))
+	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"SK", "Per hit from SK fire this turn", -1}))
+	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"HIT", "Per hit carried in total", -1}))
+	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"BG", "Battalion Guns attached", -1}))
+
+	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{12, "Halt in reserve area. Return to good morale when ME activates Rally order", 1, true}))
+	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{9, "Done for the day, march to the rear in good order", 2, false}))
+	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{5, "Hasty retreat to the rear with stragglers", 4, false}))
+	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{0, "Dispersed in panic, will reform in the morning well to the rear", 6, false}))
+	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{-4, "Dispersed in panic, will reform in 2 days well to the rear", 10, false}))
+	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{-20, "Cowards !, Deserters !", 12, false}))
+	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{-20, "Cowards !, Deserters !", 12, false}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"SQP", "ME Sauve Qui Peut", -5}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"HIT", "Per Hit", -2}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"FTG", "Per Fatigue over Fresh", -1}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"RA", "Reluctant Allies", -2}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"LC", "Lost Colours", -4}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"ES", "Ejected from structure or strongpoint", -4}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"L1", "Charismatic Leader in same grid", 10}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"L2", "Inspirational Leader in same grid", 8}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"L3", "Impersonal Leader in same grid", 2}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"L4", "Uninspiring Leader in same grid", 1}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"CF1", "Campaign Fatigue - Rested", 1}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"CF2", "Campaign Fatigue - Weary", -1}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"CF3", "Campaign Fatigue - Haggard", -2}))
+	gameData.Insert(DataMap("InitialBadMods", InitialBadMods{"CF4", "Campaign Fatigue - Spent", -4}))
 
 }
