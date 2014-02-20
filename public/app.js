@@ -1087,7 +1087,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
         },
         columnDefs: [
            	{field:'Code', width: 120}, 
-           	{field:'Description', width: 300},
+           	{field:'Descr', displayName:'Description',width: 300},
            	{field:'Points', displayName: 'ME', width: 60},
            	{field:'CorpsPoints', displayName: 'Corps', width: 80}
         ]
@@ -1108,7 +1108,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
-				console.log("The update is on the first grid");
+				//console.log("The update is on the first grid");
 				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 				gotSome = true;
 			}
@@ -1116,7 +1116,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		if (!gotSome) { 
 				angular.forEach($scope.ModData, function(v,i){
 				if (v["@id"] == targetID) {
-					console.log("The update is on the mod data grid");
+					//console.log("The update is on the mod data grid");
 					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
 					gotSome = true;
 				}
@@ -1124,7 +1124,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		}
 		if (!gotSome) {
 			if ('Code' in row) {
-				console.log("The update is on the mod data grid because it hase a property called Code");
+				//console.log("The update is on the mod data grid because it has a property called Code");
 				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
 			} else {
 				$scope.update(evt.targetScope.row);	
@@ -1207,7 +1207,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
         },
         columnDefs: [
         	{field:'Code',width:60},
-           	{field:'Description', width: 200}, 
+           	{field:'Descr', displayName:'Description',width: 200}, 
            	{field:'A1', displayName:'1st',width: 80},
            	{field:'A2', displayName:'2nd',width: 80},
            	{field:'A3', displayName:'3rd',width: 80},
@@ -1245,7 +1245,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 			})
 		}
 		if (!gotSome) {
-			if ('Description' in row) {
+			if ('Descr' in row) {
 				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
 			} else {
 				$scope.update(evt.targetScope.row);	
@@ -1258,7 +1258,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
     	$scope.Data.push({"@id": '0', Who: 'Corps',Code: '~ ??? ~'})
     }
     $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~', Description: 'Add new one here'})
+    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~', Descr: 'Add new one here'})
     }
 
     $scope.changeData = function(d) {
