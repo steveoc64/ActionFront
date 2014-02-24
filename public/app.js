@@ -163,6 +163,46 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'MoraleRecovery.html',
  			controller: 'MoraleRecoveryCtrl'
  		})
+ 		.state('GTMovement', {
+ 			url: '/GTMovement',
+ 			templateUrl: 'GTMovement.html',
+ 			controller: 'GTMovementCtrl'
+ 		})
+ 		.state('Deployment', {
+ 			url: '/Deployment',
+ 			templateUrl: 'Deployment.html',
+ 			controller: 'DeploymentCtrl'
+ 		})
+ 		.state('TacMovement', {
+ 			url: '/TacMovement',
+ 			templateUrl: 'TacMovement.html',
+ 			controller: 'TacMovement'
+ 		})
+ 		.state('ArtyMovement', {
+ 			url: '/ArtyMovement',
+ 			templateUrl: 'ArtyMovement.html',
+ 			controller: 'ArtyMovementCtrl'
+ 		})
+ 		.state('BUAMovement', {
+ 			url: '/BUAMovement',
+ 			templateUrl: 'BUAMovement.html',
+ 			controller: 'BUAMovementCtrl'
+ 		})
+ 		.state('SKRelocate', {
+ 			url: '/SKRelocate',
+ 			templateUrl: 'SKRelocate.html',
+ 			controller: 'SKRelocateCtrl'
+ 		})
+ 		.state('ArtyRelocate', {
+ 			url: '/ArtyRelocate',
+ 			templateUrl: 'ArtyRelocate.html',
+ 			controller: 'ArtyRelocateCtrl'
+ 		})
+ 		.state('FormationChange', {
+ 			url: '/FormationChange',
+ 			templateUrl: 'FormationChange.html',
+ 			controller: 'FormationChangeCtrl'
+ 		})
  		;
  }])
 .factory('DataSocket', ["$rootScope", function($rootScope) {
@@ -1313,7 +1353,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
-		{Entity: $scope.Entity2, Data: $scope.ModData, Callback: $scope.changeData2}
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData2}
 	]);
 	
 }])
