@@ -260,6 +260,18 @@ type BadMoraleRecMod struct {
 	Value int8
 }
 
+// Movement Tables
+
+type GrandTacticalMove struct {
+	METype string
+	D1     uint8
+	D2     uint8
+	D3     uint8
+	D4     uint8
+	D5     uint8
+	D6     uint8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -1747,5 +1759,15 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"CF", "Per fatigue on Cavalry ME", -2}))
 	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"MF", "Per fatigue on Mixed/Infantry ME", -1}))
 	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"SL", "Units standard has been lost", -3}))
+
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"A Infantry", 26, 10, 0, 36, 45, 54}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Cavalry", 30, 14, 0, 40, 50, 60}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"B Infantry", 22, 8, 0, 28, 35, 44}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Horse Arty", 16, 8, 0, 28, 40, 50}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Class I Arty", 8, 4, 0, 26, 44, 54}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Class II III Arty", 6, 3, 0, 20, 34, 42}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Pontoon Train", 0, 0, 0, 0, 0, 32}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Corps Baggage", 26, 10, 0, 36, 45, 54}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Forced March", 26, 10, 0, 10, 10, 12}))
 
 }

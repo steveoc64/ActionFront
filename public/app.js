@@ -1570,7 +1570,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
     });
 
     $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
     }
     $scope.newRow2 = function() {
     	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
@@ -1684,7 +1684,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
     });
 
     $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
     }
     $scope.newRow2 = function() {
     	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
@@ -1799,7 +1799,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
     });
 
     $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
     }
     $scope.newRow2 = function() {
     	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
@@ -2378,7 +2378,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
     });
 
     $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
     }
     $scope.newRow2 = function() {
     	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
@@ -2397,6 +2397,65 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+	]);
+	
+}])
+.controller("GTMovementCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Grand Tactical Movement";
+	$scope.docs = "Table 9.3";
+	$scope.Entity = "GTMove";
+
+	//DataSocket.connect($scope);
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: true,
+        enableSorting: true,
+        showColumnMenu: true,
+        showFilter: true,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+           	fields: ['METype'],
+        	directions: ['asc']    	
+        },
+        columnDefs: [
+           	{field:'METype', width: 240}, 
+           	{field:'D1', displayName: 'Deployed',width: 120},
+           	{field:'D2', displayName: 'Bde Out',width: 120},
+           	{field:'D3', displayName: 'Deploying',width: 120},
+           	{field:'D4', displayName: 'Cond Column',width: 120},
+           	{field:'D5', displayName: 'Reg Column',width: 120},
+           	{field:'D6', displayName: 'Extd Column',width: 120}
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("GTMoveUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	$scope.updateFilters = function() {
+	}
+
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		$scope.update(evt.targetScope.row);
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', METype: '~ ??? ~'})
+    }
+
+    $scope.changeData = function(d) {
+    	$scope.$apply();
+    }
+
+	DataSocket.connect([
+		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);
 	
 }])
