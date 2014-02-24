@@ -1,4 +1,4 @@
-all: production
+all: clean fetch production
 
 clean:
 	rm -f *.js *.css *.1 *.2
@@ -20,4 +20,5 @@ fetch: clean
 production: 
 	cat bootstrap.min.css font-awesome.min.css ng-grid.min.css ../public/app.css > ../public/gameDataEditor.css
 	cat jquery.min.js bootstrap.min.js angular.min.js angular-ui-router.min.js ng-grid.min.js ../public/app.js | uglifyjs > ../public/gameDataEditor.js
+	ls -l ../public/gameDataEditor.css ../public/gameDataEditor.js
 
