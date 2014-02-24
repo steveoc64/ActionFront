@@ -1149,7 +1149,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -1273,7 +1272,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -1388,7 +1386,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -1505,7 +1502,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -1620,7 +1616,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -1736,7 +1731,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -1853,7 +1847,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -1972,7 +1965,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -2088,7 +2080,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -2204,7 +2195,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
@@ -2320,7 +2310,6 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		row = evt.targetScope.row.entity;
 		console.log(row);
 		targetID = row["@id"];
-		console.log("Looking for ID ",targetID);
 		gotSome = false;
 		angular.forEach($scope.Data, function(v,i){
 			if (v["@id"] == targetID) {
