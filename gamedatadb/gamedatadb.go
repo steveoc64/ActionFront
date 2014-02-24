@@ -1657,7 +1657,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{-20, "Cowards !, Deserters !", 12, false}))
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{-20, "Cowards !, Deserters !", 12, false}))
 	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"SQP", "ME Sauve Qui Peut", -5}))
-	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"HIT", "Per Hit", -2}))
+	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"HIT", "Per Hit", -1}))
 	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"FTG", "Per Fatigue over Fresh", -1}))
 	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"RA", "Reluctant Allies", -2}))
 	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"LC", "Lost Colours", -4}))
