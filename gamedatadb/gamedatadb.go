@@ -1702,8 +1702,8 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BonusImpulseMod", BonusImpulseMod{"C6", "Impersonal Corps Commander attached", 1}))
 	gameData.Insert(DataMap("BonusImpulseMod", BonusImpulseMod{"C7", "Bold / Superior ME Leader attached", 1}))
 
-	gameData.Insert(DataMap("MEFatigue", MEFatigue{15, "ME incurs 1 fatigue level", true}))
-	gameData.Insert(DataMap("MEFatigue", MEFatigue{11, "ME incurs 1 fatigue if not fatigued last turn", false}))
+	gameData.Insert(DataMap("MEFatigue", MEFatigue{15, "ME incurs 1 fatigue level", false}))
+	gameData.Insert(DataMap("MEFatigue", MEFatigue{11, "ME incurs 1 fatigue if not fatigued last turn", true}))
 	gameData.Insert(DataMap("MEFatigueMod", MEFatigueMod{"S1", "Took Strongpoint", -3}))
 	gameData.Insert(DataMap("MEFatigueMod", MEFatigueMod{"F1", "Took Enemy Standard", -2}))
 	gameData.Insert(DataMap("MEFatigueMod", MEFatigueMod{"1ST", "First turn in combat for the day", -6}))
@@ -1726,11 +1726,12 @@ func CreateGameData(gameData *db.Col) {
 
 	gameData.Insert(DataMap("FatigueRecovery", FatigueRecovery{22, "Full Recovery", 2}))
 	gameData.Insert(DataMap("FatigueRecovery", FatigueRecovery{12, "Recovery", 1}))
-	gameData.Insert(DataMap("FatigueRecovery", FatigueRecovery{8, "Resting", 0}))
+	gameData.Insert(DataMap("FatigueRecovery", FatigueRecovery{8, "Resting (+2 next turn)", 0}))
 	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C1", "Campaign Fresh", 2}))
 	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C2", "Campaign Haggard", -2}))
 	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C3", "Campaign Spent", -4}))
 	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"BB", "Per bombardment casualty this turn", -1}))
+	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"RS", "Rested last turn", 2}))
 
 	gameData.Insert(DataMap("BadMoraleRec", BadMoraleRec{"OldGuard", 9, 2}))
 	gameData.Insert(DataMap("BadMoraleRec", BadMoraleRec{"Guard", 10, 3}))
