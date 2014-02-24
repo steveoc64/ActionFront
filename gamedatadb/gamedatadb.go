@@ -272,6 +272,47 @@ type GrandTacticalMove struct {
 	D6     uint8
 }
 
+////////////////////// NEW
+type Deployment struct {
+	Score uint8
+	Change uint8
+}
+
+type DeploymentMod struct {
+	Code string
+	Descr string
+	Value int8
+}
+
+type DeploymentState struct {
+	State uint8
+	Descr string
+	ContactFront string
+	ContactFlank string
+	ContactShaken bool
+}
+	gameData.Insert(DataMap("Deployment", Deployment{1,1}))
+	gameData.Insert(DataMap("Deployment", Deployment{10,2}))
+	gameData.Insert(DataMap("Deployment", Deployment{16,3}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"FL","French Line 1800-1807",6}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"OG","French Guard",6}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"F1","French 1792-1799",4}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"F2","French 1808-1812",4}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"F3","French 1815",4}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"F4","French Conscript 1809-1812",2}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"FA","French Allied 1807",2}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"BR","British",2}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"AU","Austrian 1792-1805",-2}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"RU","Russian 1792-1805",-2}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"PR","Prussian 1792-1806",-3}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"ML","Militia",-5}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"MUD","Mud",-3}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"FOG","Fog",-20}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"CP","Deploying from chokepoint",-4}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"MV","Per Grid Moved this turn",-2}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"DK","Darkness",-5}))
+	gameData.Insert(DataMap("DeploymentState", DeploymentState{1,"desc","front","flank",false}))
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
