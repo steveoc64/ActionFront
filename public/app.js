@@ -392,8 +392,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);			
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -484,8 +491,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);		
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -577,8 +591,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		});
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);			
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -681,9 +702,17 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		} 
     });
+
 
     $scope.newRow = function() {
     	$scope.FilteredData.push({"@id": '0', Nation: '~ ??? ~'})
@@ -775,8 +804,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -832,8 +868,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -885,8 +928,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -938,8 +988,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.updateFilters = function() {
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -995,8 +1052,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.updateFilters = function() {
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -1052,8 +1116,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.updateFilters = function() {
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -1107,8 +1178,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.updateFilters = function() {
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		} 
     });
 
     $scope.newRow = function() {
@@ -1183,35 +1261,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {													
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -1306,35 +1389,39 @@ angular.module("app", ['ui.router', 'ngGrid'])
 
 	$scope.updateFilters = function() {
 	}
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.Data2, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {											
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Descr' in row) {
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Descr' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
-
     });
 
     $scope.newRow = function() {
@@ -1420,35 +1507,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {									
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -1536,35 +1628,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {							
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -1650,35 +1747,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {					
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -1765,35 +1867,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {				
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -1881,35 +1988,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {		
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -1999,35 +2111,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {	
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -2114,35 +2231,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -2229,35 +2351,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -2344,35 +2471,40 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
 		// Nasty problem here - need to work out WHICH GRID this even belongs to
 		row = evt.targetScope.row.entity;
-		console.log(row);
-		targetID = row["@id"];
-		gotSome = false;
-		angular.forEach($scope.Data, function(v,i){
-			if (v["@id"] == targetID) {
-				//console.log("The update is on the first grid");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
-				gotSome = true;
-			}
-		});
-		if (!gotSome) { 
-				angular.forEach($scope.ModData, function(v,i){
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
 				if (v["@id"] == targetID) {
-					//console.log("The update is on the mod data grid");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
 					gotSome = true;
 				}
-			})
-		}
-		if (!gotSome) {
-			if ('Code' in row) {
-				//console.log("The update is on the mod data grid because it has a property called Code");
-				DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
-			} else {
-				$scope.update(evt.targetScope.row);	
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
 			}
 		}
     });
@@ -2442,8 +2574,15 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.updateFilters = function() {
 	}
 
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		$scope.update(evt.targetScope.row);
+		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log('Was:',$scope.saveCell);
+			$scope.update(evt.targetScope.row);
+		}
     });
 
     $scope.newRow = function() {
