@@ -1936,7 +1936,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"PR", "Prussian 1792-1806", -3}))
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"ML", "Militia", -5}))
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"MUD", "Mud", -3}))
-	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"FOG", "Fog", -20}))
+	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"FOG", "Fog", -2}))
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"CP", "Deploying from chokepoint", -4}))
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"MV", "Per Grid Moved this turn", -2}))
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"DK", "Darkness", -5}))
