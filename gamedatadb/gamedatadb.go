@@ -287,9 +287,120 @@ type DeploymentMod struct {
 type DeploymentState struct {
 	State         uint8
 	Descr         string
+	Notes         string
 	ContactFront  string
 	ContactFlank  string
 	ContactShaken bool
+}
+
+type TacMove struct {
+	UnitType string
+	Move     uint8
+	LtWood   uint8
+	HvWood   uint8
+	Mud      uint8
+	Marsh    uint8
+	LowWall  int8
+	HiWall   int8
+}
+
+type AdditionalMove struct {
+	Terrain string
+	D1      uint8
+	D2      uint8
+	D3      uint8
+}
+
+type ArtyMove struct {
+	Class   uint8
+	Guns    string
+	Regular uint8
+	Gallop  uint8
+	Prolong uint8
+}
+
+type ArtyHorseLoss struct {
+	Terrain string
+	Loss    uint8
+}
+
+type BUAMove struct {
+	Rating string
+	Occupy uint8 // score to occupy ordered, or exit ordered
+	Exit   uint8 // exit disordered
+}
+
+type BUAMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type SKRelocate struct {
+	Rating string
+	Retire uint8
+	Move   uint8
+	Bold   uint8
+}
+
+type SKRelocateMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type SKSupport struct {
+	Mode      string
+	Marchfeld uint8
+	Rolling   uint8
+	Rough     uint8
+}
+
+type ArtyRelocate struct {
+	Class int8
+	R6    uint8
+	R5    uint8
+	R4    uint8
+	R3    uint8
+	R2    uint8
+	R1    uint8
+	R0    uint8
+	W6    uint8
+	W5    uint8
+	W4    uint8
+	W3    uint8
+	W2    uint8
+	W1    uint8
+	W0    uint8
+}
+
+type ArtyRelocateMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type FormationChange struct {
+	Era       string
+	From      string
+	To        string
+	Trained   int8
+	Untrained int8
+}
+
+type FormSquare struct {
+	Rating string
+	From   string
+	Grid0  int8
+	Grid1  int8
+	Grid1D int8
+	Grid2  int8
+}
+
+type FormSquareMod struct {
+	Code  string
+	Descr string
+	Value int8
 }
 
 // Create a DataMap envelope with type name and a JSON representation of the thing
@@ -327,6 +438,22 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Drill", DrillBook{"Mob", map[string]Drill{
 		"MarchColumn":   Drill{6, 1, 0, 0},
 		"DisorderedMob": Drill{4, 2, 2, 0}}}))
+
+	gameData.Insert(DataMap("Drill", DrillBook{"ClassA", map[string]Drill{
+		"Line":         Drill{6, 3, 0, 0},
+		"Skirmish":     Drill{15, 3, 0, 0},
+		"MarchColumn":  Drill{12, 1, 0, 0},
+		"AttackColumn": Drill{10, 2, 1, 1},
+		"ClosedColumn": Drill{10, 1, 0, 1},
+		"Square":       Drill{4, 1, 0, 1}}}))
+
+	gameData.Insert(DataMap("Drill", DrillBook{"ClassB", map[string]Drill{
+		"Line":         Drill{5, 3, 0, 0},
+		"Skirmish":     Drill{13, 3, 0, 0},
+		"MarchColumn":  Drill{10, 1, 0, 0},
+		"AttackColumn": Drill{8, 2, 1, 1},
+		"ClosedColumn": Drill{8, 1, 0, 1},
+		"Square":       Drill{4, 1, 0, 1}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"French", map[string]Drill{
 		"Line":         Drill{7, 3, 0, 0},
@@ -1781,7 +1908,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"SL", "Units standard has been lost", -3}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Morale and Fatigue tables
+	// Movement, Relocation and Formation Change Tables
 
 	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"A Infantry", 26, 10, 0, 36, 45, 54}))
 	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Cavalry", 30, 14, 0, 40, 50, 60}))
@@ -1813,6 +1940,154 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"CP", "Deploying from chokepoint", -4}))
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"MV", "Per Grid Moved this turn", -2}))
 	gameData.Insert(DataMap("DeploymentMod", DeploymentMod{"DK", "Darkness", -5}))
-	gameData.Insert(DataMap("DeploymentState", DeploymentState{1, "desc", "front", "flank", false}))
+	gameData.Insert(DataMap("DeploymentState", DeploymentState{1, "Fully Deployed", "The ME is fully deployed", "Half move if engaged", "May react", false}))
+	gameData.Insert(DataMap("DeploymentState", DeploymentState{2, "Brigade Out", "1 Bde of the ME is deployed, with the remainder behind in column", "Deploy on the head of the column", "Recoil 1 grid DIS, or stand DIS and Shaken", false}))
+	gameData.Insert(DataMap("DeploymentState", DeploymentState{3, "Deploying", "Lead 2 units deployed, skirmishers out. Remainder deploying from column", "Deploy on the head of the column", "Recoil 1 grid Shaken", true}))
+	gameData.Insert(DataMap("DeploymentState", DeploymentState{4, "Closed Up Campaign Column", "Baggage to the rear, units prepare to deploy", "Units deploy 2 grids behind the head of column, Shaken", "Recoil 1 grid shaken", true}))
+	gameData.Insert(DataMap("DeploymentState", DeploymentState{5, "Regular Campaign Column", "Units begin to close downt the distance between them but remain in road column", "Deploy 2 grids behind the head of the column, Shaken, +1 fatigue", "Recoil 1 grid shaken", true}))
+	gameData.Insert(DataMap("DeploymentState", DeploymentState{6, "Extended Campaign Column", "Units are strung out on the march and widely dispersed, some stragglers and foragers. 1 Skirmisher unit may be formed on the head of the column.", "Deploy 2 grids from the head of the column, Shaken, +2 fatigue", "Broken", true}))
+
+	gameData.Insert(DataMap("TacMove", TacMove{"Infantry", 10, 7, 5, 5, 7, 1, 3}))
+	gameData.Insert(DataMap("TacMove", TacMove{"LightCav", 20, 7, 0, 5, 7, 5, 0}))
+	gameData.Insert(DataMap("TacMove", TacMove{"Cavalry", 16, 5, 0, 5, 7, 5, 0}))
+	gameData.Insert(DataMap("TacMove", TacMove{"Artillery", 6, 5, 0, 2, 0, 0, 0}))
+
+	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Marchfeld", 1, 2, 3}))
+	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Rolling", 2, 4, 6}))
+	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Rough", 3, 6, 9}))
+
+	// Horse Light
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "2pdr", 13, 20, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "3pdr", 13, 20, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "4pdr", 13, 20, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "6pdr", 13, 20, 2}))
+
+	// Horse Medium
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "8pdr", 10, 16, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "9pdr", 10, 16, 1}))
+
+	// Class I light
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "2pdr", 10, 16, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "3pdr", 10, 16, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "4pdr", 10, 16, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "6pdr", 10, 16, 2}))
+
+	// Class I medium
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "8pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "9pdr", 8, 13, 1}))
+
+	// Class I heavy
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "10pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "12pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "18pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "24pdr", 6, 10, 1}))
+
+	// Class II light
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "2pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "3pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "4pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "6pdr", 8, 13, 1}))
+
+	// Class II medium
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "8pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "9pdr", 6, 10, 1}))
+
+	// Class II heavy
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "10pdr", 5, 8, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "12pdr", 5, 8, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "18pdr", 5, 8, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "24pdr", 5, 8, 1}))
+
+	gameData.Insert(DataMap("ArtyHorseLoss", ArtyHorseLoss{"Marchfeld", 4}))
+	gameData.Insert(DataMap("ArtyHorseLoss", ArtyHorseLoss{"Rolling", 6}))
+	gameData.Insert(DataMap("ArtyHorseLoss", ArtyHorseLoss{"Rough", 8}))
+
+	gameData.Insert(DataMap("BUAMove", BUAMove{"Excellent", 6, 4}))
+	gameData.Insert(DataMap("BUAMove", BUAMove{"Good", 8, 5}))
+	gameData.Insert(DataMap("BUAMove", BUAMove{"Average", 12, 6}))
+	gameData.Insert(DataMap("BUAMove", BUAMove{"Poor", 14, 7}))
+
+	gameData.Insert(DataMap("BUAMod", BUAMod{"CA", "Successful Commander Action", 2}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"LA", "Successful Leader Action", 1}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"UN", "Per unit that moved through the structure this turn", -2}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"JN", "Janissaries", 2}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"RU", "Russian Grenadiers", 3}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"AU", "Austrian Grenadiers", 3}))
+
+	gameData.Insert(DataMap("SKRelocate", SKRelocate{"Superior", 4, 8, 12}))
+	gameData.Insert(DataMap("SKRelocate", SKRelocate{"Excellent", 5, 9, 13}))
+	gameData.Insert(DataMap("SKRelocate", SKRelocate{"Good", 7, 11, 15}))
+	gameData.Insert(DataMap("SKRelocate", SKRelocate{"Average", 8, 13, 16}))
+	gameData.Insert(DataMap("SKRelocate", SKRelocate{"Poor", 11, 17, 23}))
+
+	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"AM", "Ammo depleted", -6}))
+	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"BD", "Unit is Bold", 6}))
+	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"CL", "Charismatic Leader Attached", 6}))
+	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"IL", "Inspirational Leader Attached", 4}))
+	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"AL", "Average Leader Attached", 2}))
+	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"UL", "Uninspiring Leader Attached", -1}))
+
+	gameData.Insert(DataMap("SKSupport", SKSupport{"Normal", 9, 6, 12}))
+	gameData.Insert(DataMap("SKSupport", SKSupport{"Bold", 30, 30, 18}))
+
+	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{0, 6, 8, 10, 11, 13, 16, 21, 2, 2, 7, 10, 12, 15, 20}))
+	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{1, 8, 9, 11, 12, 14, 17, 21, 2, 5, 8, 11, 13, 15, 20}))
+	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{2, 9, 11, 12, 13, 15, 18, 22, 6, 7, 9, 12, 14, 16, 20}))
+	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{3, 12, 13, 14, 15, 17, 19, 23, 7, 8, 10, 13, 15, 17, 20}))
+
+	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"LA", "ME Commander Attached", 1}))
+	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"CA", "Corps Commander Attached", 2}))
+	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"AA", "Army Commander Attached", 3}))
+	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"MD", "Mud", -2}))
+	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"FT", "Per fatigue level", -1}))
+	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"AT", "Per Attempt", -1}))
+
+	// Result codes :
+	// N = number of movement inches after formation change
+	// 0 = Not allowed
+	// -1 = entire turn, and may fire
+	// -2 = entire turn
+	// -3 = entire turn and disordered
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "AttackColumn", "Line Left", 2, -1}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "AttackColumn", "Line Centre", -1, -3}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "AttackColumn", "Line Right", -1, -3}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "AttackColumn", "ClosedColumn", 6, 4}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "AttackColumn", "Square", 1, 0}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "ClosedColumn", "Line Left", -1, -2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "ClosedColumn", "Line Centre", 0, 0}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "ClosedColumn", "Line Right", 0, 0}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "ClosedColumn", "AttackColumn", 6, 4}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "ClosedColumn", "Square", -2, -3}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "Line", "AttackColumn", 1, -2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "Line", "ClosedColumn", -1, -2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "Line", "Square", -1, -3}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "Square", "Line", 2, -1}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "Square", "AttackColumn", 2, -1}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"AR", "Square", "ClosedColumn", -2, -3}))
+
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "AttackColumn", "Line Left", 2, -1}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "AttackColumn", "Line Centre", 1, -1}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "AttackColumn", "Line Right", 2, -1}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "AttackColumn", "ClosedColumn", 10, 6}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "AttackColumn", "Square", 2, -1}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "ClosedColumn", "Line Left", -1, -2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "ClosedColumn", "Line Centre", 3, 2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "ClosedColumn", "Line Right", -1, -2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "ClosedColumn", "AttackColumn", 10, 8}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "ClosedColumn", "Square", -1, -2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "Line", "AttackColumn", 1, -2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "Line", "ClosedColumn", -1, -2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "Line", "Square", 1, -3}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "Square", "Line", 2, -1}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "Square", "AttackColumn", 4, 2}))
+	gameData.Insert(DataMap("FormationChange", FormationChange{"DIV", "Square", "ClosedColumn", -2, -3}))
+
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"D1", "Charge from Diagonal", -2}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"D2", "Charged from Flank", -6}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"D3", "Charged from Rear", -8}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"DS", "Disordered", -4}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"CA", "Commander Attached", 4}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"LA", "Leader Attached", 2}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"OC", "Opportunity Charge", -3}))
 
 }
