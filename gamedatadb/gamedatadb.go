@@ -312,7 +312,7 @@ type AdditionalMove struct {
 }
 
 type ArtyMove struct {
-	Class   uint8
+	Class   string
 	Guns    string
 	Regular uint8
 	Gallop  uint8
@@ -325,9 +325,9 @@ type ArtyHorseLoss struct {
 }
 
 type BUAMove struct {
-	Rating string
-	Occupy uint8 // score to occupy ordered, or exit ordered
-	Exit   uint8 // exit disordered
+	Rating  string
+	Ordered uint8 // score to occupy ordered, or exit ordered
+	Exit    uint8 // exit disordered
 }
 
 type BUAMod struct {
@@ -357,7 +357,7 @@ type SKSupport struct {
 }
 
 type ArtyRelocate struct {
-	Class int8
+	Class string
 	R6    uint8
 	R5    uint8
 	R4    uint8
@@ -1956,46 +1956,46 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Rough", 3, 6, 9}))
 
 	// Horse Light
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "2pdr", 13, 20, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "3pdr", 13, 20, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "4pdr", 13, 20, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "6pdr", 13, 20, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "2pdr", 13, 20, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "3pdr", 13, 20, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "4pdr", 13, 20, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "6pdr", 13, 20, 2}))
 
 	// Horse Medium
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "8pdr", 10, 16, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{0, "9pdr", 10, 16, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "8pdr", 10, 16, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "9pdr", 10, 16, 1}))
 
 	// Class I light
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "2pdr", 10, 16, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "3pdr", 10, 16, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "4pdr", 10, 16, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "6pdr", 10, 16, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "2pdr", 10, 16, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "3pdr", 10, 16, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "4pdr", 10, 16, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "6pdr", 10, 16, 2}))
 
 	// Class I medium
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "8pdr", 8, 13, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "9pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "8pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "9pdr", 8, 13, 1}))
 
 	// Class I heavy
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "10pdr", 6, 10, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "12pdr", 6, 10, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "18pdr", 6, 10, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{1, "24pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "10pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "12pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "18pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "24pdr", 6, 10, 1}))
 
 	// Class II light
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "2pdr", 8, 13, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "3pdr", 8, 13, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "4pdr", 8, 13, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "6pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "2pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "3pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "4pdr", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "6pdr", 8, 13, 1}))
 
 	// Class II medium
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "8pdr", 6, 10, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "9pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "8pdr", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "9pdr", 6, 10, 1}))
 
 	// Class II heavy
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "10pdr", 5, 8, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "12pdr", 5, 8, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "18pdr", 5, 8, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{2, "24pdr", 5, 8, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "10pdr", 5, 8, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "12pdr", 5, 8, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "18pdr", 5, 8, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "24pdr", 5, 8, 1}))
 
 	gameData.Insert(DataMap("ArtyHorseLoss", ArtyHorseLoss{"Marchfeld", 4}))
 	gameData.Insert(DataMap("ArtyHorseLoss", ArtyHorseLoss{"Rolling", 6}))
@@ -2029,17 +2029,17 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("SKSupport", SKSupport{"Normal", 9, 6, 12}))
 	gameData.Insert(DataMap("SKSupport", SKSupport{"Bold", 30, 30, 18}))
 
-	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{0, 6, 8, 10, 11, 13, 16, 21, 2, 2, 7, 10, 12, 15, 20}))
-	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{1, 8, 9, 11, 12, 14, 17, 21, 2, 5, 8, 11, 13, 15, 20}))
-	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{2, 9, 11, 12, 13, 15, 18, 22, 6, 7, 9, 12, 14, 16, 20}))
-	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{3, 12, 13, 14, 15, 17, 19, 23, 7, 8, 10, 13, 15, 17, 20}))
+	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{"Guard", 6, 8, 10, 11, 13, 16, 21, 2, 2, 7, 10, 12, 15, 20}))
+	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{"Class I", 8, 9, 11, 12, 14, 17, 21, 2, 5, 8, 11, 13, 15, 20}))
+	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{"Class II", 9, 11, 12, 13, 15, 18, 22, 6, 7, 9, 12, 14, 16, 20}))
+	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{"Class III", 12, 13, 14, 15, 17, 19, 23, 7, 8, 10, 13, 15, 17, 20}))
 
 	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"LA", "ME Commander Attached", 1}))
 	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"CA", "Corps Commander Attached", 2}))
 	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"AA", "Army Commander Attached", 3}))
 	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"MD", "Mud", -2}))
 	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"FT", "Per fatigue level", -1}))
-	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"AT", "Per Attempt", -1}))
+	gameData.Insert(DataMap("ArtyRelocateMod", ArtyRelocateMod{"AT", "Per Attempt", 1}))
 
 	// Result codes :
 	// N = number of movement inches after formation change
