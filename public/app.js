@@ -176,7 +176,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
  		.state('TacMovement', {
  			url: '/TacMovement',
  			templateUrl: 'TacMovement.html',
- 			controller: 'TacMovement'
+ 			controller: 'TacMovementCtrl'
  		})
  		.state('ArtyMovement', {
  			url: '/ArtyMovement',
@@ -841,10 +841,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: false,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -904,10 +904,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -964,10 +964,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1026,10 +1026,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         columnDefs: [
@@ -1090,10 +1090,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         columnDefs: [
@@ -1145,7 +1145,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 	$scope.title = "Order Arrival Calculation";
 	$scope.docs = "Table 3.3";
 	$scope.Entity = "OrderArrival";
-
+false
 	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
@@ -1153,10 +1153,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1217,10 +1217,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1238,14 +1238,14 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
-        	fields:['Code'],
+        	fields:['Points'],
         	directions:['asc']
         },
         columnDefs: [
@@ -1339,10 +1339,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1364,8 +1364,8 @@ angular.module("app", ['ui.router', 'ngGrid'])
         enableCellEdit: true,
         enableColumnResize: true,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -1459,10 +1459,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1485,10 +1485,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -1583,10 +1583,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1606,10 +1606,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -1704,10 +1704,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1725,10 +1725,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -1823,10 +1823,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1845,10 +1845,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -1943,10 +1943,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -1966,10 +1966,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -2064,10 +2064,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -2089,10 +2089,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -2187,10 +2187,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -2209,10 +2209,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -2307,10 +2307,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -2329,10 +2329,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -2427,10 +2427,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -2449,10 +2449,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -2545,10 +2545,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -2617,10 +2617,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
@@ -2638,10 +2638,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
@@ -2660,10 +2660,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
-        enableColumnReordering: true,
+        enableColumnReordering: false,
         enableSorting: true,
-        showColumnMenu: true,
-        showFilter: true,
+        showColumnMenu: false,
+        showFilter: false,
         showFooter: true,
         footerTemplate: 'gridFooterTemplate3.html',
         sortInfo: {
@@ -2760,6 +2760,126 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData},
 		{Entity: $scope.DepEntity, Data: $scope.DepData, Callback: $scope.changeData}
+	]);
+	
+}])
+.controller("TacMovementCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.maintitle = "Tactical Movement";
+	$scope.modtitle = "Extra Move";
+	$scope.docs = "Table 14.1, 14.7";
+	$scope.moddocs = "Table 14.3";
+	$scope.Entity = "TacMove";
+	$scope.Entity2 = "AdditionalMove";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Move'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'UnitType', width: 100}, 
+           	{field:'Move', width: 80}, 
+           	{field:'LtWood' ,width: 80}, 
+           	{field:'HvWood' ,width: 80}, 
+           	{field:'Mud', width: 80}, 
+           	{field:'Marsh',width: 80}, 
+           	{field:'LoWall',width: 80}, 
+           	{field:'HiWall',width: 80}, 
+        ]
+	};
+
+	$scope.gridOptionsMods = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields:['Terrain'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Terrain', width: 120}, 
+           	{field:'D1', displayName:'Extra 1',width: 80},
+           	{field:'D2', displayName:'Extra 2',width: 80},
+           	{field:'D3', displayName:'Extra 3',width: 80}
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("TacMoveUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.ModData, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Terrain' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
 	]);
 	
 }])

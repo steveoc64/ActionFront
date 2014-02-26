@@ -300,7 +300,7 @@ type TacMove struct {
 	HvWood   uint8
 	Mud      uint8
 	Marsh    uint8
-	LowWall  int8
+	LoWall   int8
 	HiWall   int8
 }
 
@@ -1603,7 +1603,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C3", "Order is from a Good Commander", 1, 1}))
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C4", "Order is from an Average Commander", 0, 0}))
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C5", "Order is from a Poor Commander", -1, -1}))
-	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C6", "Order is from a Despicable", -2, -2}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C6", "Order is from a Despicable Commander", -2, -2}))
 
 	// Commander Actions
 	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "MV1", "Move 1 grid", 0}))
@@ -1811,9 +1811,8 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{12, "Halt in reserve area. Return to good morale when ME activates Rally order", 1, true}))
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{9, "Done for the day, march to the rear in good order", 2, false}))
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{5, "Hasty retreat to the rear with stragglers", 4, false}))
-	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{0, "Dispersed in panic, will reform in the morning well to the rear", 6, false}))
+	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{0, "Abandoned the field for the day, will reform in the morning well to the rear", 6, false}))
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{-4, "Dispersed in panic, will reform in 2 days well to the rear", 10, false}))
-	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{-20, "Cowards !, Deserters !", 12, false}))
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{-20, "Cowards !, Deserters !", 12, false}))
 	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"SQP", "ME Sauve Qui Peut", -5}))
 	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"HIT", "Per Hit", -1}))
@@ -1947,9 +1946,9 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("DeploymentState", DeploymentState{5, "Regular Campaign Column", "Units begin to close downt the distance between them but remain in road column", "Deploy 2 grids behind the head of the column, Shaken, +1 fatigue", "Recoil 1 grid shaken", true}))
 	gameData.Insert(DataMap("DeploymentState", DeploymentState{6, "Extended Campaign Column", "Units are strung out on the march and widely dispersed, some stragglers and foragers. 1 Skirmisher unit may be formed on the head of the column.", "Deploy 2 grids from the head of the column, Shaken, +2 fatigue", "Broken", true}))
 
-	gameData.Insert(DataMap("TacMove", TacMove{"Infantry", 10, 7, 5, 5, 7, 1, 3}))
-	gameData.Insert(DataMap("TacMove", TacMove{"LightCav", 20, 7, 0, 5, 7, 5, 0}))
-	gameData.Insert(DataMap("TacMove", TacMove{"Cavalry", 16, 5, 0, 5, 7, 5, 0}))
+	gameData.Insert(DataMap("TacMove", TacMove{"Infantry", 10, 7, 5, 5, 7, -1, -3}))
+	gameData.Insert(DataMap("TacMove", TacMove{"LightCav", 20, 7, 0, 5, 7, -5, 0}))
+	gameData.Insert(DataMap("TacMove", TacMove{"Cavalry", 16, 5, 0, 5, 7, -5, 0}))
 	gameData.Insert(DataMap("TacMove", TacMove{"Artillery", 6, 5, 0, 2, 0, 0, 0}))
 
 	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Marchfeld", 1, 2, 3}))
