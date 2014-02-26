@@ -1,0 +1,17 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{title}}</h3> {{docs}}
+  </div>
+  <div class="panel-body">
+  	<div><h4>Formation Change Notes</h4>
+  		<ul>
+  			<li># = Inches remaining after move.</li>
+  			<li>0 = Not Allowed</li>
+  			<li>-1 = Takes entire turn, may fire</li>
+  			<li>-2 = Takes entire turn, no fire possible</li>
+  			<li>-3 = Takes entire turn, no fire and disordered</li>
+  		</ul>
+  	</div>
+    <div class="gridStyle bigGrid" ng-grid="gridOptions"></div>
+  </div>
+</div>
