@@ -3155,8 +3155,8 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Code', width: 80}, 
-           	{field:'Descr', displayName:'Description',width: 400},
+           	{field:'Code', width: 60}, 
+           	{field:'Descr', displayName:'Description',width: 250},
            	{field:'Value',width:80}
         ]
 	};
@@ -3294,9 +3294,9 @@ false
         },
         columnDefs: [
            	{field:'Mode', width: 80}, 
-           	{field:'Marchfeld', width: 120},
-           	{field:'Rolling',width:80},
-           	{field:'Rough',width:80}
+           	{field:'Marchfeld', width: 100},
+           	{field:'Rolling',width:60},
+           	{field:'Rough',width:60}
         ]
 	};
 
