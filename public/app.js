@@ -88,112 +88,127 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'unitTypes.equip.html',
  			controller: 'EquipCtrl'
  		})
- 		.state('initTables', {
+		.state('cc', {
+ 			url: '/cc',
+ 			templateUrl: 'commandControl.html',
+ 			controller: 'CommandControlCtrl'
+ 		})
+ 		.state('cc.initTables', {
  			url: '/initTables',
  			templateUrl: 'initTables.html',
  			controller: 'InitTablesCtrl'
  		})
- 		.state('corpsOrders', {
+ 		.state('cc.corpsOrders', {
  			url: '/corpsOrders',
  			templateUrl: 'corpsOrders.html',
  			controller: 'CorpsOrdersCtrl'
  		})
- 		.state('meOrders', {
+ 		.state('cc.meOrders', {
  			url: '/meOrders',
  			templateUrl: 'meOrders.html',
  			controller: 'MEOrdersCtrl'
  		})
-		.state('orderArrival', {
+		.state('cc.orderArrival', {
  			url: '/orderArrival',
  			templateUrl: 'orderArrival.html',
  			controller: 'OrderArrivalCtrl'
  		})
- 		.state('orderActivation', {
+ 		.state('cc.orderActivation', {
  			url: '/orderActivation',
  			templateUrl: 'orderActivation.html',
  			controller: 'OrderActivationCtrl'
  		})
- 		.state('commanderAction', {
+ 		.state('cc.commanderAction', {
  			url: '/commanderAction',
  			templateUrl: 'commanderAction.html',
  			controller: 'CommanderActionCtrl'
  		})
- 		.state('MEMorale', {
+		.state('mf', {
+ 			url: '/mf',
+ 			templateUrl: 'moraleFatigue.html',
+ 			controller: 'MoraleFatigueCtrl'
+ 		})
+ 		.state('mf.MEMorale', {
  			url: '/MEMorale',
  			templateUrl: 'MEMorale.html',
  			controller: 'MEMoraleCtrl'
  		})
- 		.state('MEPanic', {
+ 		.state('mf.MEPanic', {
  			url: '/MEPanic',
  			templateUrl: 'MEPanic.html',
  			controller: 'MEPanicCtrl'
  		})
- 		.state('UnitMorale', {
+ 		.state('mf.UnitMorale', {
  			url: '/UnitMorale',
  			templateUrl: 'UnitMorale.html',
  			controller: 'UnitMoraleCtrl'
  		})
- 		.state('FireDisc', {
+ 		.state('mf.FireDisc', {
  			url: '/FireDisc',
  			templateUrl: 'FireDisc.html',
  			controller: 'FireDiscCtrl'
  		})
- 		.state('InitBadMorale', {
+ 		.state('mf.InitBadMorale', {
  			url: '/InitBadMorale',
  			templateUrl: 'InitBadMorale.html',
  			controller: 'InitBadMoraleCtrl'
  		})
- 		.state('BonusImpulse', {
+ 		.state('mf.BonusImpulse', {
  			url: '/BonusImpulse',
  			templateUrl: 'BonusImpulse.html',
  			controller: 'BonusImpulseCtrl'
  		})
- 		.state('MEFatigue', {
+ 		.state('mf.MEFatigue', {
  			url: '/MEFatigue',
  			templateUrl: 'MEFatigue.html',
  			controller: 'MEFatigueCtrl'
  		})
- 		.state('FatigueRecovery', {
+ 		.state('mf.FatigueRecovery', {
  			url: '/FatigueRecovery',
  			templateUrl: 'FatigueRecovery.html',
  			controller: 'FatigueRecoveryCtrl'
  		})
- 		.state('MoraleRecovery', {
+ 		.state('mf.MoraleRecovery', {
  			url: '/MoraleRecovery',
  			templateUrl: 'MoraleRecovery.html',
  			controller: 'MoraleRecoveryCtrl'
  		})
- 		.state('GTMovement', {
+		.state('mv', {
+ 			url: '/mv',
+ 			templateUrl: 'movement.html',
+ 			controller: 'MovementCtrl'
+ 		})		
+ 		.state('mv.GTMovement', {
  			url: '/GTMovement',
  			templateUrl: 'GTMovement.html',
  			controller: 'GTMovementCtrl'
  		})
- 		.state('Deployment', {
+ 		.state('mv.Deployment', {
  			url: '/Deployment',
  			templateUrl: 'Deployment.html',
  			controller: 'DeploymentCtrl'
  		})
- 		.state('TacMovement', {
+ 		.state('mv.TacMovement', {
  			url: '/TacMovement',
  			templateUrl: 'TacMovement.html',
  			controller: 'TacMovementCtrl'
  		})
- 		.state('ArtyMovement', {
+ 		.state('mv.ArtyMovement', {
  			url: '/ArtyMovement',
  			templateUrl: 'ArtyMovement.html',
  			controller: 'ArtyMovementCtrl'
  		})
- 		.state('SKRelocate', {
+ 		.state('mv.SKRelocate', {
  			url: '/SKRelocate',
  			templateUrl: 'SKRelocate.html',
  			controller: 'SKRelocateCtrl'
  		}) 		
- 		.state('BUAMovement', {
+ 		.state('mv.BUAMovement', {
  			url: '/BUAMovement',
  			templateUrl: 'BUAMovement.html',
  			controller: 'BUAMovementCtrl'
  		})
- 		.state('FormationChange', {
+ 		.state('mv.FormationChange', {
  			url: '/FormationChange',
  			templateUrl: 'FormationChange.html',
  			controller: 'FormationChangeCtrl'
@@ -320,6 +335,12 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		$rootScope.FilterValues = {"Nation":$scope.Nation, "Year":$scope.Year, "Name":$scope.Name};
 		$scope.$broadcast('FilterUpdate', $rootScope.FilterValues);
 	}
+}])
+.controller("CommandControlCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+}])
+.controller("MoraleFatigueCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+}])
+.controller("MovementCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 }])
 .controller("FormationsCtrl", ["$scope", "DataSocket", "$rootScope", function($scope, DataSocket, $rootScope){
 	$scope.Data = [];
