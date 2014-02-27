@@ -200,21 +200,14 @@ angular.module("app", ['ui.router', 'ngGrid'])
  		})
  		;
  }])
-.factory('DataSocket', ["$rootScope", function($rootScope) {
+.factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
   var service = {};
   $rootScope.FilterValues = {};
 
   service.connect = function(subscriptions) {
-  	//service.scope = scope;
-  	//service.Entity = scope.Entity;
-  	//service.Data = scope.Data;
-
   	// subscriptions is an array of objects in the form
   	// Entity, Data, Callback
   	service.subscriptions = subscriptions;
-
-  	//console.log("Subs = ",subscriptions);
-   	//service.initMessage = JSON.stringify({"Action":"List", "Entity":service.Entity});
 
     if(service.ws) { 
     	angular.forEach(service.subscriptions, function(v,i){
@@ -281,21 +274,30 @@ angular.module("app", ['ui.router', 'ngGrid'])
     }
 
 	ws.onopen = function() {
-    	angular.forEach(service.subscriptions, function(v,i){
-    		initMsg = JSON.stringify({"Action":"List", "Entity":v.Entity});
-    		service.ws.send(initMsg);
-    	});
-		service.isOpen = true;
+		if (service.reconnecting === true) {
+			console.log("Server is back up - Forcing page reload");
+			$window.location.reload();
+		} else {
+	    	angular.forEach(service.subscriptions, function(v,i){
+	    		initMsg = JSON.stringify({"Action":"List", "Entity":v.Entity});
+	    		service.ws.send(initMsg);
+	    	});
+			service.isOpen = true;
+		}
 	}
 
 	ws.onclose = function(e) {
-		console.log("Socket closed ?", e);
+		console.log("Reconnecting with server");
 		service.isOpen = false;
+		service.reconnecting = true;
 		service.ws = null;
+
+		var timeout = setTimeout(function() {
+	  		service.connect(service.subscriptions);
+		},2000);
 	}
 
 	ws.onerror = function(e) {
-		console.log("Socket error ?", e);
 	}
 
     service.ws = ws;
@@ -304,14 +306,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
   service.send = function(message) {
   	if (!service.isOpen) {
   		// if we are dead, try to reopen the connection on demand
-  		service.connect(service.subscriptions);
+  		//service.connect(service.subscriptions);
+  		console.log("Cannot send, server is still down ....");
   	} else {
     	service.ws.send(message); 		
   	}
-  }
- 
-  service.subscribe = function(callback) {
-    service.callback = callback;
   }
  
   return service;
@@ -1788,12 +1787,12 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
+		console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
+		console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -2585,7 +2584,10 @@ false
     }
 
     $scope.changeData = function(d) {
-    	$scope.$apply();
+    	console.log("New data set ",d);
+    	$scope.$apply(function() {
+    		$scope.Data = d;
+    	});
     }
 
 	DataSocket.connect([
