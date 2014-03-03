@@ -403,6 +403,123 @@ type FormSquareMod struct {
 	Value int8
 }
 
+type FireEffect struct {
+	ID    uint8
+	Dice  int8
+	Descr string
+}
+
+type FireChart struct {
+	ID        uint8
+	SmallArms uint8
+	LtArt     uint8
+	MdArt     uint8
+	MdHvArt   uint8
+	HvArt     uint8
+}
+
+type FireMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type FireSKMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type SKEffect struct {
+	Code  string
+	Dice  uint8
+	Descr string
+}
+
+type FireFight struct {
+	Dice      int8
+	Descr     string
+	Fallback  bool
+	HoldCover bool
+	Disorder  bool
+	Rout      bool
+}
+type FireFightMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type ArtRange struct {
+	Weight string
+	Short  uint8
+	Medium uint8
+	Long   uint8
+}
+
+type ArtMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type ArtLimber struct {
+	Code  string
+	Descr string
+	Score uint8
+}
+
+type CounterBty struct {
+	Score   uint8
+	LHorses uint8
+	LCrew   uint8
+	Horses  uint8
+	Crew    uint8
+	Caisson bool
+}
+
+type Aflame struct {
+	Cover     string
+	TacMd     uint8
+	TacHv     uint8
+	BombardMd uint8
+	BombardHv uint8
+}
+
+type DoubleTeam struct {
+	Score uint8
+}
+
+type DoubleTeamMod struct {
+	Code  string
+	Value int8
+}
+
+type ArtFate struct {
+	Situation string
+	Score     uint8
+}
+
+type ArtFateMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type Bouncethru struct {
+	Score    int8
+	Light    uint8
+	Medium   uint8
+	MediumHv uint8
+	Heavy    uint8
+}
+
+type BouncethruMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -516,7 +633,7 @@ func CreateGameData(gameData *db.Col) {
 
 	gameData.Insert(DataMap("Equip", Equip{"Musket", 0, 10, 5, 0}))
 	gameData.Insert(DataMap("Equip", Equip{"Carbine", 1, 8, 2, 0}))
-	gameData.Insert(DataMap("Equip", Equip{"Superior Musket", 1, 12, 6, 1}))
+	gameData.Insert(DataMap("Equip", Equip{"Superior Musket", 1, 11, 6, 1}))
 	gameData.Insert(DataMap("Equip", Equip{"Poor Musket", -1, 8, 4, 0}))
 	gameData.Insert(DataMap("Equip", Equip{"Rifle", 3, 8, 6, 2}))
 	gameData.Insert(DataMap("Equip", Equip{"Minie", 4, 9, 6, 3}))
@@ -2125,5 +2242,206 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"CA", "Commander Attached", 4}))
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"LA", "Leader Attached", 2}))
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"OC", "Opportunity Charge", -3}))
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Muskets and Cannons and things that go Bang
+
+	gameData.Insert(DataMap("FireEffect", FireEffect{1, -5, "Terrible"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{2, 1, "Erratic"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{3, 5, "Ineffective"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{4, 9, "Effective"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{5, 12, "Excellent"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{6, 15, "Withering"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{7, 19, "Crushing"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{8, 23, "Devestating"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{9, 29, "Horrendous"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{10, 34, "Extrodinary"}))
+
+	gameData.Insert(DataMap("FireChart", FireChart{1, 3, 0, 0, 1, 1}))
+	gameData.Insert(DataMap("FireChart", FireChart{2, 5, 0, 1, 2, 2}))
+	gameData.Insert(DataMap("FireChart", FireChart{3, 8, 1, 1, 2, 3}))
+	gameData.Insert(DataMap("FireChart", FireChart{4, 12, 2, 2, 3, 4}))
+	gameData.Insert(DataMap("FireChart", FireChart{5, 15, 2, 3, 4, 5}))
+	gameData.Insert(DataMap("FireChart", FireChart{6, 17, 4, 4, 5, 6}))
+	gameData.Insert(DataMap("FireChart", FireChart{7, 22, 4, 6, 7, 8}))
+	gameData.Insert(DataMap("FireChart", FireChart{8, 26, 6, 8, 8, 10}))
+	gameData.Insert(DataMap("FireChart", FireChart{9, 35, 7, 10, 10, 12}))
+	gameData.Insert(DataMap("FireChart", FireChart{10, 42, 8, 11, 12, 14}))
+
+	gameData.Insert(DataMap("FireMod", FireMod{"OldGuard", "OldGuard", 10}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Guard", "Guard", 8}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Grenadier", "Grenadier", 6}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Elite", "Elite", 4}))
+	gameData.Insert(DataMap("FireMod", FireMod{"CrackLine", "CrackLine", 2}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Veteran", "Veteran", 0}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Regular", "Regular", -1}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Conscript", "Conscript", -2}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Landwehr", "Landwehr", -3}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Militia", "Militia", -4}))
+	gameData.Insert(DataMap("FireMod", FireMod{"Rabble", "Rabble", -6}))
+	gameData.Insert(DataMap("FireMod", FireMod{"FF", "First Fire", 3}))
+	gameData.Insert(DataMap("FireMod", FireMod{"DIS", "Disordered", -5}))
+	gameData.Insert(DataMap("FireMod", FireMod{"SHK", "Shaken", -5}))
+	gameData.Insert(DataMap("FireMod", FireMod{"SQ", "Firing from Square", -4}))
+	gameData.Insert(DataMap("FireMod", FireMod{"AMD", "Ammo Depleted", -6}))
+	gameData.Insert(DataMap("FireMod", FireMod{"AME", "Ammo Exhausted", -10}))
+	gameData.Insert(DataMap("FireMod", FireMod{"FLW", "Firing from Lt Woods", -1}))
+	gameData.Insert(DataMap("FireMod", FireMod{"FMW", "Firing from Md Woods", -2}))
+	gameData.Insert(DataMap("FireMod", FireMod{"FHW", "Firing from Hv Woods", -3}))
+	gameData.Insert(DataMap("FireMod", FireMod{"ENL", "Enfilade vs Line", 5}))
+	gameData.Insert(DataMap("FireMod", FireMod{"ENC", "Enfilade vs any Column", 5}))
+	gameData.Insert(DataMap("FireMod", FireMod{"TSQ", "vs Square", 9}))
+	gameData.Insert(DataMap("FireMod", FireMod{"ART", "vs Artillery", -10}))
+	gameData.Insert(DataMap("FireMod", FireMod{"TCOL", "vs Column", 2}))
+	gameData.Insert(DataMap("FireMod", FireMod{"TCC", "vs Closed Column", 5}))
+	gameData.Insert(DataMap("FireMod", FireMod{"OO", "vs Open Order", -6}))
+	gameData.Insert(DataMap("FireMod", FireMod{"SK", "vs Skirmish Order", -10}))
+	gameData.Insert(DataMap("FireMod", FireMod{"OPP", "Opportunity Fire", -3}))
+	gameData.Insert(DataMap("FireMod", FireMod{"CAV", "vs Cavalry", -8}))
+	gameData.Insert(DataMap("FireMod", FireMod{"CAVM", "vs Cavalry charging uphill or in mud", -5}))
+	gameData.Insert(DataMap("FireMod", FireMod{"RN", "Rain", -2}))
+	gameData.Insert(DataMap("FireMod", FireMod{"HR", "Heavy Rain", -5}))
+	gameData.Insert(DataMap("FireMod", FireMod{"C1", "Target in Lt Cover", -4}))
+	gameData.Insert(DataMap("FireMod", FireMod{"C2", "Target in Md Cover", -8}))
+	gameData.Insert(DataMap("FireMod", FireMod{"C3", "Target in Hv Cover", -12}))
+	gameData.Insert(DataMap("FireMod", FireMod{"C1", "Target in SuperHv Cover", -16}))
+	gameData.Insert(DataMap("FireMod", FireMod{"C1", "Target in SuperHv Cover", -16}))
+	gameData.Insert(DataMap("FireMod", FireMod{"FTG", "Per Fatigue Level over Fresh", -2}))
+	gameData.Insert(DataMap("FireMod", FireMod{"HIT", "Per Hit", -1}))
+
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"1", "Superior Grade", 12}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"2", "Excellent Grade", 8}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"3", "Good Grade", 5}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"4", "Average Grade", 0}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"5", "Poor Grade", -5}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"FTG", "Per Fatigue Level", -2}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"CV", "Firing from Cover/Rough/Woods", 5}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"SK", "Firing from Skirmish Order", 5}))
+
+	gameData.Insert(DataMap("SKEffect", SKEffect{"FC", 2, "Column or Square"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"FF", 3, "Any Formed"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"FA", 4, "Artillery"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"FO", 5, "Open Order"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"FS", 6, "Skirmish Order"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"CR", 2, "Rolling/Rough Terrain"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"CL", 3, "Light Cover"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"CM", 4, "Medium Cover"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"CR", 5, "Heavy Cover"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"CR", 5, "Heavy Cover"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"CS", 6, "Super Heavy Cover"}))
+
+	gameData.Insert(DataMap("FireFight", FireFight{2, "Firefight Continues", false, true, false, false}))
+	gameData.Insert(DataMap("FireFight", FireFight{13, "Fallback in good order if not in cover", true, true, false, false}))
+	gameData.Insert(DataMap("FireFight", FireFight{17, "Fallback in good order", true, false, false, false}))
+	gameData.Insert(DataMap("FireFight", FireFight{20, "Fallback in disorder", true, false, true, false}))
+	gameData.Insert(DataMap("FireFight", FireFight{23, "Rout", true, false, true, true}))
+
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"HIT", "Per Hit", -1}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"NHIT", "Per Hit this turn", -2}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"HITX", "Per Hit inflicted this turn", 2}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"LCH", "Loser has Charismatic leader", -3}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"LIN", "Loser has Inspirational leader", -2}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"LAV", "Loser has Average/Poor leader", -1}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"AMM", "Loser has Ammo depleted or exhausted", 3}))
+
+	gameData.Insert(DataMap("ArtRange", ArtRange{"Heavy", 1, 2, 6}))
+	gameData.Insert(DataMap("ArtRange", ArtRange{"MdHeavy", 1, 2, 5}))
+	gameData.Insert(DataMap("ArtRange", ArtRange{"Medium", 1, 2, 4}))
+	gameData.Insert(DataMap("ArtRange", ArtRange{"Light", 1, 2, 3}))
+
+	gameData.Insert(DataMap("ArtMod", ArtMod{"MO", "Mixed Order Target", 1}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"SQ", "Target in Square", 9}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"RS", "Reverse Slope", -4}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"CAV", "Cavalry Target", 1}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"CW", "Cavalry Withdrawing", -6}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"CC", "Closed Column", 5}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"CO", "Other Columns", 2}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"OO", "Open Order", -6}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"G0", "Guard Artillery", 6}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"G1", "Class I", 3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"G2", "Class II", 0}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"G3", "Class III", -4}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"RM", "Range - Medium", -3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"RL", "Range - Long", -13}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"SC", "Screened by Skirmishers", -10}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"NAP", "Napoleon Himself attached to battery", 6}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"CR", "Corps Commander attached to battery", 3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"RE", "Fresh out of Reserve", 10}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"FT", "Per Fatigue level beyond Fresh", -1}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"HC", "Heavy Counter Bty at Long Range", -3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"LC", "Light/Medium Counter Bty at Long Range", -5}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"A1", "Ammo Depleted", -8}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"A2", "Ammo Exhausted", -13}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"T1", "Narchfeld Terrain", 3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"3G", "3 Gun Section", 5}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S1", "Defense of Bty vs Infantry", 5}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S2", "Fire & Retire vs Infantry", -3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S3", "Followup Defense of Bty vs Infantry", -4}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S4", "Followup Fire & Retire vs Infantry", -10}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S5", "Support Fire vs Infantry", -2}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S6", "Followup Support Fire vs Infantry", -6}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S7", "Defense of Bty vs Cavalry", 4}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S8", "Fire & Retire vs Cavalry", -5}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S9", "Followup Defense of Bty vs Cavalry", -7}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S10", "Followup Fire & Retire vs Cavalry", -13}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S11", "Support Fire vs Cavalry", -3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"S12", "Followup Support Fire vs Cavlary", -10}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"B1", "Bombardment - Grand Bty with rated leader", 5}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"B2", "Bombardment - Grand Bty without rated leader", 3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"B3", "Bombardment - Short Range Fire", 3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"B4", "Bombardment - Paced Rate of Fire", -4}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"B5", "Bombardment - Intensive Rate of Fire", 6}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"B5", "Bombardment - Target Moved 1 Grid", -7}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"B5", "Bombardment - Target Moved more than 1 Grid", -10}))
+
+	gameData.Insert(DataMap("ArtLimber", ArtLimber{"IC", "Infantry Close", 12}))
+	gameData.Insert(DataMap("ArtLimber", ArtLimber{"IS", "Infantry Same Grid", 8}))
+	gameData.Insert(DataMap("ArtLimber", ArtLimber{"IN", "Infantry Next Grid", 5}))
+	gameData.Insert(DataMap("ArtLimber", ArtLimber{"CC", "Cavalry Close", 18}))
+	gameData.Insert(DataMap("ArtLimber", ArtLimber{"CS", "Cavalry Same Grid", 12}))
+	gameData.Insert(DataMap("ArtLimber", ArtLimber{"CN", "Cavalry Next Grid", 8}))
+
+	gameData.Insert(DataMap("CounterBty", CounterBty{2, 2, 0, 3, 0, false}))
+	gameData.Insert(DataMap("CounterBty", CounterBty{9, 1, 0, 1, 1, false}))
+	gameData.Insert(DataMap("CounterBty", CounterBty{12, 0, 1, 0, 2, false}))
+	gameData.Insert(DataMap("CounterBty", CounterBty{14, 1, 1, 2, 1, false}))
+	gameData.Insert(DataMap("CounterBty", CounterBty{19, 1, 1, 2, 3, true}))
+
+	gameData.Insert(DataMap("Aflame", Aflame{"Light", 17, 16, 16, 16}))
+	gameData.Insert(DataMap("Aflame", Aflame{"Medium", 18, 17, 17, 17}))
+	gameData.Insert(DataMap("Aflame", Aflame{"Heavy", 20, 18, 19, 18}))
+	gameData.Insert(DataMap("Aflame", Aflame{"SuperHeavy", 21, 19, 20, 19}))
+
+	gameData.Insert(DataMap("DoubleTeam", DoubleTeam{11}))
+	gameData.Insert(DataMap("DoubleTeamMod", DoubleTeamMod{"British", -2}))
+	gameData.Insert(DataMap("DoubleTeamMod", DoubleTeamMod{"French", 0}))
+	gameData.Insert(DataMap("DoubleTeamMod", DoubleTeamMod{"French Guard", 4}))
+	gameData.Insert(DataMap("DoubleTeamMod", DoubleTeamMod{"Horse Arty", 2}))
+	gameData.Insert(DataMap("DoubleTeamMod", DoubleTeamMod{"Other", -3}))
+
+	gameData.Insert(DataMap("ArtFate", ArtFate{"Friendly", 15}))
+	gameData.Insert(DataMap("ArtFate", ArtFate{"Disable Enemy", 15}))
+	gameData.Insert(DataMap("ArtFate", ArtFate{"Capture Enemy", 17}))
+	gameData.Insert(DataMap("ArtFateMod", ArtFateMod{"CA", "Commander Action Used", 3}))
+	gameData.Insert(DataMap("ArtFateMod", ArtFateMod{"NE", "Non Engaged", 2}))
+	gameData.Insert(DataMap("ArtFateMod", ArtFateMod{"EN", "Engineers present", 3}))
+
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{5, 0, 0, 1, 2}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{9, 0, 1, 2, 3}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{14, 1, 2, 3, 4}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{18, 2, 3, 4, 5}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{23, 3, 4, 5, 6}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"RF", "Rocky Fields", 2}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"MF", "Marchfeld", 2}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"LA", "Limbered Arty", 1}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"DT", "Dense Target", 6}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"B1", "Intensive Bombardment", 6}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"HC", "Heavy Cover", -18}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"RG", "Rough Ground", -2}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"B2", "Paced Bombardment", -4}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"TW", "Target in Town Block", -10}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"MD", "Muddy conditions", -10}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"LW", "Lt woods", -2}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"CT", "Per Contour Difference", -2}))
 
 }
