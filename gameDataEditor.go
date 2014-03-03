@@ -193,7 +193,11 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			}
 
 		case "Update":
+			// Invalidate the LIST cache for this entity before we do any updates
+			delete(ListCache, theEntity)
+
 			log.Println("UPDATE request:", theEntity, RxMsg["Data"])
+
 			myGameData = RxMsg["Data"].(map[string]interface{})
 			docID := myGameData["@id"]
 			delete(myGameData, "@id") // strip the ID out of this record
@@ -205,6 +209,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				if myDocID, err = gameData.Insert(gamedatadb.DataMap(theEntity, myGameData)); err != nil {
 					panic(err)
 				}
+				delete(ListCache, theEntity)
 				log.Printf("Inserted as ID %d", myDocID)
 				myGameData["@id"] = myDocID
 				//gameData.Read(myDocID, &myGameData)
@@ -217,13 +222,12 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				if err := gameData.Update(myDocID, gamedatadb.DataMap(theEntity, myGameData)); err != nil {
 					panic(err)
 				}
+				delete(ListCache, theEntity)
 				//gameData.Read(myDocID, &myGameData)
 				myGameData["@id"] = docID
 				msg, _ := json.Marshal(messageFormat{"Update", theEntity, myGameData})
 				sendOthers(conn, msg)
 			}
-			// Invalidate the LIST cache for this entity
-			delete(ListCache, theEntity)
 
 		case "Delete":
 			log.Println("DELETE request:", RxMsg["Entity"])
