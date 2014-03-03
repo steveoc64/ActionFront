@@ -147,31 +147,38 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 		}
 
 		// Got a message on the socket !!!
-		log.Printf("<- %s", msg)
+		//log.Printf("<- %s", msg)
 		json.Unmarshal(msg, &RxMsg)
 		theEntity := RxMsg["Entity"].(string)
 
 		switch RxMsg["Action"] {
 		case "List":
 			// List all records for the given entity
-			log.Println("LIST request:", theEntity)
-			resultIDs := make(map[uint64]struct{}) // query result (document IDs) goes into map keys
-			if err := db.EvalAllIDs(gameData, &resultIDs); err != nil {
+			startTime := time.Now()
+
+			// Use tiedot embedded query processor
+			queryStr := `{"eq": "` + theEntity + `", "in": ["Type"]}`
+			var query interface{}
+			json.Unmarshal([]byte(queryStr), &query)
+			queryResult := make(map[uint64]struct{}) // query result (document IDs) goes into map keys
+			queryResult = make(map[uint64]struct{})  // query result (document IDs) goes into map keys
+
+			if err := db.EvalQuery(query, gameData, &queryResult); err != nil {
 				panic(err)
 			}
+
 			results := make([]interface{}, 0)
 
-			for id := range resultIDs {
+			for id := range queryResult {
 				gameData.Read(id, &myGameData)
 
-				if myGameData["Type"].(string) == theEntity {
-					theID := myGameData["@id"].(string)
-					theData := myGameData["Data"].(map[string]interface{})
-					theData["@id"] = theID
-					results = append(results, theData)
-				}
+				theID := myGameData["@id"].(string)
+				theData := myGameData["Data"].(map[string]interface{})
+				theData["@id"] = theID
+				results = append(results, theData)
 			}
-			msg, _ := json.Marshal(messageFormat{"List", theEntity, results})
+			msg, _ = json.Marshal(messageFormat{"List", theEntity, results})
+			log.Printf("LIST request: %s (%s)", theEntity, time.Since(startTime))
 			sendMsg(conn, msg)
 
 		case "Update":

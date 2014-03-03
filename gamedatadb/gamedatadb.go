@@ -3,6 +3,7 @@ package gamedatadb
 import (
 	"encoding/json"
 	"github.com/HouzuoGuo/tiedot/db"
+	"log"
 )
 
 type Infantry struct {
@@ -857,7 +858,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Infantry", Infantry{"Preussen", 1813, 1814, "Russo German Legion", "CrackLine", "Prussian", "4L 1S", 0, 0, "Poor Musket", "Good", "Average", false}))
 
 	// Prussian Guard
-	gameData.Insert(DataMap("Infantry", Infantry{"Preussen Guard", 179, 1810, "Leibguard", "Guard", "OldSchool", "4L", 0, 0, "Poor Musket", "", "Average", true}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Preussen Guard", 1792, 1810, "Leibguard", "Guard", "OldSchool", "4L", 0, 0, "Poor Musket", "", "Average", true}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Preussen Guard", 1792, 1810, "Grenadier", "Grenadier", "OldSchool", "4L", 0, 0, "Poor Musket", "", "Average", true}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Preussen Guard", 1811, 1815, "Grenadier", "Grenadier", "Prussian", "4L 1S", 0, 0, "Musket", "Good", "Good", true}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Preussen Guard", 1811, 1815, "Jager", "Grenadier", "Light Infantry", "4E", 0, 0, "Rifle", "Excellent", "Excellent", true}))
@@ -2444,4 +2445,9 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"LW", "Lt woods", -2}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"CT", "Per Contour Difference", -2}))
 
+	// Now create some indexes
+	log.Println("Creating Index on Type")
+	if err := gameData.Index([]string{"Type"}); err != nil {
+		panic(err)
+	}
 }
