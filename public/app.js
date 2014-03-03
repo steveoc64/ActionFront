@@ -213,6 +213,46 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'FormationChange.html',
  			controller: 'FormationChangeCtrl'
  		})
+		.state('fire', {
+ 			url: '/fire',
+ 			templateUrl: 'fire.html',
+ 			controller: 'FireCtrl'
+ 		})		
+ 		.state('fire.SKFire', {
+ 			url: '/SKFire',
+ 			templateUrl: 'SKFire.html',
+ 			controller: 'SKFireCtrl'
+ 		})
+ 		.state('fire.VolleyFire', {
+ 			url: '/VolleyFire',
+ 			templateUrl: 'VolleyFire.html',
+ 			controller: 'VolleyFireCtrl'
+ 		})
+ 		.state('fire.FireFight', {
+ 			url: '/FireFight',
+ 			templateUrl: 'FireFight.html',
+ 			controller: 'FireFightCtrl'
+ 		})
+ 		.state('fire.ArtyFire', {
+ 			url: '/ArtyFire',
+ 			templateUrl: 'ArtyFire.html',
+ 			controller: 'ArtyFireCtrl'
+ 		})
+ 		.state('fire.Bombardment', {
+ 			url: '/Bombardment',
+ 			templateUrl: 'Bombardment.html',
+ 			controller: 'BombardmentCtrl'
+ 		})
+ 		.state('fire.CounterBtyFire', {
+ 			url: '/CounterBtyFire',
+ 			templateUrl: 'CounterBtyFire.html',
+ 			controller: 'CounterBtyFireCtrl'
+ 		})
+ 		.state('fire.BridgeFire', {
+ 			url: '/BridgeFire',
+ 			templateUrl: 'BridgeFire.html',
+ 			controller: 'BridgeFireCtrl'
+ 		})
  		;
  }])
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -341,6 +381,8 @@ angular.module("app", ['ui.router', 'ngGrid'])
 .controller("MoraleFatigueCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 }])
 .controller("MovementCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+}])
+.controller("FireCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 }])
 .controller("FormationsCtrl", ["$scope", "DataSocket", "$rootScope", function($scope, DataSocket, $rootScope){
 	$scope.Data = [];
@@ -3439,6 +3481,347 @@ false
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+	]);
+	
+}])
+.controller("SKFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.Data3 = [];
+	$scope.Data4 = [];
+	$scope.title = "Fire Chart";
+	$scope.title2 = "Fire Effect";
+	$scope.title3 = "Fire Modifiers";
+	$scope.title4 = "To Hit Values";
+	$scope.docs = "Table 15.2";
+	$scope.docs2 = "Table 15.2";
+	$scope.docs3 = "Table 3.1";
+	$scope.docs4 = "Table 3.2"
+	$scope.Entity = "FireChart";
+	$scope.Entity2 = "FireEffect";
+	$scope.Entity3 = "FireSKMod";
+	$scope.Entity4 = "SKEffect";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['ID'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ID', width: 60}, 
+           	{field:'SmallArms', displayName:'Skirmish %',width: 100}, 
+        ]
+	};
+
+	$scope.gridOptions2 = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields:['ID'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ID', width: 60}, 
+           	{field:'Dice', width: 60},
+           	{field:'Descr', displayName:'Description',width:120}
+        ]
+	};
+
+	$scope.gridOptions3 = { 
+		data: 'Data3',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate3.html',
+        sortInfo: {
+        	fields:['Value'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 60}, 
+           	{field:'Descr', displayName:'Description',width: 220},
+           	{field:'Value', width: 60},
+        ]
+	};
+	$scope.gridOptions4 = { 
+		data: 'Data4',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate4.html',
+        sortInfo: {
+        	fields:['Code'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ECode', width: 60}, 
+           	{field:'Dice', width: 60},
+           	{field:'Descr', displayName:'Target',width: 120},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("SKFireUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) { 
+					angular.forEach($scope.Data3, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) { 
+					angular.forEach($scope.Data4, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity4,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Dice' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else if ('ECode' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity4,"Data":row}));
+				} else if ('Code' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
+    }
+    $scope.newRow3 = function() {
+    	$scope.Data3.push({"@id": '0', Code: '~ ??? ~'})
+    }
+    $scope.newRow4 = function() {
+    	$scope.Data4.push({"@id": '0', ECode: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+		{Entity: $scope.Entity4, Data: $scope.Data4, Callback: $scope.changeData},
+	]);
+	
+}])
+.controller("VolleyFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.Data3 = [];
+	$scope.title = "Fire Chart";
+	$scope.title2 = "Fire Effect";
+	$scope.title3 = "Fire Modifiers";
+	$scope.docs = "Table 15.2";
+	$scope.docs2 = "Table 15.2";
+	$scope.docs3 = "Table 15.2A & B";
+	$scope.Entity = "FireChart";
+	$scope.Entity2 = "FireEffect";
+	$scope.Entity3 = "FireMod";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['ID'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ID', width: 60}, 
+           	{field:'SmallArms', displayName:'Musket %',width: 100}, 
+        ]
+	};
+
+	$scope.gridOptions2 = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields:['ID'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ID', width: 60}, 
+           	{field:'Dice', width: 60},
+           	{field:'Descr', displayName:'Description',width:120}
+        ]
+	};
+
+	$scope.gridOptions3 = { 
+		data: 'Data3',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate3.html',
+        sortInfo: {
+        	fields:['Value'],
+        	directions:['desc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 120}, 
+           	{field:'Descr', displayName:'Description',width: 300},
+           	{field:'Value', width: 60},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("SKFireUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) { 
+					angular.forEach($scope.Data3, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Dice' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else if ('Code' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
+    }
+    $scope.newRow3 = function() {
+    	$scope.Data3.push({"@id": '0', Code: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
 	]);
 	
 }])

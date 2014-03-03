@@ -432,7 +432,7 @@ type FireSKMod struct {
 }
 
 type SKEffect struct {
-	Code  string
+	ECode string
 	Dice  uint8
 	Descr string
 }
@@ -2251,19 +2251,19 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireEffect", FireEffect{2, 1, "Erratic"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{3, 5, "Ineffective"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{4, 9, "Effective"}))
-	gameData.Insert(DataMap("FireEffect", FireEffect{5, 12, "Excellent"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{5, 12, "Deadly"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{6, 15, "Withering"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{7, 19, "Crushing"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{8, 23, "Devestating"}))
-	gameData.Insert(DataMap("FireEffect", FireEffect{9, 29, "Horrendous"}))
-	gameData.Insert(DataMap("FireEffect", FireEffect{10, 34, "Extrodinary"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{9, 29, "Magnificent"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{10, 34, "Extraordinaire"}))
 
 	gameData.Insert(DataMap("FireChart", FireChart{1, 3, 0, 0, 1, 1}))
 	gameData.Insert(DataMap("FireChart", FireChart{2, 5, 0, 1, 2, 2}))
 	gameData.Insert(DataMap("FireChart", FireChart{3, 8, 1, 1, 2, 3}))
 	gameData.Insert(DataMap("FireChart", FireChart{4, 12, 2, 2, 3, 4}))
 	gameData.Insert(DataMap("FireChart", FireChart{5, 15, 2, 3, 4, 5}))
-	gameData.Insert(DataMap("FireChart", FireChart{6, 17, 4, 4, 5, 6}))
+	gameData.Insert(DataMap("FireChart", FireChart{6, 18, 4, 4, 5, 6}))
 	gameData.Insert(DataMap("FireChart", FireChart{7, 22, 4, 6, 7, 8}))
 	gameData.Insert(DataMap("FireChart", FireChart{8, 26, 6, 8, 8, 10}))
 	gameData.Insert(DataMap("FireChart", FireChart{9, 35, 7, 10, 10, 12}))
@@ -2319,17 +2319,16 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireSKMod", FireSKMod{"CV", "Firing from Cover/Rough/Woods", 5}))
 	gameData.Insert(DataMap("FireSKMod", FireSKMod{"SK", "Firing from Skirmish Order", 5}))
 
-	gameData.Insert(DataMap("SKEffect", SKEffect{"FC", 2, "Column or Square"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"FF", 3, "Any Formed"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"FA", 4, "Artillery"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"FO", 5, "Open Order"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"FS", 6, "Skirmish Order"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"CR", 2, "Rolling/Rough Terrain"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"CL", 3, "Light Cover"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"CM", 4, "Medium Cover"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"CR", 5, "Heavy Cover"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"CR", 5, "Heavy Cover"}))
-	gameData.Insert(DataMap("SKEffect", SKEffect{"CS", 6, "Super Heavy Cover"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"T1", 2, "Column or Square"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"T2", 3, "Any Formed"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"T3", 4, "Artillery"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"T4", 5, "Open Order"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"T5", 6, "Skirmish Order"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"C1", 2, "Rolling/Rough Terrain"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"C2", 3, "Light Cover"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"C3", 4, "Medium Cover"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"C4", 5, "Heavy Cover"}))
+	gameData.Insert(DataMap("SKEffect", SKEffect{"C5", 6, "Super Heavy Cover"}))
 
 	gameData.Insert(DataMap("FireFight", FireFight{2, "Firefight Continues", false, true, false, false}))
 	gameData.Insert(DataMap("FireFight", FireFight{13, "Fallback in good order if not in cover", true, true, false, false}))

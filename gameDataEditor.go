@@ -163,7 +163,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 
 			// If we already have a cached result, send that
 			if msg, ok := ListCache[theEntity]; ok {
-				log.Printf("LIST request: %s (%s) ~ Cached", theEntity, time.Since(startTime))
+				log.Printf("LIST request: %s (%s)~", theEntity, time.Since(startTime))
 				sendMsg(conn, msg)
 			} else {
 				// Otherwise, build a new result set using tiedot embedded query processor
