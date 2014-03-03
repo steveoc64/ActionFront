@@ -3491,7 +3491,7 @@ false
 	$scope.Data4 = [];
 	$scope.title = "Fire Chart";
 	$scope.title2 = "Fire Effect";
-	$scope.title3 = "Fire Modifiers";
+	$scope.title3 = "Skirmish Fire Modifiers";
 	$scope.title4 = "To Hit Values";
 	$scope.docs = "Table 15.2";
 	$scope.docs2 = "Table 15.2";
@@ -3825,4 +3825,121 @@ false
 	]);
 	
 }])
+.controller("FireFightCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.title = "Fire Fight Results";
+	$scope.title2 = "Fire Fight Modifiers";
+	$scope.docs = "Table 15.2";
+	$scope.docs2 = "Table 15.2";
+	$scope.Entity = "FireFight";
+	$scope.Entity2 = "FireFightMod";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Dice'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Dice', width: 60}, 
+           	{field:'Descr', displayName:'Description',width:200},
+           	{field:'Fallback', width:80, editableCellTemplate: 'fallbackTemplate.html'},
+           	{field:'HoldCover', width:80, editableCellTemplate: 'holdTemplate.html'},
+           	{field:'Disorder', width:80, editableCellTemplate: 'disorderTemplate.html'},
+           	{field:'Rout', width:80, editableCellTemplate: 'routTemplate.html'},
+        ]
+	};
+
+	$scope.gridOptions2 = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields:['Value'],
+        	directions:['desc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 120}, 
+           	{field:'Descr', displayName:'Description',width: 300},
+           	{field:'Value', width: 60},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("SKFireUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+	]);
+	
+}])
 ;
+
+
