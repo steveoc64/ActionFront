@@ -472,10 +472,10 @@ type ArtLimber struct {
 
 type CounterBty struct {
 	Score   uint8
-	LHorses uint8
-	LCrew   uint8
 	Horses  uint8
 	Crew    uint8
+	LHorses uint8
+	LCrew   uint8
 	Caisson bool
 }
 
@@ -2065,9 +2065,9 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("DeploymentState", DeploymentState{6, "Extended Campaign Column", "Units are strung out on the march and widely dispersed, some stragglers and foragers. 1 Skirmisher unit may be formed on the head of the column.", "Deploy 2 grids from the head of the column, Shaken, +2 fatigue", "Broken", true}))
 
 	gameData.Insert(DataMap("TacMove", TacMove{"Infantry", 10, 7, 5, 5, 7, -1, -3}))
-	gameData.Insert(DataMap("TacMove", TacMove{"LightCav", 20, 7, 0, 5, 7, -5, 0}))
-	gameData.Insert(DataMap("TacMove", TacMove{"Cavalry", 16, 5, 0, 5, 7, -5, 0}))
-	gameData.Insert(DataMap("TacMove", TacMove{"Artillery", 6, 5, 0, 2, 0, 0, 0}))
+	gameData.Insert(DataMap("TacMove", TacMove{"LightCav", 20, 10, 0, 10, 15, -5, 0}))
+	gameData.Insert(DataMap("TacMove", TacMove{"Cavalry", 16, 8, 0, 5, 12, -5, 0}))
+	gameData.Insert(DataMap("TacMove", TacMove{"Artillery", 6, 3, 0, 2, 0, 0, 0}))
 
 	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Marchfeld", 1, 2, 3}))
 	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Rolling", 2, 4, 6}))

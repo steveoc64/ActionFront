@@ -198,6 +198,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'ArtyMovement.html',
  			controller: 'ArtyMovementCtrl'
  		})
+ 		.state('mv.ArtyExtra', {
+ 			url: '/ArtyExtra',
+ 			templateUrl: 'ArtyExtra.html',
+ 			controller: 'ArtyExtraCtrl'
+ 		})
  		.state('mv.SKRelocate', {
  			url: '/SKRelocate',
  			templateUrl: 'SKRelocate.html',
@@ -238,10 +243,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'ArtyFire.html',
  			controller: 'ArtyFireCtrl'
  		})
- 		.state('fire.Bombardment', {
- 			url: '/Bombardment',
- 			templateUrl: 'Bombardment.html',
- 			controller: 'BombardmentCtrl'
+ 		.state('fire.ArtyStats', {
+ 			url: '/ArtyStats',
+ 			templateUrl: 'ArtyStats.html',
+ 			controller: 'ArtyStatsCtrl'
  		})
  		.state('fire.CounterBtyFire', {
  			url: '/CounterBtyFire',
@@ -950,9 +955,13 @@ angular.module("app", ['ui.router', 'ngGrid'])
 }])
 .controller("EquipCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
 	$scope.Data = [];
-	$scope.title = "Equipment Types";
+	$scope.title = "Small Arms";
 	$scope.docs = "";
 	$scope.Entity = "Equip";
+	$scope.Data2 = [];
+	$scope.title2 = "Artillery Ranges (Grids)";
+	$scope.docs2 = "Table 17.2";
+	$scope.Entity2 = "ArtRange";
 
 	//DataSocket.connect($scope);
 
@@ -972,11 +981,33 @@ angular.module("app", ['ui.router', 'ngGrid'])
         	directions: ['asc']
         },
         columnDefs: [
-           	{field:'Name', width: 200}, 
-           	{field:'SK', displayName: 'Skirmish', width: 200}, 
-           	{field:'Volley', width: 200}, 
-           	{field:'Close', width: 200}, 
-           	{field:'Long', width: 200}, 
+           	{field:'Name', width: 180}, 
+           	{field:'SK', displayName: 'Skirmish', width: 100}, 
+           	{field:'Volley', width: 100}, 
+           	{field:'Close', width: 100}, 
+           	{field:'Long', width: 100}, 
+        ]
+	};
+	$scope.gridOptions2 = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields: ['Long'],
+        	directions: ['asc']
+        },
+        columnDefs: [
+           	{field:'Weight', width: 120}, 
+           	{field:'Short', width: 80}, 
+           	{field:'Medium', width: 80}, 
+           	{field:'Long', width: 80}, 
         ]
 	};
 
@@ -990,14 +1021,44 @@ angular.module("app", ['ui.router', 'ngGrid'])
 		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
 	});
 	$scope.$on('ngGridEventEndCellEdit', function(evt){
-		if (evt.targetScope.row.entity[evt.targetScope.col.field] != $scope.saveCell) {
-			console.log('Was:',$scope.saveCell);
-			$scope.update(evt.targetScope.row);
-		} 
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {													
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						//console.log("The update is on the mod data grid");
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Short' in row) {
+					//console.log("The update is on the mod data grid because it has a property called Code");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
     });
 
     $scope.newRow = function() {
-    	$scope.FilteredData.push({"@id": '0', Name: '~ ??? ~'})
+    	$scope.Data.push({"@id": '0', Name: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.Data2.push({"@id": '0', Weight: '~ ??? ~'})
     }
 
     $scope.changeData = function(d) {
@@ -1005,7 +1066,8 @@ angular.module("app", ['ui.router', 'ngGrid'])
     }
 
 	DataSocket.connect([
-		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
 	]);		
 }])
 .controller("InitTablesCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
@@ -3149,6 +3211,156 @@ false
 	]);
 	
 }])
+.controller("ArtyExtraCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.Data3 = [];
+	$scope.title = "Double Team Mods";
+	$scope.title2 = "Recover Guns";
+	$scope.title3 = "Recovery Mods";
+	$scope.docs = "Table 17.9 (Req 11+ to DblTeam)";
+	$scope.docs2 = "Table 17.10";
+	$scope.docs3 = "Table 17.10A";
+	$scope.Entity = "DoubleTeamMod";
+	$scope.Entity2 = "ArtFate";
+	$scope.Entity3 = "ArtFateMod";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Value'],
+        	directions:['desc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 120}, 
+           	{field:'Value', width: 80}, 
+        ]
+	};
+
+	$scope.gridOptions2 = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields:['Score'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Situation', width: 200}, 
+           	{field:'Score', width: 80},
+        ]
+	};
+
+	$scope.gridOptions3 = { 
+		data: 'Data3',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate3.html',
+        sortInfo: {
+        	fields:['Value'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 80}, 
+           	{field:'Descr', displayName:'Description',width: 180},
+           	{field:'Value', width: 80},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("ArtyExtraUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) { 
+					angular.forEach($scope.Data3, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Situation' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+				} else if ('Descr' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Code: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.Data2.push({"@id": '0', Situation: '~ ??? ~'})
+    }
+    $scope.newRow3 = function() {
+    	$scope.Data3.push({"@id": '0', Code: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+	]);
+	
+}])
 .controller("BUAMovementCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
@@ -3754,7 +3966,7 @@ false
 	};
 
 	$scope.update = function(row) {
-		console.log("SKFireUpdated -> ",row.entity);
+		console.log("VolleyFireUpdated -> ",row.entity);
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
@@ -3883,7 +4095,7 @@ false
 	};
 
 	$scope.update = function(row) {
-		console.log("SKFireUpdated -> ",row.entity);
+		console.log("FireFightUpdated -> ",row.entity);
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
@@ -3939,6 +4151,306 @@ false
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 	
+}])
+.controller("ArtyFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.Data3 = [];
+	$scope.title = "Fire Effect";
+	$scope.title2 = "Fire Chart";
+	$scope.title3 = "Fire Modifiers";
+	$scope.docs = "Table 15.2";
+	$scope.docs2 = "Table 17.1";
+	$scope.docs3 = "Table 17.2A";
+	$scope.Entity = "FireEffect";
+	$scope.Entity2 = "FireChart";
+	$scope.Entity3 = "ArtMod";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['ID'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ID', width: 60}, 
+           	{field:'Dice', width: 60},
+           	{field:'Descr', displayName:'Description',width:120}
+        ]
+	};
+
+	$scope.gridOptions2 = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields:['ID'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ID', width: 60}, 
+           	{field:'LtArt', displayName:'Light',width: 60}, 
+           	{field:'MdArt', displayName:'Medium',width: 60}, 
+           	{field:'MdHvArt', displayName:'MdHeavy',width: 60}, 
+           	{field:'HvArt', displayName:'Heavy',width: 60}, 
+        ]
+	};
+
+
+	$scope.gridOptions3 = { 
+		data: 'Data3',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate3.html',
+        sortInfo: {
+        	fields:['Value'],
+        	directions:['desc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 80}, 
+           	{field:'Descr', displayName:'Description',width: 280},
+           	{field:'Value', width: 60},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("ArtyFireUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) { 
+					angular.forEach($scope.Data3, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Dice' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+				} else if ('LtArt' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else if ('Code' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
+    }
+    $scope.newRow3 = function() {
+    	$scope.Data3.push({"@id": '0', Code: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+	]);
+	
+}])
+.controller("CounterBtyFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Counter Bty Fire Results";
+	$scope.docs = "Table 17.5";
+	$scope.Entity = "CounterBty";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Score'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Score', width: 100}, 
+           	{field:'Horses', width: 100},
+           	{field:'Crew', width: 100},
+           	{field:'LHorses', displayName:'Limbered - Horses',width: 200},
+           	{field:'LCrew', displayName: 'Limbered - Crew',width: 200},
+           	{field:'Caisson', displayName:'Caisson Hit', editableCellTemplate: 'caissonTemplate.html',width: 100},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("CounterBtyUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+	]);
+}])
+.controller("BridgeFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Set Bridges and Buildings Aflame";
+	$scope.docs = "Table 17.8  (+1 for each additional Howitzer section in Bty)";
+	$scope.Entity = "Aflame";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['TacMd'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Cover', width: 200}, 
+           	{field:'TacMd', displayName: 'Tactical Fire < 18lb',width: 200},
+           	{field:'TacHv', displayName: '18lb +', width: 100},
+           	{field:'BombardMd', displayName:'Bombardment < 18lb',width: 200},
+           	{field:'BombardHv', displayName: '18lb +',width: 100},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("BridgeFireUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Cover: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+	]);
 }])
 ;
 
