@@ -521,6 +521,21 @@ type BouncethruMod struct {
 	Value int8
 }
 
+type DefFire struct {
+	ID     uint8
+	Target string
+	Hits1  string
+	Hits4  string
+	Hits6  string
+	Hits8  string
+	Hits10 string
+}
+
+type DefFireNote struct {
+	Code  string
+	Descr string
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -2443,6 +2458,33 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"MD", "Muddy conditions", -10}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"LW", "Lt woods", -2}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"CT", "Per Contour Difference", -2}))
+
+	gameData.Insert(DataMap("DefFire", DefFire{1, "Infantry", "-1", "-2 FG", "-1 DFG", "-2 DEFG", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{2, "Infantry w/Impetus", "-1", "-2 G", "-1 DG", "-2 DG", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{3, "Infantry Storming", "", "G", "X", "X", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{4, "Shock Infantry", "-1", "-1 H", "DF", "DFG", "DER"}))
+	gameData.Insert(DataMap("DefFire", DefFire{5, "Shock Infantry w/Impetus", "-1", "-1", "D", "-2 DG", "DER"}))
+	gameData.Insert(DataMap("DefFire", DefFire{6, "Shock Infantry Storming", "", "", "X", "X", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{7, "Cavalry", "-1", "C", "DC", "DC", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{8, "Cavalry w/Impetus", "-1", "-1 D", "-2 D", "-3 C", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{9, "DUB Cavalry", "C", "DC", "A", "B", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{10, "DUB Cavalry w/Impetus", "-2", "-3 D", "A", "B", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{11, "Cossacks", "R", "DR", "DZ", "X", "X"}))
+
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"-1", "Close Action at -1"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"-2", "Close Action at -2"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"-3", "Close Action at -3"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"D", "Disorders. If already disordered, Fallback"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"E", "If already disordered, Rout"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"F", "Fallback and fire"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"G", "If attacking guns, fire disordered and fallback"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"X", "Unit Routs (Inf 2 grid, Cav 3 grid), add 1-3 hits"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"R", "Retreat 1 Grid"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"Z", "Retreat 2 Grids"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"H", "Halt at close range, enter FireFight"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"C", "Cavalry, Fire and Retire 2 Grids"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"A", "Fire and Retire 2 Grids. 9 or less = Rout"}))
+	gameData.Insert(DataMap("DefFireNote", DefFireNote{"B", "Fire and Retire 2 Grids. 12 or less = Rout"}))
 
 	// Now create some indexes
 	log.Println("Creating Index on Type")
