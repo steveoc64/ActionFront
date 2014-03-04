@@ -243,10 +243,10 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'ArtyFire.html',
  			controller: 'ArtyFireCtrl'
  		})
- 		.state('fire.ArtyStats', {
- 			url: '/ArtyStats',
- 			templateUrl: 'ArtyStats.html',
- 			controller: 'ArtyStatsCtrl'
+ 		.state('fire.Bouncethru', {
+ 			url: '/Bouncethru',
+ 			templateUrl: 'Bouncethru.html',
+ 			controller: 'BouncethruCtrl'
  		})
  		.state('fire.CounterBtyFire', {
  			url: '/CounterBtyFire',
@@ -4306,6 +4306,120 @@ false
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+	]);
+	
+}])
+.controller("BouncethruCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.title = "Bounce Through Effect";
+	$scope.title2 = "Bounce Through Mods";
+	$scope.docs = "Table 18.3";
+	$scope.docs2 = "Table 18.3";
+	$scope.Entity = "Bouncethru";
+	$scope.Entity2 = "BouncethruMod";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Score'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Score', width: 60}, 
+           	{field:'Light', width: 120},
+           	{field:'Medium', width:120},
+           	{field:'MediumHv', width:120},
+           	{field:'Heavy', width:120},
+        ]
+	};
+
+	$scope.gridOptions2= { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate3.html',
+        sortInfo: {
+        	fields:['Value'],
+        	directions:['desc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 80}, 
+           	{field:'Descr', displayName:'Description',width: 280},
+           	{field:'Value', width: 60},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("BounceThruUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Code' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 	
 }])
