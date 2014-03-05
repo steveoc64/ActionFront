@@ -278,6 +278,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'LimberIfCharged.html',
  			controller: 'LimberIfChargedCtrl'
  		})
+ 		.state('ca.ShockValue', {
+ 			url: '/ShockValue',
+ 			templateUrl: 'ShockValue.html',
+ 			controller: 'ShockValueCtrl'
+ 		})
  		;
  }])
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -2216,8 +2221,8 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Score', width: 80}, 
-           	{field:'Descr', displayName:'Description',width: 300}, 
+           	{field:'Score', width: 60}, 
+           	{field:'Descr', displayName:'Description',width: 280}, 
            	{field:'Another', displayName:'Bonus',width: 80, editableCellTemplate: 'anotherTemplate.html'},
            	{field:'Fatigue', width: 80, editableCellTemplate: 'fatigueTemplate.html'},
            	{field:'OneUnitOnly', width: 80, editableCellTemplate: 'oneUnitOnlyTemplate.html'},
@@ -2241,7 +2246,7 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Code', width: 120}, 
+           	{field:'Code', width: 80}, 
            	{field:'Descr', displayName:'Description',width: 300},
            	{field:'Value', width: 60},
         ]
@@ -4615,7 +4620,7 @@ false
         },
         columnDefs: [
            	{field:'ID', visible: false,width: 60}, 
-           	{field:'Target', width: 180},
+           	{field:'Target', displayName:'Attacking Unit',width: 180},
            	{field:'Hits1', displayName:'1-3 Hits', width:75},
            	{field:'Hits4', displayName:'4-5 Hits', width:75},
            	{field:'Hits6', displayName:'6-7 Hits', width:75},
@@ -4880,6 +4885,75 @@ false
 
     $scope.newRow = function() {
     	$scope.Data.push({"@id": '0', Code: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+	]);
+}])
+.controller("ShockValueCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Shock Value / ACE Calculator";
+	$scope.docs = "Table 16.2";
+	$scope.Entity = "ShockValue";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['ID'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ID', displayName: 'Numeric Index', width: 120}, 
+           	{field:'Label', width: 240}, 
+           	{field:'Value', displayName: 'Shock Value / ACE Rating', width: 200},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("ShockValueUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
     }
 
 	$scope.changeData = function(d) {

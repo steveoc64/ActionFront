@@ -539,6 +539,12 @@ type DefFireNote struct {
 	Descr string
 }
 
+type ShockValue struct {
+	ID    uint8
+	Label string
+	Value uint8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -2490,6 +2496,47 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("DefFireNote", DefFireNote{"C", "Cavalry, Fire and Retire 2 Grids"}))
 	gameData.Insert(DataMap("DefFireNote", DefFireNote{"A", "Fire and Retire 2 Grids. 9 or less = Rout"}))
 	gameData.Insert(DataMap("DefFireNote", DefFireNote{"B", "Fire and Retire 2 Grids. 12 or less = Rout"}))
+
+	gameData.Insert(DataMap("ShockValue", ShockValue{1, "", 0}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{2, "", 1}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{3, "", 1}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{4, "", 1}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{5, "", 2}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{6, "", 2}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{7, "", 2}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{8, "", 2}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{9, "", 2}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{10, "", 3}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{11, "Rabble", 3}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{12, "", 4}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{13, "", 4}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{14, "", 5}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{15, "Militia", 5}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{16, "", 6}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{17, "", 6}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{18, "Landwehr", 7}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{19, "Conscript", 8}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{20, "Regular", 9}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{21, "Veteran", 10}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{22, "", 11}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{23, "CrackLine", 12}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{24, "Elite", 14}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{25, "Grenadier", 16}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{26, "Guard", 18}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{27, "", 20}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{28, "OldGuard", 22}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{29, "", 24}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{30, "", 26}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{31, "", 28}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{32, "", 30}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{33, "", 32}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{34, "", 36}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{35, "", 39}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{36, "", 42}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{37, "", 46}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{38, "", 50}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{39, "", 55}))
+	gameData.Insert(DataMap("ShockValue", ShockValue{40, "", 60}))
 
 	// Now create some indexes
 	log.Println("Creating Index on Type")
