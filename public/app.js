@@ -293,6 +293,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'CAInf.html',
  			controller: 'CAInfCtrl'
  		})
+ 		.state('ca.CAResult', {
+ 			url: '/CAResult',
+ 			templateUrl: 'CAResult.html',
+ 			controller: 'CAResultCtrl'
+ 		}) 		
  		;
  }])
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -5000,9 +5005,9 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Code', width: 80},
-           	{field:'Descr', displayName:'Description',width:300},
+           	{field:'Code', visible:false,width: 80},
            	{field:'Value', width:80},
+           	{field:'Descr', displayName:'Description',width:300},
         ]
 	};
 
@@ -5022,15 +5027,15 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Code', width: 80}, 
+           	{field:'Code', visible:false,width: 80}, 
            	{field:'Type', width: 120}, 
-           	{field:'Descr', displayName:'Description',width: 250},
            	{field:'Value', width: 80},
+           	{field:'Descr', displayName:'Description',width: 250},
         ]
 	};
 
 	$scope.update = function(row) {
-		console.log("FormSquareUpdated -> ",row.entity);
+		console.log("CACavUpdated -> ",row.entity);
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
@@ -5113,9 +5118,9 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Code', width: 80},
-           	{field:'Descr', displayName:'Description',width:300},
+           	{field:'Code', visible:false,width: 80},
            	{field:'Value', width:80},
+           	{field:'Descr', displayName:'Description',width:300},
         ]
 	};
 
@@ -5135,15 +5140,15 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Code', width: 80}, 
+           	{field:'Code', visible:false,width: 80}, 
            	{field:'Type', width: 120}, 
-           	{field:'Descr', displayName:'Description',width: 250},
            	{field:'Value', width: 80},
+           	{field:'Descr', displayName:'Description',width: 250},
         ]
 	};
 
 	$scope.update = function(row) {
-		console.log("FormSquareUpdated -> ",row.entity);
+		console.log("CAInfUpdated -> ",row.entity);
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
@@ -5199,6 +5204,162 @@ false
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 
+}])
+.controller("CAResultCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.Data3 = [];
+	$scope.title = "Close Action Results";
+	$scope.title2 = "Result Code";
+	$scope.title3 = "Close Action Mods";
+	$scope.docs = "Table 16.3";
+	$scope.docs2 = "Table 16.3";
+	$scope.docs3 = "Table 16.3A";
+	$scope.Entity = "CAResult";
+	$scope.Entity2 = "CAResultCode";
+	$scope.Entity3 = "CAResultMod";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Score'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Score', width: 60}, 
+           	{field:'Descr', displayName:'Description',width:100},
+           	{field:'LInf', displayName:'Lose Inf',width:80},
+           	{field:'LCav', displayName:'Cavalry',width:100},
+           	{field:'LArt', displayName:'Artillery',width:80},
+           	{field:'VInf', displayName:'Win Inf',width:80},
+           	{field:'VCav', displayName:'Cav',width:80},
+        ]
+	};
+
+	$scope.gridOptions2 = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate2.html',
+        sortInfo: {
+        	fields:['ID'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'ID', visible: false,width: 60}, 
+           	{field:'Code', displayName:'Code',width: 60}, 
+           	{field:'Descr', displayName:'Description',width: 180}, 
+        ]
+	};
+
+	$scope.gridOptions3 = { 
+		data: 'Data3',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate3.html',
+        sortInfo: {
+        	fields:['Value'],
+        	directions:['desc']
+        },
+        columnDefs: [
+           	{field:'Code', visible:false,width: 80}, 
+           	{field:'Value', width: 60},
+           	{field:'Descr', displayName:'Description',width: 280},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("CAResultUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) { 
+					angular.forEach($scope.Data3, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('ID' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else if ('Value' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity3,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    }
+    $scope.newRow2 = function() {
+    	//$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
+    }
+    $scope.newRow3 = function() {
+    	//$scope.Data3.push({"@id": '0', Code: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+	]);
+	
 }])
 ;
 

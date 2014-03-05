@@ -564,6 +564,28 @@ type CAInf struct {
 	Value int8
 }
 
+type CAResult struct {
+	Score uint8
+	Descr string
+	LInf  string
+	LCav  string
+	LArt  string
+	VInf  string
+	VCav  string
+}
+
+type CAResultMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type CAResultCode struct {
+	ID    uint8
+	Code  string
+	Descr string
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -2615,6 +2637,35 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CAInf", CAInf{"C3", "vs Cavalry - Veteran or better Defending in Closed Column", 3}))
 	gameData.Insert(DataMap("CAInf", CAInf{"C4", "vs Cavalry - Defending in Anchored Line", 3}))
 	gameData.Insert(DataMap("CAInf", CAInf{"C5", "vs Cavalry - Defending in Supported Line", 2}))
+
+	gameData.Insert(DataMap("CAResult", CAResult{0, "Draw", "2 HS", "1 <", "1 L", "2 HS", "1 H"}))
+	gameData.Insert(DataMap("CAResult", CAResult{9, "Minor", "2 <S", "1 <<", "1X <<", "HS", "H"}))
+	gameData.Insert(DataMap("CAResult", CAResult{11, "Effective", "3X <<", "2X <<<", "2X <<", "-", "-+"}))
+	gameData.Insert(DataMap("CAResult", CAResult{16, "Major", "4X <<", "4X <<<<", "3X <<", ">", ">+"}))
+	gameData.Insert(DataMap("CAResult", CAResult{19, "Smashing", "6X <<", "5X <<<<", "4X <<", ">", ">>+"}))
+	gameData.Insert(DataMap("CAResult", CAResult{24, "Crushing", "8X <<", "6X <<<<", "5X <<", ">", ">>++"}))
+	gameData.Insert(DataMap("CAResult", CAResult{27, "Devestating", "DX <<<", "8X <<<<", "6X <<", ">", ">>++"}))
+	gameData.Insert(DataMap("CAResult", CAResult{29, "Breakthrough", "DDX <<<", "10X <<<<<<", "6X <<", "-+", ">>+++"}))
+
+	gameData.Insert(DataMap("CAResultMod", CAResultMod{"O1", "Odds of +10-15", 3}))
+	gameData.Insert(DataMap("CAResultMod", CAResultMod{"O2", "Odds of +16-24", 8}))
+	gameData.Insert(DataMap("CAResultMod", CAResultMod{"O3", "Odds of 25 or more", 10}))
+	gameData.Insert(DataMap("CAResultMod", CAResultMod{"CV", "Cavalry Defeats Infantry / Artillery", 6}))
+	gameData.Insert(DataMap("CAResultMod", CAResultMod{"DW", "Non Charging Defender Wins", -2}))
+	gameData.Insert(DataMap("CAResultMod", CAResultMod{"IC", "Infantry Defeats Cavalry", -3}))
+
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{1, "#", "Any Number = Number of Hits Taken"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{2, "H", "Halt in good order"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{3, "X", "Break with Bad Morale"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{4, "S", "If in BUA, results in Street Fight"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{5, "<", "Fallback half a grid in disorder"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{6, "<<", "Fallback 1 Grid in disorder"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{7, "<<", "Fallback 1 Grid in disorder"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{8, "D", "Fallback 1D10 inches in disorder"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{9, "-", "Minor Breakthrough"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{10, ">", "Half Grid Breakthrough"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{11, ">", "Whole Grid Breakthrough"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{12, "+", "Add 1D10 inches to Breakthrough"}))
 
 	// Now create some indexes
 	log.Println("Creating Index on Type")
