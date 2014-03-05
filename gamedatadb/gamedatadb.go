@@ -586,6 +586,17 @@ type CAResultCode struct {
 	Descr string
 }
 
+type StreetFight struct {
+	Score uint8
+	Hits  uint8
+}
+
+type StreetMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -2666,6 +2677,22 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{10, ">", "Half Grid Breakthrough"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{11, ">", "Whole Grid Breakthrough"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{12, "+", "Add 1D10 inches to Breakthrough"}))
+
+	gameData.Insert(DataMap("StreetFight", StreetFight{5, 1}))
+	gameData.Insert(DataMap("StreetFight", StreetFight{9, 2}))
+	gameData.Insert(DataMap("StreetFight", StreetFight{11, 3}))
+	gameData.Insert(DataMap("StreetFight", StreetFight{13, 4}))
+	gameData.Insert(DataMap("StreetFight", StreetFight{15, 5}))
+	gameData.Insert(DataMap("StreetFight", StreetFight{17, 6}))
+	gameData.Insert(DataMap("StreetFight", StreetFight{19, 7}))
+	gameData.Insert(DataMap("StreetFight", StreetFight{22, 8}))
+
+	gameData.Insert(DataMap("StreetMod", StreetMod{"SH", "Shock Infantry", 3}))
+	gameData.Insert(DataMap("StreetMod", StreetMod{"NQ", "No Quarter", 5}))
+	gameData.Insert(DataMap("StreetMod", StreetMod{"GR", "Per Morale Grade Difference", 1}))
+	gameData.Insert(DataMap("StreetMod", StreetMod{"N1", "Outnumber enemy", 1}))
+	gameData.Insert(DataMap("StreetMod", StreetMod{"N2", "2:1 Mass Difference", 2}))
+	gameData.Insert(DataMap("StreetMod", StreetMod{"N3", "3:1 or more Mass Difference", 3}))
 
 	// Now create some indexes
 	log.Println("Creating Index on Type")
