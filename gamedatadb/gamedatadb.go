@@ -545,6 +545,25 @@ type ShockValue struct {
 	Value uint8
 }
 
+type CAFactor struct {
+	Code  string
+	Type  string
+	Descr string
+	Value int8
+}
+
+type CACav struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type CAInf struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -2470,6 +2489,9 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"LW", "Lt woods", -2}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"CT", "Per Contour Difference", -2}))
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Close Action - Bayonets and Sabres
+
 	gameData.Insert(DataMap("DefFire", DefFire{1, "Infantry", "-1", "-2 FG", "-1 DFG", "-2 DEFG", "X"}))
 	gameData.Insert(DataMap("DefFire", DefFire{2, "Infantry w/Impetus", "-1", "-2 G", "-1 DG", "-2 DG", "X"}))
 	gameData.Insert(DataMap("DefFire", DefFire{3, "Infantry Storming", "", "G", "X", "X", "X"}))
@@ -2537,6 +2559,62 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("ShockValue", ShockValue{38, "", 50}))
 	gameData.Insert(DataMap("ShockValue", ShockValue{39, "", 55}))
 	gameData.Insert(DataMap("ShockValue", ShockValue{40, "", 60}))
+
+	gameData.Insert(DataMap("CAFactor", CAFactor{"C1", "Cover", "Defending Light Cover", 2}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"C2", "Cover", "Defending Medium Cover", 4}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"C3", "Cover", "Defending Heavy Cover", 6}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"C4", "Cover", "Defending Super Heavy", 12}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"C5", "Cover", "Fortified Building Bonus", 2}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"C6", "Cover", "Attacking with Engineer vs Cover", 2}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"A1", "Approach", "Per Overlap", 2}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"A2", "Approach", "Diagonal", 4}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"A3", "Approach", "Flank", 7}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"A4", "Approach", "Rear", 10}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"A5", "Approach", "Uphill of Opponent", 1}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"A6", "Approach", "Defending Steep Hill", 2}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"A7", "Approach", "Formed vs Unformed", 6}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"A8", "Approach", "Formed vs Artillery", 5}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"M1", "Morale", "Disordered", -3}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"M2", "Morale", "Shaken", -4}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"M3", "Morale", "Bad Morale", -10}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"F1", "Fatigue", "Winded", -1}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"F2", "Fatigue", "Worn", -2}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"F3", "Fatigue", "Tired", -3}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"F4", "Fatigue", "Exhausted", -5}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"H1", "Hits", "Per 2 HITs", -1}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"L1", "Leader", "Charismatic Leader at Div/Bde Level", 2}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"L2", "Leader", "Inspirational Leader at Div/Bde Level", 1}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"L3", "Leader", "Impersonal Leader at Div/Bde Level", 0}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"L4", "Leader", "Uninspiring Leader at Div/Bde Level", -1}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"L5", "Leader", "Charismatic Leader at Unit Level", 4}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"L6", "Leader", "Inspirational Leader at Unit Level", 2}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"L7", "Leader", "Impersonal Leader at Unit Level", 1}))
+	gameData.Insert(DataMap("CAFactor", CAFactor{"L8", "Leader", "Uninspiring Leader at Unit Level", -1}))
+
+	gameData.Insert(DataMap("CACav", CACav{"WV", "Each Successive Wave", 1}))
+	gameData.Insert(DataMap("CACav", CACav{"MS", "2:1 or greater mass", 2}))
+	gameData.Insert(DataMap("CACav", CACav{"BL", "Blown Cavalry", -6}))
+	gameData.Insert(DataMap("CACav", CACav{"I1", "vs Infantry - Square", -6}))
+	gameData.Insert(DataMap("CACav", CACav{"I2", "vs Infantry - Closed Column", -5}))
+	gameData.Insert(DataMap("CACav", CACav{"I3", "vs Infantry - Anchored Line", -5}))
+	gameData.Insert(DataMap("CACav", CACav{"I4", "vs Infantry - Supported Line", -4}))
+	gameData.Insert(DataMap("CACav", CACav{"I5", "vs Infantry - Rain / Snow", 2}))
+	gameData.Insert(DataMap("CACav", CACav{"I6", "vs Infantry - Lancers in Rain", 2}))
+	gameData.Insert(DataMap("CACav", CACav{"C1", "Heavy vs Light", 2}))
+	gameData.Insert(DataMap("CACav", CACav{"C2", "Medium vs Light", 1}))
+	gameData.Insert(DataMap("CACav", CACav{"C3", "Heavy vs Medium", 1}))
+	gameData.Insert(DataMap("CACav", CACav{"C4", "Round 1, Lancer vs Non Lancer", 2}))
+	gameData.Insert(DataMap("CACav", CACav{"C5", "Charging vs Non Charging", 3}))
+
+	gameData.Insert(DataMap("CAInf", CAInf{"I1", "vs Infantry - Shock Infantry", 1}))
+	gameData.Insert(DataMap("CAInf", CAInf{"I2", "vs Infantry - Defending in Square", -3}))
+	gameData.Insert(DataMap("CAInf", CAInf{"I3", "vs Infantry - Defending in Closed Column", -2}))
+	gameData.Insert(DataMap("CAInf", CAInf{"I4", "vs Infantry - Defending in Anchored Line", 2}))
+	gameData.Insert(DataMap("CAInf", CAInf{"C1", "vs Cavalry - Defending in Square", 7}))
+	gameData.Insert(DataMap("CAInf", CAInf{"C2", "vs Cavalry - Defending in Hasty Square", 4}))
+	gameData.Insert(DataMap("CAInf", CAInf{"C3", "vs Cavalry - Veteran or better Defending in Closed Column", 3}))
+	gameData.Insert(DataMap("CAInf", CAInf{"C4", "vs Cavalry - Defending in Anchored Line", 3}))
+	gameData.Insert(DataMap("CAInf", CAInf{"C5", "vs Cavalry - Defending in Supported Line", 2}))
 
 	// Now create some indexes
 	log.Println("Creating Index on Type")
