@@ -597,6 +597,12 @@ type StreetMod struct {
 	Value int8
 }
 
+type CAFlagMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -2693,6 +2699,10 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("StreetMod", StreetMod{"N1", "Outnumber enemy", 1}))
 	gameData.Insert(DataMap("StreetMod", StreetMod{"N2", "2:1 Mass Difference", 2}))
 	gameData.Insert(DataMap("StreetMod", StreetMod{"N3", "3:1 or more Mass Difference", 3}))
+
+	gameData.Insert(DataMap("CAFlagMod", CAFlagMod{"IF", "Per Infantry Hit", 1}))
+	gameData.Insert(DataMap("CAFlagMod", CAFlagMod{"CV", "Per Cavalry Hit", 2}))
+	gameData.Insert(DataMap("CAFlagMod", CAFlagMod{"ML", "Melee Occurred", 3}))
 
 	// Now create some indexes
 	log.Println("Creating Index on Type")
