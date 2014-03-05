@@ -1008,7 +1008,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 .controller("EquipCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
 	$scope.Data = [];
 	$scope.title = "Small Arms";
-	$scope.docs = "";
+	$scope.docs = "Small Arms Ranges - Volley = Almost touching, Close = Same Grid, Long = Next Grid";
 	$scope.Entity = "Equip";
 	$scope.Data2 = [];
 	$scope.title2 = "Artillery Ranges (Grids)";
@@ -4738,7 +4738,7 @@ false
 	$scope.Data2 = [];
 	$scope.title = "Form Square";
 	$scope.title2 = "Form Square Mods";
-	$scope.docs = "Table 14.5";
+	$scope.docs = "Table 14.5 (";
 	$scope.docs2 = "Table 14.5A";
 	$scope.Entity = "FormSquare";
 	$scope.Entity2 = "FormSquareMod";

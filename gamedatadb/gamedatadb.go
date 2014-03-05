@@ -603,6 +603,96 @@ type CAFlagMod struct {
 	Value int8
 }
 
+// 21.2A
+type LeaderFateMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+// 21.3
+type InjurySurvival struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+// 21.4
+type CAInjury struct {
+	Hi       uint8
+	Lo       uint8
+	Severity string
+	Descr    string
+}
+
+// 21.5
+type Injury struct {
+	Hi       uint8
+	Lo       uint8
+	Severity string
+	Descr    string
+}
+
+type EngTask struct {
+	Code   string
+	Effort string
+	Descr  string
+}
+
+type EngResult struct {
+	Score     uint8
+	Easy      uint8
+	Moderate  uint8
+	Difficult uint8
+	VeryHard  uint8
+}
+
+type EngMod struct {
+	Code  string
+	Descr string
+	Value int8
+}
+
+type Demolition struct {
+	Score uint8
+	Code  string
+	Descr string
+}
+
+// Applies to wind, and precipitation levels every 2 hours
+type WeatherChange struct {
+	Score uint8
+	Descr string
+	Value int8
+}
+
+type Weather struct {
+	Code  string
+	Descr string
+	Sight uint8
+	Turn1 uint8
+	Turn2 uint8
+	Move  uint8
+}
+
+type WeatherRegion struct {
+	Region string
+	Season string
+	D1     string
+	D2     string
+	D3     string
+	D4     string
+	D5     string
+	D6     string
+	D7     string
+	D8     string
+	D9     string
+	D10    string
+	D11    string
+	D12    string
+	D13    string
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -1935,6 +2025,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("MEMoraleMod", MEMoraleMod{"CF1", "Campaign Fatigue - Weary", -1}))
 	gameData.Insert(DataMap("MEMoraleMod", MEMoraleMod{"CF2", "Campaign Fatigue - Haggard", -2}))
 	gameData.Insert(DataMap("MEMoraleMod", MEMoraleMod{"CF3", "Campaign Fatigue - Spent", -5}))
+	gameData.Insert(DataMap("MEMoraleMod", MEMoraleMod{"COLD", "Cold weather conditions", -2}))
 
 	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"OldGuard", 2, 3, 4}))
 	gameData.Insert(DataMap("MEPanicTest", MEPanicTest{"Guard", 3, 5, 6}))
@@ -2318,13 +2409,13 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FormSquare", FormSquare{32, "Rabble", "ClosedColumn", 26, 22, 18, 17}))
 	gameData.Insert(DataMap("FormSquare", FormSquare{33, "Rabble", "Line", 28, 26, 19, 18}))
 
-	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"D1", "Charge from Diagonal", -2}))
-	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"D2", "Charged from Flank", -6}))
-	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"D3", "Charged from Rear", -8}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"FL", "Charged from Flank", -6}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"RR", "Charged from Rear", -8}))
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"DS", "Disordered", -4}))
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"CA", "Commander Attached", 4}))
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"LA", "Leader Attached", 2}))
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"OC", "Opportunity Charge", -3}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"CC", "Form Closed Column Instead", 4}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Muskets and Cannons and things that go Bang
@@ -2454,7 +2545,8 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("ArtMod", ArtMod{"LC", "Light/Medium Counter Bty at Long Range", -5}))
 	gameData.Insert(DataMap("ArtMod", ArtMod{"A1", "Ammo Depleted", -8}))
 	gameData.Insert(DataMap("ArtMod", ArtMod{"A2", "Ammo Exhausted", -13}))
-	gameData.Insert(DataMap("ArtMod", ArtMod{"T1", "Narchfeld Terrain", 3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"T1", "Marchfeld Terrain", 3}))
+	gameData.Insert(DataMap("ArtMod", ArtMod{"HR", "Heavy Rain", -2}))
 	gameData.Insert(DataMap("ArtMod", ArtMod{"3G", "3 Gun Section", 5}))
 	gameData.Insert(DataMap("ArtMod", ArtMod{"S1", "Defense of Bty vs Infantry", 5}))
 	gameData.Insert(DataMap("ArtMod", ArtMod{"S2", "Fire & Retire vs Infantry", -3}))
@@ -2671,17 +2763,17 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CAResultMod", CAResultMod{"DW", "Non Charging Defender Wins", -2}))
 	gameData.Insert(DataMap("CAResultMod", CAResultMod{"IC", "Infantry Defeats Cavalry", -3}))
 
-	gameData.Insert(DataMap("CAResultCode", CAResultCode{1, "#", "Any Number = Number of Hits Taken"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{1, "#", "Number of Hits"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{2, "H", "Halt in good order"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{2, "L", "Limber and Retire"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{3, "X", "Break with Bad Morale"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{4, "S", "If in BUA, results in Street Fight"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{5, "<", "Fallback half a grid in disorder"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{6, "<<", "Fallback 1 Grid in disorder"}))
-	gameData.Insert(DataMap("CAResultCode", CAResultCode{7, "<<", "Fallback 1 Grid in disorder"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{8, "D", "Fallback 1D10 inches in disorder"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{9, "-", "Minor Breakthrough"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{10, ">", "Half Grid Breakthrough"}))
-	gameData.Insert(DataMap("CAResultCode", CAResultCode{11, ">", "Whole Grid Breakthrough"}))
+	gameData.Insert(DataMap("CAResultCode", CAResultCode{11, ">>", "Whole Grid Breakthrough"}))
 	gameData.Insert(DataMap("CAResultCode", CAResultCode{12, "+", "Add 1D10 inches to Breakthrough"}))
 
 	gameData.Insert(DataMap("StreetFight", StreetFight{5, 1}))
@@ -2703,6 +2795,332 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CAFlagMod", CAFlagMod{"IF", "Per Infantry Hit", 1}))
 	gameData.Insert(DataMap("CAFlagMod", CAFlagMod{"CV", "Per Cavalry Hit", 2}))
 	gameData.Insert(DataMap("CAFlagMod", CAFlagMod{"ML", "Melee Occurred", 3}))
+
+	gameData.Insert(DataMap("LeaderFateMod", LeaderFateMod{"FR", "French Leader attached to unit", -1}))
+	gameData.Insert(DataMap("LeaderFateMod", LeaderFateMod{"BR", "British Leader attached to unit", -1}))
+	gameData.Insert(DataMap("LeaderFateMod", LeaderFateMod{"HIT", "Per 2 Hits", -1}))
+	gameData.Insert(DataMap("LeaderFateMod", LeaderFateMod{"PD", "Premonition of Death", -2}))
+	gameData.Insert(DataMap("LeaderFateMod", LeaderFateMod{"FM", "Leader used Follow Me action", -2}))
+	gameData.Insert(DataMap("LeaderFateMod", LeaderFateMod{"ML", "Involved in Melee", -1}))
+	gameData.Insert(DataMap("LeaderFateMod", LeaderFateMod{"RF", "Under fire from Rifles", -1}))
+
+	gameData.Insert(DataMap("InjurySurvival", InjurySurvival{"CR", "Critical Wound", -2}))
+	gameData.Insert(DataMap("InjurySurvival", InjurySurvival{"LT", "Light Wound", 2}))
+	gameData.Insert(DataMap("InjurySurvival", InjurySurvival{"GG", "Gangrene, next re-roll", -2}))
+	gameData.Insert(DataMap("InjurySurvival", InjurySurvival{"BR", "in Asia, Africa, Caribbean, Middle East, South America", -1}))
+
+	gameData.Insert(DataMap("CAInjury", CAInjury{2, 1, "Death", "Bayonetted to death"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{2, 2, "Escape", "Left for dead. Returns an hour later unharmed"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{2, 3, "Death", "Raising his sword, a bullet strikes the hilt and enters his heart"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{2, 4, "Death", "After a minor wound, General stays with his troops, and is subsequently shot dead !"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{2, 5, "Death", "Unnoticed by his men, the General slumps to the ground dead from a musket shot"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{2, 6, "Death", "A shell goes off nearby hitting the General with shrapnel. He exclaims 'Jolly Good Shot' before dropping dead"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{3, 1, "Death", "Head caved in by a blow from the butt of a musket"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{3, 2, "Death", "A bullet passes through both lungs"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{3, 3, "Death", "Last seen riding into the fray, his bloodied riderless horse returns a moment later"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{3, 4, "Death", "Hit in the neck, the General bleeds to death before help can arrive"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{3, 5, "Death", "Sabred in a duel with an enemy officer"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{3, 6, "Death", "Decapitated by a sword blow"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{4, 1, "Death", "Urging his men on, the General takes several musket shots before slumping to his death"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{4, 2, "Escape", "Shot in the chest, the bullet strikes his snuff box"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{4, 3, "Death", "Badly wounded, the General is finished off by a looter"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{4, 4, "Death", "Stabbed through the eye"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{4, 5, "Death", "Shot clean between the eyes"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{4, 6, "Death", "Shot through the spine"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{5, 1, "Death", "Hit square in the head by a heavy cannon ball"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{5, 2, "Death", "Knocked to the ground, the General is stabbed in the heart, like a dog"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{5, 3, "Death", "Thrown from his horse, the General is trampled to death in the heat of battle"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{5, 4, "Death", "Hit by a pistol shot in the back of the head, the General slumps forward on his horse"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{5, 5, "Captured", "Knocked to the ground. The General gives a Masonic sign of distress, and is spared by the enemy"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{5, 6, "Death", "Struck by a bullet, the General stands his ground and is hit by 3 more"}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{6, 1, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{6, 2, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{6, 3, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{6, 4, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{6, 5, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{6, 6, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{7, 1, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{7, 2, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{7, 3, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{7, 4, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{7, 5, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{7, 6, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{8, 1, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{8, 2, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{8, 3, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{8, 4, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{8, 5, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{8, 6, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{9, 1, "Uninspired", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{9, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{9, 3, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{9, 4, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{9, 5, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{9, 6, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{10, 1, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{10, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{10, 3, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{10, 4, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{10, 5, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{10, 6, "Death", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{11, 1, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{11, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{11, 3, "Captured", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{11, 4, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{11, 5, "Stunned", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{11, 6, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{12, 1, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{12, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{12, 3, "Inspired", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{12, 4, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{12, 5, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{12, 6, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{13, 1, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{13, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{13, 3, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{13, 4, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{13, 5, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{13, 6, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{14, 1, "Stunned", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{14, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{14, 3, "Death", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{14, 4, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{14, 5, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{14, 6, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{15, 1, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{15, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{15, 3, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{15, 4, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{15, 5, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{15, 6, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{16, 1, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{16, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{16, 3, "Death", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{16, 4, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{16, 5, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{16, 6, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{17, 1, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{17, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{17, 3, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{17, 4, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{17, 5, "Drunk", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{17, 6, "Drunk", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{18, 1, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{18, 2, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{18, 3, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{18, 4, "Captured", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{18, 5, "Critical", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{18, 6, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{19, 1, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{19, 2, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{19, 3, "Death", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{19, 4, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{19, 5, "Inspired", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{19, 6, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{20, 1, "Light", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{20, 2, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{20, 3, "Serious", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{20, 4, "Escape", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{20, 5, "Death", ""}))
+	gameData.Insert(DataMap("CAInjury", CAInjury{20, 6, "Inspired", ""}))
+
+	gameData.Insert(DataMap("Injury", Injury{2, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{2, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{2, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{2, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{2, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{2, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{3, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{3, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{3, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{3, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{3, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{3, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{4, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{4, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{4, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{4, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{4, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{4, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{5, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{5, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{5, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{5, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{5, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{5, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{6, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{6, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{6, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{6, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{6, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{6, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{7, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{7, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{7, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{7, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{7, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{7, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{8, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{8, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{8, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{8, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{8, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{8, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{9, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{9, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{9, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{9, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{9, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{9, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{10, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{10, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{10, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{10, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{10, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{10, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{11, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{11, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{11, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{11, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{11, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{11, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{12, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{12, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{12, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{12, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{12, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{12, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{13, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{13, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{13, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{13, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{13, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{13, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{14, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{14, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{14, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{14, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{14, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{14, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{15, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{15, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{15, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{15, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{15, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{15, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{16, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{16, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{16, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{16, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{16, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{16, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{17, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{17, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{17, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{17, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{17, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{17, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{18, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{18, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{18, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{18, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{18, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{18, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{19, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{19, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{19, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{19, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{19, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{19, 6, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{20, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{20, 2, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{20, 3, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{20, 4, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{20, 5, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{20, 6, "Death", ""}))
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Emgineering and Weather
+
+	gameData.Insert(DataMap("EngTask", EngTask{"LP", "Easy", "Loophole a section of buildings"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"FT", "Moderate", "Fortify section of buildings"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"AT", "Auto", "Attach Engineers to unit to assault buildings"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"RD", "Difficult", "Dig a gun position for a battery"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"BM", "VeryHard", "Bridging half grid of marshes"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"MW", "Moderate", "Clear a path through half a grid of medium woods"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"HW", "VeryHard", "Clear a path through half a grid of heavy woods"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"LB", "Moderate", "Prepare a light wood bridge for demolition"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"SB", "Difficult", "Prepare a stone bridge for demolition"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"LS", "Moderate", "Prepare a light structure for demolition"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"MS", "Difficult", "Prepare a medium structure for demolition"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"HS", "VeryHard", "Prepare a heavy structure for demolition"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"PT", "Moderate", "Setup 50m section of pontoon bridge"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"FB", "Difficult", "Setup 50m section of flying bridge"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"TB", "Difficult", "Setup 50m section of trestle bridge"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"HB", "VeryHard", "Setup 50m section of heavy all-arms trestle bridge"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"RB", "Difficult", "Repair a partially damaged temporary bridge"}))
+	gameData.Insert(DataMap("EngTask", EngTask{"RP", "VeryHard", "Repair 50m section of a partially damaged permanent bridge"}))
+
+	gameData.Insert(DataMap("EngResult", EngResult{0, 2, 1, 1, 0}))
+	gameData.Insert(DataMap("EngResult", EngResult{4, 4, 2, 1, 1}))
+	gameData.Insert(DataMap("EngResult", EngResult{6, 4, 3, 1, 1}))
+	gameData.Insert(DataMap("EngResult", EngResult{8, 4, 3, 2, 1}))
+	gameData.Insert(DataMap("EngResult", EngResult{10, 6, 4, 2, 1}))
+	gameData.Insert(DataMap("EngResult", EngResult{12, 6, 5, 3, 1}))
+	gameData.Insert(DataMap("EngResult", EngResult{14, 8, 6, 3, 1}))
+	gameData.Insert(DataMap("EngResult", EngResult{16, 8, 6, 4, 2}))
+	gameData.Insert(DataMap("EngResult", EngResult{18, 8, 8, 4, 2}))
+	gameData.Insert(DataMap("EngResult", EngResult{20, 10, 8, 6, 3}))
+
+	gameData.Insert(DataMap("EngMod", EngMod{"DIG", "Miners performing entrenching work", 2}))
+	gameData.Insert(DataMap("EngMod", EngMod{"GEN", "Imperial Guard Genies", 2}))
+	gameData.Insert(DataMap("EngMod", EngMod{"NGT", "Working at Night", -4}))
+	gameData.Insert(DataMap("EngMod", EngMod{"PON", "Non-Pontooneers building a pontoon bridge", -2}))
+	gameData.Insert(DataMap("EngMod", EngMod{"FLW", "Bridging a fast flowing river", -4}))
+	gameData.Insert(DataMap("EngMod", EngMod{"WTH", "Bad weather (rain/snow)", -4}))
+	gameData.Insert(DataMap("EngMod", EngMod{"HOT", "Bad weather - extreme heat", -2}))
+
+	gameData.Insert(DataMap("Demolition", Demolition{0, "FC", "Faulty Charge"}))
+	gameData.Insert(DataMap("Demolition", Demolition{5, "FF", "Fails to fire. Try again next turn"}))
+	gameData.Insert(DataMap("Demolition", Demolition{9, "PD", "Partially destroyed. Structure rated down 1 level"}))
+	gameData.Insert(DataMap("Demolition", Demolition{13, "ZZ", "Kaboom !  Structure destroyed"}))
+
+	gameData.Insert(DataMap("WeatherChange", WeatherChange{2, "Conditions ease", -1}))
+	gameData.Insert(DataMap("WeatherChange", WeatherChange{7, "Conditions stable", 0}))
+	gameData.Insert(DataMap("WeatherChange", WeatherChange{16, "Conditions worsen", 1}))
+
+	gameData.Insert(DataMap("Weather", Weather{"Clear", "Clear conditions, no effects", 6, 5, 4, 10}))
+	gameData.Insert(DataMap("Weather", Weather{"Calm", "Windless, humid day. Smoke effects visibility", 6, 2, 1, 10}))
+	gameData.Insert(DataMap("Weather", Weather{"Mud", "Slow movement and no bouncethrough on artillery", 5, 4, 3, 5}))
+	gameData.Insert(DataMap("Weather", Weather{"LtRain", "Affects infantry fire, and assists cavalry in close combat", 4, 3, 2, 10}))
+	gameData.Insert(DataMap("Weather", Weather{"HvRain", "Causes Mud. Affects infantry and artillery fire", 3, 2, 1, 5}))
+	gameData.Insert(DataMap("Weather", Weather{"Hot", "Extreme heat effects fatigue accumulation", 5, 4, 3, 8}))
+	gameData.Insert(DataMap("Weather", Weather{"Cold", "Extreme Cold effects fatigue and morale", 4, 2, 1, 6}))
+	gameData.Insert(DataMap("Weather", Weather{"Sleet", "Combines Mud, Cold and LtRain", 4, 3, 2, 4}))
+	gameData.Insert(DataMap("Weather", Weather{"Snow", "As per light rain, reduced visibility", 2, 1, 0, 9}))
+	gameData.Insert(DataMap("Weather", Weather{"HvSnow", "As per heavy rain, no visibilty", 1, 0, 0, 8}))
+	gameData.Insert(DataMap("Weather", Weather{"Frost", "Ground will be frozen till noon, then Mud", 3, 2, 1, 8}))
+	gameData.Insert(DataMap("Weather", Weather{"Fog", "Affects visibility", 0, 0, 0, 9}))
+
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Central Europe", "Spring", "HvSnow", "Snow", "Sleet", "Fog", "Fog", "Calm", "Clear", "Clear", "Mud", "LtRain", "LtRain", "HvRain", "Sleet"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Italy/Spain/Med", "Spring", "HvSnow", "Snow", "Fog", "Fog", "LtRain", "Calm", "Clear", "Clear", "Calm", "Mud", "LtRain", "LtRain", "HvRain"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Russia/Poland", "Spring", "HvSnow", "Snow", "Snow", "Sleet", "LtRain", "Clear", "Clear", "Calm", "Mud", "Frost", "LtRain", "LtRain", "HvRain"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Middle East", "Spring", "Hot", "Hot", "LtRain", "Fog", "Mud", "Clear", "Clear", "Clear", "Clear", "Clear", "LtRain", "LtRain", "HvRain"}))
+
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Central Europe", "Summer", "HvRain", "LtRain", "LtRain", "Mud", "Calm", "Clear", "Clear", "Clear", "Clear", "Calm", "LtRain", "LtRain", "Hot"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Italy/Spain/Med", "Summer", "HvRain", "LtRain", "LtRain", "Mud", "Calm", "Clear", "Clear", "Clear", "Clear", "Calm", "Hot", "Hot", "Hot"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Russia/Poland", "Summer", "HvRain", "LtRain", "LtRain", "Mud", "Calm", "Clear", "Clear", "Clear", "Clear", "Calm", "LtRain", "Hot", "Hot"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Middle East", "Summer", "HvRain", "LtRain", "Hot", "Calm", "Calm", "Clear", "Clear", "Clear", "Clear", "Hot", "Hot", "Hot", "Hot"}))
+
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Central Europe", "Autumn", "Cold", "Frost", "Mud", "Fog", "LtRain", "LtRain", "Clear", "Clear", "Fog", "Calm", "Sleet", "HvRain", "Snow"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Italy/Spain/Med", "Autumn", "Hot", "LtRain", "Mud", "Fog", "LtRain", "LtRain", "Clear", "Clear", "Fog", "Calm", "LtRain", "HvRain", "HvRain"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Russia/Poland", "Autumn", "Cold", "Snow", "Frost", "Mud", "Sleet", "LtRain", "Clear", "Clear", "Fog", "Calm", "LtRain", "HvRain", "Hot"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Middle East", "Autumn", "LtRain", "LtRain", "LtRain", "Clear", "Calm", "Clear", "Clear", "Clear", "Calm", "Clear", "Hot", "Hot", "Hot"}))
+
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Central Europe", "Winter", "Cold", "HvRain", "Mud", "Frost", "LtRain", "Sleet", "Fog", "Clear", "Calm", "Snow", "Snow", "HvSnow", "HvSnow"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Italy/Spain/Med", "Winter", "HvSnow", "Snow", "Snow", "Sleet", "LtRain", "Mud", "Calm", "Clear", "Clear", "Fog", "HvRain", "Sleet", "Snow"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Russia/Poland", "Winter", "HvSnow", "Mud", "Frost", "LtRain", "Sleet", "Sleet", "Calm", "Clear", "Cold", "Snow", "Snow", "HvSnow", "HvSnow"}))
+	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Middle East", "Winter", "Snow", "LtRain", "LtRain", "Fog", "Clear", "Clear", "Clear", "Clear", "Clear", "Calm", "Calm", "LtRain", "HvRain"}))
 
 	// Now create some indexes
 	log.Println("Creating Index on Type")
