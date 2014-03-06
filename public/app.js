@@ -328,6 +328,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'Weather.html',
  			controller: 'WeatherCtrl'
  		}) 		
+ 		.state('eng.WeatherRegion', {
+ 			url: '/WeatherRegion',
+ 			templateUrl: 'WeatherRegion.html',
+ 			controller: 'WeatherRegionCtrl'
+ 		}) 		
  		;
  }])
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -5907,6 +5912,87 @@ false
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+	]);
+}])
+.controller("WeatherRegionCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Weather Determination";
+	$scope.docs = "Section 24, pp174-175";
+	$scope.Entity = "WeatherRegion";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Region'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Region', width: 150}, 
+           	{field:'Season', width: 100},
+           	{field:'D1', displayName: 'Dice 2',width: 70}, 
+           	{field:'D2', displayName: '3',width: 70}, 
+           	{field:'D3', displayName: '4',width: 70}, 
+           	{field:'D4', displayName: '5',width: 70}, 
+           	{field:'D5', displayName: '6',width: 70}, 
+           	{field:'D6', displayName: '7-8',width: 70}, 
+           	{field:'D7', displayName: '9-12',width: 70}, 
+           	{field:'D8', displayName: '13-14',width: 70}, 
+           	{field:'D9', displayName: '15-16',width: 70}, 
+           	{field:'D10', displayName: '17',width: 70}, 
+           	{field:'D11', displayName: '18',width: 70}, 
+           	{field:'D12', displayName: '19',width: 70}, 
+           	{field:'D13', displayName: '20',width: 70}, 
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("WeatherRegionUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Region: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
 }])
 ;
