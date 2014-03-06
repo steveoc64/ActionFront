@@ -318,7 +318,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'Engineering.html',
  			controller: 'EngineeringCtrl'
  		}) 		
-
+ 		.state('eng.Demolition', {
+ 			url: '/Demolition',
+ 			templateUrl: 'Demolition.html',
+ 			controller: 'DemolitionCtrl'
+ 		}) 		
  		;
  }])
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -5716,6 +5720,75 @@ false
 		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
 	]);
 	
+}])
+.controller("DemolitionCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Demolition Results";
+	$scope.docs = "Table 23.2";
+	$scope.Entity = "Demolition";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Score'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Score', width: 100}, 
+           	{field:'Code', width: 120},
+           	{field:'Descr', displayName: 'Description',width: 400}, 
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("DemolitionUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+	]);
 }])
 ;
 
