@@ -2416,6 +2416,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"LA", "Leader Attached", 2}))
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"OC", "Opportunity Charge", -3}))
 	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"CC", "Form Closed Column Instead", 4}))
+	gameData.Insert(DataMap("FormSquareMod", FormSquareMod{"FA", "Per fatigue level over Fresh", -1}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Muskets and Cannons and things that go Bang

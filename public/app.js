@@ -333,6 +333,16 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'WeatherRegion.html',
  			controller: 'WeatherRegionCtrl'
  		}) 		
+		.state('oob', {
+ 			url: '/oob',
+ 			templateUrl: 'oob.html',
+ 			controller: 'OOBCtrl'
+ 		})		 		 		 		
+ 		.state('oob.Formations', {
+ 			url: '/formations',
+ 			templateUrl: 'unitTypes.formations.html',
+ 			controller: 'FormationsCtrl'
+ 		}) 		
  		;
  }])
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -467,6 +477,8 @@ angular.module("app", ['ui.router', 'ngGrid'])
 .controller("CaCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 }])
 .controller("EngCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+}])
+.controller("OOBCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 }])
 .controller("FormationsCtrl", ["$scope", "DataSocket", "$rootScope", function($scope, DataSocket, $rootScope){
 	$scope.Data = [];
@@ -1056,7 +1068,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
-        	fields: ['Name'],
+        	fields: ['Volley'],
         	directions: ['asc']
         },
         columnDefs: [
@@ -1505,12 +1517,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -1690,7 +1700,7 @@ false
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
-        	fields:['Code'],
+        	fields:['Value'],
         	directions:['asc']
         },
         columnDefs: [
@@ -1751,12 +1761,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -1811,7 +1819,7 @@ false
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
-        	fields:['Code'],
+        	fields:['Value'],
         	directions:['asc']
         },
         columnDefs: [
@@ -1872,12 +1880,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -1930,7 +1936,7 @@ false
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
-        	fields:['Code'],
+        	fields:['Value'],
         	directions:['asc']
         },
         columnDefs: [
@@ -1991,12 +1997,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -2050,7 +2054,7 @@ false
         showFooter: true,
         footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
-        	fields:['Code'],
+        	fields:['Value'],
         	directions:['asc']
         },
         columnDefs: [
@@ -2111,12 +2115,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -2131,7 +2133,7 @@ false
 	$scope.ModData = [];
 	$scope.maintitle = "Initial Bad Morale Test";
 	$scope.modtitle = "Initial Bad Morale Modifiers";
-	$scope.docs = "Table 22.2";
+	$scope.docs = "Table 22.2 (Note - all men are equal at the point of breaking. There are no Grade mods here)";
 	$scope.moddocs = "Table 22.2A";
 	$scope.Entity = "InitialBadMorale";
 	$scope.ModEntity = "InitialBadMod";
@@ -2232,12 +2234,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -2355,12 +2355,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -2475,12 +2473,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -2595,12 +2591,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -2615,7 +2609,7 @@ false
 	$scope.ModData = [];
 	$scope.maintitle = "Bad Morale Recovery";
 	$scope.modtitle = "Bad Morale Recovery Modifiers";
-	$scope.docs = "Table 22.4";
+	$scope.docs = "Table 22.4 (Roll to recover. If score < Still Rallying, unit retires from field)";
 	$scope.moddocs = "Table 22.4";
 	$scope.Entity = "BadMoraleRec";
 	$scope.ModEntity = "BadMoraleRecMod";
@@ -2638,7 +2632,7 @@ false
         columnDefs: [
            	{field:'Rating', width: 160}, 
            	{field:'GoodMorale', displayName:'Good Morale',width: 120}, 
-           	{field:'TryAgain', displayName:'Try Again',width: 120},
+           	{field:'TryAgain', displayName:'Still Rallying',width: 180},
         ]
 	};
 
@@ -2715,12 +2709,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -2948,12 +2940,10 @@ false
     }
 
 	$scope.changeData = function(d) {
-		//console.log("Change Data Callback",d);
 		$scope.$apply();
 	}
 
 	$scope.changeModData = function(d) {
-		//console.log("Change Mod Data Callback",d)
 		$scope.$apply();
 	}
 
@@ -3775,7 +3765,7 @@ false
 	]);
 	
 }])
-.controller("SKFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("SKFireCtrl", ["$scope", "DataSocket", "$rootScope","$state", function($scope, DataSocket,$rootScope,$state){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.Data3 = [];
@@ -4239,7 +4229,7 @@ false
 	$scope.title2 = "Fire Chart";
 	$scope.title3 = "Fire Modifiers";
 	$scope.docs = "Table 15.2";
-	$scope.docs2 = "Table 17.1";
+	$scope.docs2 = "Table 17.1 (Score on 1D12 per gun to score a HIT)";
 	$scope.docs3 = "Table 17.2A";
 	$scope.Entity = "FireEffect";
 	$scope.Entity2 = "FireChart";
@@ -4393,7 +4383,7 @@ false
 	$scope.Data2 = [];
 	$scope.title = "Bounce Through Effect";
 	$scope.title2 = "Bounce Through Mods";
-	$scope.docs = "Table 18.3";
+	$scope.docs = "Table 18.3 (Score on 1D12 per gun to score a HIT)";
 	$scope.docs2 = "Table 18.3";
 	$scope.Entity = "Bouncethru";
 	$scope.Entity2 = "BouncethruMod";
@@ -4527,9 +4517,9 @@ false
            	{field:'Score', width: 100}, 
            	{field:'Horses', width: 100},
            	{field:'Crew', width: 100},
-           	{field:'LHorses', displayName:'Limbered - Horses',width: 200},
-           	{field:'LCrew', displayName: 'Limbered - Crew',width: 200},
-           	{field:'Caisson', displayName:'Caisson Hit', editableCellTemplate: 'caissonTemplate.html',width: 100},
+           	{field:'LHorses', displayName:'Limbered - Horses',width: 180},
+           	{field:'LCrew', displayName: 'Limbered - Crew',width: 180},
+           	{field:'Caisson', displayName:'Caisson Explodes', editableCellTemplate: 'caissonTemplate.html',width: 180},
         ]
 	};
 
@@ -4765,7 +4755,7 @@ false
 	$scope.Data2 = [];
 	$scope.title = "Form Square";
 	$scope.title2 = "Form Square Mods";
-	$scope.docs = "Table 14.5 (";
+	$scope.docs = "Table 14.5 (Use this table when forming square as a reaction, or if opp charge whilst forming square during initiative turn)";
 	$scope.docs2 = "Table 14.5A";
 	$scope.Entity = "FormSquare";
 	$scope.Entity2 = "FormSquareMod";
@@ -4785,6 +4775,7 @@ false
         	fields:['ID'],
         	directions:['asc']
         },
+        groups: ['Rating'],
         columnDefs: [
            	{field:'ID', visible: false,width: 1},
            	{field:'Rating', width: 100},

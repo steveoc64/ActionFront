@@ -14,6 +14,29 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
       <ul class="nav navbar-nav navbar-right">
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Games<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li ui-sref-active="active"><a ui-sref='game.CreateGame'>Create New Game</a></li>
+            <li ui-sref-active="active"><a ui-sref='game.GameControl'>Game Control</a></li>
+            <li ui-sref-active="active"><a ui-sref='game.JoinGame'>Join Game</a></li>           
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scenarios<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li ui-sref-active="active"><a ui-sref='oob.CreateScenario'>Create New Scenario</a></li>
+            <li ui-sref-active="active"><a ui-sref='oob.Scenarios'>Edit Scenarios</a></li>
+            <li class="divider"></li>                        
+            <li ui-sref-active="active"><a ui-sref='oob.Formations'>Organisations</a></li>
+            <li ui-sref-active="active"><a ui-sref='oob.Commanders'>Commanders</a></li>
+            <li ui-sref-active="active"><a ui-sref='oob.Campaigns'>Campaigns</a></li>
+            <li ui-sref-active="active"><a ui-sref='oob.Corps'>Corps Formations</a></li>
+            <li ui-sref-active="active"><a ui-sref='oob.Maps'>Region Maps</a></li>
+          </ul>
+        </li>
+
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Unit Types<b class="caret"></b></a>
           <ul class="dropdown-menu">
@@ -113,6 +136,11 @@
             <li><a ui-sref="eng.WeatherRegion">Region/Season</a></li>
             <li class="divider"></li>
             <li><a ui-sref="eng.TerrainEffect">Terrain Effects</a></li>
+            <li class="divider"></li>
+            <li><a ui-sref="eng.Supply">Supply</a></li>
+            <li><a ui-sref="eng.Depots">Depots & Arsenals</a></li>
+            <li><a ui-sref="eng.CampaignMv">Campaign Movement</a></li>
+            <li><a ui-sref="eng.Diplomacy">Diplomacy</a></li>
           </ul>
         </li>
       </ul>
