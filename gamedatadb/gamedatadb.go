@@ -2,7 +2,7 @@ package gamedatadb
 
 import (
 	"encoding/json"
-	"github.com/HouzuoGuo/tiedot/db"
+	"github.com/steveoc64/tiedot/db"
 	"log"
 )
 

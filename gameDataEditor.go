@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/HouzuoGuo/tiedot/db"
+	"github.com/steveoc64/tiedot/db"
 	"github.com/appio/websocket"
 	"github.com/codegangsta/martini"
 	"github.com/steveoc64/ActionFront/gamedatadb"
