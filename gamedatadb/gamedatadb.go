@@ -2925,7 +2925,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CAInjury", CAInjury{20, 5, "Death", "Whilst figting another General on horseback, the General is run through and the sword is seen coming out of his back. The whole unit sees this, and takes a morale test at -2"}))
 	gameData.Insert(DataMap("CAInjury", CAInjury{20, 6, "Inspired", "The General rides over to any routed or disordered unit within 2 Grids and successfully rallies them"}))
 
-	gameData.Insert(DataMap("Injury", Injury{2, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{2, 1, "Escape", ""}))
 	gameData.Insert(DataMap("Injury", Injury{2, 2, "Death", ""}))
 	gameData.Insert(DataMap("Injury", Injury{2, 3, "Death", ""}))
 	gameData.Insert(DataMap("Injury", Injury{2, 4, "Death", ""}))

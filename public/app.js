@@ -355,11 +355,17 @@ angular.module("app", ['ui.router', 'ngGrid'])
   	service.subscriptions = subscriptions;
 
     if(service.ws) { 
-    	angular.forEach(service.subscriptions, function(v,i){
-    		initMsg = JSON.stringify({"Action":"List", "Entity":v.Entity});
-    		service.ws.send(initMsg);
-    	});
-		//service.ws.send(service.initMessage);
+		if (service.subscriptions.length > 1) {
+			Entities = [];
+		 	angular.forEach(service.subscriptions, function(v,i){
+		 		Entities.push(v.Entity)
+		 	});
+    		initMsg = JSON.stringify({"Action":"MList", "Entities":Entities});
+			service.ws.send(initMsg);
+		} else {
+	    	initMsg = JSON.stringify({"Action":"List", "Entity":service.subscriptions[0].Entity});
+			service.ws.send(initMsg);			
+		}
     	return; 
     }
 
@@ -369,8 +375,22 @@ angular.module("app", ['ui.router', 'ngGrid'])
     ws.onmessage = function(e) {
     	//console.log(e);
 		var RxMsg = JSON.parse(e.data);
-	
-		angular.forEach(service.subscriptions, function(sub,isub) {
+
+		if (RxMsg.Action == "MList") {
+			console.log("Msg ->", RxMsg);
+			angular.forEach(RxMsg.Data, function(v,i) {
+				angular.forEach(service.subscriptions, function(sub,isub) {
+					if (v.Entity == sub.Entity) {
+						angular.copy(v.Data, sub.Data);
+						gotSome = true;
+					}
+				});
+			});
+			if (gotSome) {
+				service.subscriptions[0].Callback();
+			}
+		} else {
+	  	angular.forEach(service.subscriptions, function(sub,isub) {
 			if (RxMsg.Entity == sub.Entity) {
 				// console.log($scope)
 				console.log("Msg ->", RxMsg);
@@ -416,6 +436,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 				}
 			} // if msg entity = this entity
 		});
+		}
     }
 
 	ws.onopen = function() {
@@ -423,10 +444,17 @@ angular.module("app", ['ui.router', 'ngGrid'])
 			console.log("Server is back up - Forcing page reload");
 			$window.location.reload();
 		} else {
-	    	angular.forEach(service.subscriptions, function(v,i){
-	    		initMsg = JSON.stringify({"Action":"List", "Entity":v.Entity});
-	    		service.ws.send(initMsg);
-	    	});
+			if (service.subscriptions.length > 1) {
+				Entities = [];
+			 	angular.forEach(service.subscriptions, function(v,i){
+			 		Entities.push(v.Entity)
+			 	});
+	    		initMsg = JSON.stringify({"Action":"MList", "Entities":Entities});
+    			service.ws.send(initMsg);
+   			} else {
+		    	initMsg = JSON.stringify({"Action":"List", "Entity":service.subscriptions[0].Entity});
+    			service.ws.send(initMsg);			
+			}
 			service.isOpen = true;
 		}
 	}
@@ -472,7 +500,7 @@ angular.module("app", ['ui.router', 'ngGrid'])
 }])
 .controller("MovementCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 }])
-.controller("FireCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+.controller("FireCtrl", ["$scope", "$rootScope", "$state",function($scope, $rootScope,$state){
 }])
 .controller("CaCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 }])
@@ -2780,10 +2808,7 @@ false
     }
 
     $scope.changeData = function(d) {
-    	console.log("New data set ",d);
-    	$scope.$apply(function() {
-    		$scope.Data = d;
-    	});
+    	$scope.$apply();
     }
 
 	DataSocket.connect([

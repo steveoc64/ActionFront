@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/steveoc64/tiedot/db"
 	"github.com/appio/websocket"
 	"github.com/codegangsta/martini"
 	"github.com/steveoc64/ActionFront/gamedatadb"
+	"github.com/steveoc64/tiedot/db"
 	"log"
 	"math/rand"
 	"net/http"
@@ -22,7 +22,7 @@ var (
 )
 
 // Make the LIST cache a global object
-var ListCache map[string][]byte
+var ListCache map[string]interface{}
 
 // Convert a GO structure to a map[string]interface{}
 func toMap(thing interface{}) map[string]interface{} {
@@ -56,7 +56,7 @@ func initDB() *db.Col {
 		gamedatadb.CreateGameData(gameData)
 	}
 	myDB.Scrub("GameData")
-	ListCache = make(map[string][]byte)
+	ListCache = make(map[string]interface{})
 
 	return myDB.Use("GameData")
 }
@@ -104,6 +104,39 @@ func getsdfsdfAllUnitTypes(col *db.Col) map[uint64]struct{} {
 	return queryResult
 }
 
+// For a given entity, return a slice of bytes, being a JSON representation of that list
+func getList(col *db.Col, theEntity string) (messageFormat, bool) {
+	var myData map[string]interface{}
+
+	if records, ok := ListCache[theEntity]; ok {
+		return records.(messageFormat), true
+	}
+
+	// Not cached, so Build a new result set using tiedot embedded query processor
+	queryStr := `{"eq": "` + theEntity + `", "in": ["Type"]}`
+	var query interface{}
+	json.Unmarshal([]byte(queryStr), &query)
+	queryResult := make(map[uint64]struct{}) // query result (document IDs) goes into map keys
+
+	if err := db.EvalQuery(query, col, &queryResult); err != nil {
+		panic(err)
+	}
+
+	results := make([]interface{}, 0)
+
+	for id := range queryResult {
+		col.Read(id, &myData)
+
+		theID := myData["@id"].(string)
+		theData := myData["Data"].(map[string]interface{})
+		theData["@id"] = theID
+		results = append(results, theData)
+	}
+	records := messageFormat{"List", theEntity, results}
+	ListCache[theEntity] = records
+	return records, false
+}
+
 // Martini handler for incoming socket request - runs forever until socket connection is closed
 //
 // A DataSocket handler defines a standard protocol, which automates the realtime updates
@@ -120,6 +153,14 @@ func getsdfsdfAllUnitTypes(col *db.Col) map[uint64]struct{} {
 //
 // On the frontend, a single call to DataSocket.connect($scope) will bind the current scope of an ng-grid
 // for a single Entity type to the global DataSocket. This includes kicking off the first LIST request.
+
+func tilde(c bool) string {
+	if c {
+		return "~"
+	} else {
+		return ""
+	}
+}
 
 func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col) {
 
@@ -154,46 +195,39 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 		// Got a message on the socket !!!
 		//log.Printf("<- %s", msg)
 		json.Unmarshal(msg, &RxMsg)
-		theEntity := RxMsg["Entity"].(string)
 
 		switch RxMsg["Action"] {
+		case "MList":
+			// Return an array of lists
+			startTime := time.Now()
+			Entities := RxMsg["Entities"].([]interface{})
+			EntityNames := ""
+			var mmsg []messageFormat
+
+			for _, Entity := range Entities {
+				theEntity := Entity.(string)
+				EntityNames = EntityNames + theEntity + " "
+				msg, cached := getList(gameData, theEntity)
+				log.Printf("MLIST request: %s (%s)%s", theEntity, time.Since(startTime), tilde(cached))
+				mmsg = append(mmsg, msg)
+			}
+			msg, _ = json.Marshal(messageFormat{"MList", EntityNames, mmsg})
+			sendMsg(conn, msg)
+
 		case "List":
 			// List all records for the given entity
 			startTime := time.Now()
+			theEntity := RxMsg["Entity"].(string)
 
-			// If we already have a cached result, send that
-			if msg, ok := ListCache[theEntity]; ok {
-				log.Printf("LIST request: %s (%s)~", theEntity, time.Since(startTime))
-				sendMsg(conn, msg)
-			} else {
-				// Otherwise, build a new result set using tiedot embedded query processor
-				queryStr := `{"eq": "` + theEntity + `", "in": ["Type"]}`
-				var query interface{}
-				json.Unmarshal([]byte(queryStr), &query)
-				queryResult := make(map[uint64]struct{}) // query result (document IDs) goes into map keys
-
-				if err := db.EvalQuery(query, gameData, &queryResult); err != nil {
-					panic(err)
-				}
-
-				results := make([]interface{}, 0)
-
-				for id := range queryResult {
-					gameData.Read(id, &myGameData)
-
-					theID := myGameData["@id"].(string)
-					theData := myGameData["Data"].(map[string]interface{})
-					theData["@id"] = theID
-					results = append(results, theData)
-				}
-				msg, _ = json.Marshal(messageFormat{"List", theEntity, results})
-				log.Printf("LIST request: %s (%s)", theEntity, time.Since(startTime))
-				ListCache[theEntity] = msg
-				sendMsg(conn, msg)
-			}
+			records, cached := getList(gameData, theEntity)
+			log.Printf("LIST request: %s (%s)%s", theEntity, time.Since(startTime), tilde(cached))
+			msg, _ = json.Marshal(records)
+			sendMsg(conn, msg)
 
 		case "Update":
 			// Invalidate the LIST cache for this entity before we do any updates
+			theEntity := RxMsg["Entity"].(string)
+
 			delete(ListCache, theEntity)
 
 			log.Println("UPDATE request:", theEntity, RxMsg["Data"])
