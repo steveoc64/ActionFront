@@ -6021,8 +6021,8 @@ false
 	$scope.Data2 = [];
 	$scope.title = "Leader Injury (Close Action)";
 	$scope.title2 = "Leader Injury (Other Causes)";
-	$scope.docs = "xxx";
-	$scope.docs2 = "xxx";
+	$scope.docs = "Table 21.4";
+	$scope.docs2 = "Table 21.5";
 	$scope.Entity = "CAInjury";
 	$scope.Entity2 = "Injury";
 
@@ -6042,10 +6042,10 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Hi', width: 40}, 
-           	{field:'Lo', width: 40}, 
-           	{field:'Severity', width: 100}, 
-           	{field:'Descr',displayName:'Description',width:500},
+           	{field:'Hi', displayName:'2D10',width: 60}, 
+           	{field:'Lo', displayName:'D6',width: 50}, 
+           	{field:'Severity', width: 80}, 
+           	{field:'Descr',displayName:'Description',width:600},
         ]
 	};
 
@@ -6065,10 +6065,10 @@ false
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'Hi', width: 40}, 
-           	{field:'Lo', width: 40}, 
-           	{field:'Severity', width: 100}, 
-           	{field:'Descr',displayName:'Description',width:500},
+           	{field:'Hi', displayName:'2D10',width: 60}, 
+           	{field:'Lo', displayName:'D6',width: 50}, 
+           	{field:'Severity', width: 80}, 
+           	{field:'Descr',displayName:'Description',width:600},
         ]
 	};
 
