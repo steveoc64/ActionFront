@@ -308,6 +308,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
  			templateUrl: 'CAFlag.html',
  			controller: 'CAFlagCtrl'
  		}) 		
+		.state('ca.CALeaderDeath', {
+ 			url: '/CALeaderDeath',
+ 			templateUrl: 'CALeaderDeath.html',
+ 			controller: 'CALeaderDeathCtrl'
+ 		}) 		
 		.state('eng', {
  			url: '/eng',
  			templateUrl: 'eng.html',
@@ -6011,6 +6016,120 @@ false
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
 }])
+.controller("CALeaderDeathCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.Data2 = [];
+	$scope.title = "Leader Injury (Close Action)";
+	$scope.title2 = "Leader Injury (Other Causes)";
+	$scope.docs = "xxx";
+	$scope.docs2 = "xxx";
+	$scope.Entity = "CAInjury";
+	$scope.Entity2 = "Injury";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Hi'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Hi', width: 40}, 
+           	{field:'Lo', width: 40}, 
+           	{field:'Severity', width: 100}, 
+           	{field:'Descr',displayName:'Description',width:500},
+        ]
+	};
+
+	$scope.gridOptions2 = { 
+		data: 'Data2',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Hi'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Hi', width: 40}, 
+           	{field:'Lo', width: 40}, 
+           	{field:'Severity', width: 100}, 
+           	{field:'Descr',displayName:'Description',width:500},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("WeatherUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) { 
+					angular.forEach($scope.Data2, function(v,i){
+					if (v["@id"] == targetID) {
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+						gotSome = true;
+					}
+				})
+			}
+			if (!gotSome) {
+				if ('Score' in row) {
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
+				} else {
+					$scope.update(evt.targetScope.row);	
+				}
+			}
+		}
+    });
+
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Code: '~ ??? ~'})
+    }
+    $scope.newRow = function() {
+    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+    }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+	]);
+}])
+
 ;
 
 

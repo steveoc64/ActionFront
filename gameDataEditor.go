@@ -209,6 +209,8 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				EntityNames = EntityNames + theEntity + " "
 				msg, cached := getList(gameData, theEntity)
 				log.Printf("MLIST request: %s (%s)%s", theEntity, time.Since(startTime), tilde(cached))
+				startTime = time.Now()
+
 				mmsg = append(mmsg, msg)
 			}
 			msg, _ = json.Marshal(messageFormat{"MList", EntityNames, mmsg})
