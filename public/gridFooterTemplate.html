@@ -2,7 +2,10 @@
     <div class="ngTotalSelectContainer" >
         <div class="ngFooterTotalItems" ng-class="{'ngNoMultiSelect': !multiSelect}" >
             <span class="ngLabel">{{i18n.ngTotalItemsLabel}} {{maxRows()}}</span><span ng-show="filterText.length > 0" class="ngLabel">({{i18n.ngShowingItemsLabel}} {{totalFilteredItemsLength()}})</span>
-            <span class="pull-right"><button class="btn btn-success" ng-click="newRow()">Add New</button></span>
+            <span class="pull-right">
+            	<button class="btn btn-success" ng-click="newRow()">Add New</button>
+				<button type="button" class="btn btn-primary" bs-aside="aside">Help</button>
+			<span>
             <div style='clear:both'></div>
         </div>
     </div>

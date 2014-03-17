@@ -44,7 +44,7 @@ function contains(haystack,needle) {
 	return (h1.indexOf(n1) != -1);
 }
 
-angular.module("app", ['ui.router', 'ngGrid'])
+angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
  .config(['$urlRouterProvider', '$stateProvider',function ($urlRouterProvider, $stateProvider) {
  	$urlRouterProvider.otherwise('/');
  	$stateProvider
@@ -596,6 +596,11 @@ angular.module("app", ['ui.router', 'ngGrid'])
     $scope.changeData = function(d) {
     	$scope.updateFilters();
     	$scope.$apply();
+    }
+
+    $scope.aside = {
+    	"title": "Help Info",
+    	"content": "This is a <br>Multiline message"
     }
 
 	DataSocket.connect([
@@ -1800,6 +1805,11 @@ false
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.aside = {
+		"title": "Help Information",
+		"content": "The Content"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
