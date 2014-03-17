@@ -2973,7 +2973,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Injury", Injury{9, 4, "Light", "A bullet grazes the Generals arm, and breaks two ribs. Ouch !"}))
 	gameData.Insert(DataMap("Injury", Injury{9, 5, "Light", "A bullet takes an ugly gouge out of the Generals nose"}))
 	gameData.Insert(DataMap("Injury", Injury{9, 6, "Light", "The General is thrown from his horse, injuring his knee"}))
-	gameData.Insert(DataMap("Injury", Injury{10, 1, "Death", ""}))
+	gameData.Insert(DataMap("Injury", Injury{10, 1, "Action", "The Generals horse bolts, leaving him without a mount. General retires to reserve area to remount"}))
 	gameData.Insert(DataMap("Injury", Injury{10, 2, "Death", ""}))
 	gameData.Insert(DataMap("Injury", Injury{10, 3, "Death", ""}))
 	gameData.Insert(DataMap("Injury", Injury{10, 4, "Death", ""}))

@@ -520,8 +520,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs = "Table 1.2";
 	$scope.Entity = "NationalOrg";
 
-	//DataSocket.connect($scope);
-
 	$scope.gridOptions = angular.copy(defaultGridOptions);
     $scope.gridOptions.sortInfo = {
         	fields: ['From'],
@@ -598,10 +596,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-    $scope.aside = {
-    	"title": "Help Info",
-    	"content": "This is a <br>Multiline message"
-    }
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -617,8 +615,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "L'Infanterie";
 	$scope.docs = "Appendix C";
 	$scope.Entity = "Infantry";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = angular.copy(defaultGridOptions);
     $scope.gridOptions.sortInfo = {
@@ -702,6 +698,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);	
@@ -716,8 +717,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "La Cavalerie";
 	$scope.docs = "Appendix B";
 	$scope.Entity = "Cavalry";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = angular.copy(defaultGridOptions);
     $scope.gridOptions.sortInfo = {
@@ -802,6 +801,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);	
@@ -816,8 +820,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "L'Artillerie";
 	$scope.docs = "Appendix D";
 	$scope.Entity = "Artillery";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'FilteredData',
@@ -914,6 +916,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);	
@@ -926,8 +933,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "L'Etat Major";
 	$scope.docs = "Appendix G";
 	$scope.Entity = "EtatMajor";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'FilteredData',
@@ -1015,6 +1020,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);		
@@ -1024,8 +1034,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "L'Reglement / Drill Book";
 	$scope.docs = "";
 	$scope.Entity = "Drill";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1078,6 +1086,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);		
@@ -1091,8 +1104,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title2 = "Artillery Ranges (Grids)";
 	$scope.docs2 = "Table 17.2";
 	$scope.Entity2 = "ArtRange";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1194,6 +1205,15 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
@@ -1204,8 +1224,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "Initiative Modifiers";
 	$scope.docs = "Table 11.1";
 	$scope.Entity = "InitTable";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1255,6 +1273,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);	
@@ -1266,8 +1289,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "Corps Orders";
 	$scope.docs = "Table 3.1";
 	$scope.Entity = "CorpsOrder";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1319,6 +1340,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);	
@@ -1330,8 +1356,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "ME Orders";
 	$scope.docs = "Table 4.1";
 	$scope.Entity = "MEOrder";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1383,6 +1407,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);
@@ -1393,8 +1422,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "Order Arrival Calculation";
 	$scope.docs = "Table 3.3";
 	$scope.Entity = "OrderArrival";
-false
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1444,6 +1471,11 @@ false
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -1562,6 +1594,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -1577,8 +1618,6 @@ false
 	$scope.docs2 = "Table 12.3 , Table 12.3A, Commander Ratings Apply.  +/-3 if leader is attached to a unit."
 	$scope.Entity = "CommanderAction";
 	$scope.Entity2 = "CAScore";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1684,6 +1723,15 @@ false
     	$scope.$apply();
     }
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData2}
@@ -1692,13 +1740,13 @@ false
 }])
 .controller("MEMoraleCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
 	$scope.Data = [];
-	$scope.ModData = [];
-	$scope.maintitle = "ME Morale Test";
-	$scope.modtitle = "ME Morale Modifiers";
+	$scope.Data2 = [];
+	$scope.title = "ME Morale Test";
+	$scope.title2 = "ME Morale Modifiers";
 	$scope.docs = "Table 5.1";
-	$scope.moddocs = "Table 5.1A";
+	$scope.docs2 = "Table 5.1A";
 	$scope.Entity = "MEMoraleTest";
-	$scope.ModEntity = "MEMoraleMod";
+	$scope.Entity2 = "MEMoraleMod";
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1726,8 +1774,8 @@ false
         ]
 	};
 
-	$scope.gridOptionsMods = { 
-		data: 'ModData',
+	$scope.gridOptions2 = { 
+		data: 'Data2',
 		enableCellSelection: true,
         enableCellEdit: true,
         enableColumnResize: true,
@@ -1772,10 +1820,10 @@ false
 				}
 			});
 			if (!gotSome) { 
-					angular.forEach($scope.ModData, function(v,i){
+					angular.forEach($scope.Data2, function(v,i){
 					if (v["@id"] == targetID) {
 						//console.log("The update is on the mod data grid");
-						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+						DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
 						gotSome = true;
 					}
 				})
@@ -1783,7 +1831,7 @@ false
 			if (!gotSome) {
 				if ('Code' in row) {
 					//console.log("The update is on the mod data grid because it has a property called Code");
-					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.ModEntity,"Data":row}));
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity2,"Data":row}));
 				} else {
 					$scope.update(evt.targetScope.row);	
 				}
@@ -1791,29 +1839,41 @@ false
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-    }
+//    $scope.newRow = function() {
+//    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
+//    }
+
     $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
+    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
     }
+
 
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
-	$scope.changeModData = function(d) {
-		$scope.$apply();
-	}
+	$scope.addNewRow = {
+		title: 'Add new record',
+		content: 'Need to create a dialog here to add a new record'
+	};
 
-	$scope.aside = {
-		"title": "Help Information",
-		"content": "The Content"
+    $scope.simulator = {
+    	title: $scope.title + ' Simulator',
+    	content: 'Simulator'
+    };
+
+	$scope.help = {
+		title: $scope.title + ' Help',
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2 + ' Help',
+		"content": "Help Content2"
 	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
-		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
 	]);
 	
 }])
@@ -1929,6 +1989,15 @@ false
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -2046,6 +2115,15 @@ false
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -2165,6 +2243,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -2283,6 +2370,15 @@ false
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -2405,6 +2501,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -2522,6 +2627,15 @@ false
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -2641,6 +2755,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -2759,6 +2882,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -2770,8 +2902,6 @@ false
 	$scope.title = "Grand Tactical Movement";
 	$scope.docs = "Table 9.3";
 	$scope.Entity = "GTMove";
-
-	//DataSocket.connect($scope);
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -2825,6 +2955,11 @@ false
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -2987,6 +3122,19 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		title: $scope.title3,
+		"content": "Help Content3"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData},
@@ -3107,6 +3255,15 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -3312,6 +3469,23 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		title: $scope.title3,
+		"content": "Help Content3"
+	};
+	$scope.help4 = {
+		title: $scope.title4,
+		"content": "Help Content4"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -3463,6 +3637,19 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		title: $scope.title3,
+		"content": "Help Content3"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -3575,6 +3762,15 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -3725,6 +3921,19 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		"title": "Help Information",
+		"content": "Help Content3"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -3799,6 +4008,11 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -3987,6 +4201,23 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		title: $scope.title3,
+		"content": "Help Content3"
+	};
+	$scope.help4 = {
+		title: $scope.title4,
+		"content": "Help Content4"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4139,6 +4370,19 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		title: $scope.title3,
+		"content": "Help Content3"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4254,6 +4498,15 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -4411,6 +4664,19 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		title: $scope.title3,
+		"content": "Help Content3"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4526,6 +4792,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4600,6 +4875,11 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
@@ -4670,6 +4950,11 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -4784,6 +5069,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4837,7 +5131,7 @@ false
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
         	fields:['Code'],
         	directions:['asc']
@@ -4900,6 +5194,15 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -4974,6 +5277,11 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
@@ -5043,6 +5351,11 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
@@ -5089,7 +5402,7 @@ false
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
         	fields:['Code'],
         	directions:['asc']
@@ -5153,6 +5466,15 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5266,6 +5588,15 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5422,6 +5753,19 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		title: $scope.title3,
+		"content": "Help Content3"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -5534,6 +5878,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -5603,6 +5956,11 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5755,6 +6113,19 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+	$scope.help3 = {
+		title: $scope.title3,
+		"content": "Help Content3"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -5826,6 +6197,11 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5940,6 +6316,15 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		"content": "Help Content2"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -6022,11 +6407,16 @@ false
 		$scope.$apply();
 	}
 
+	$scope.help = {
+		title: $scope.title,
+		"content": "Help Content"
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
 }])
-.controller("CALeaderDeathCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("CALeaderDeathCtrl", ["$scope", "DataSocket", "$rootScope", "$http", function($scope, DataSocket,$rootScope, $http){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Leader Injury (Close Action)";
@@ -6069,7 +6459,7 @@ false
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate.html',
+        footerTemplate: 'gridFooterTemplate2.html',
         sortInfo: {
         	fields:['Hi'],
         	directions:['asc']
@@ -6083,7 +6473,7 @@ false
 	};
 
 	$scope.update = function(row) {
-		console.log("WeatherUpdated -> ",row.entity);
+		console.log("InjuryUpdated -> ",row.entity);
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
@@ -6133,6 +6523,15 @@ false
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.help = {
+		title: $scope.title,
+		content: "some help info"	
+	};
+	$scope.help2 = {
+		title: $scope.title2,
+		contentTemplate: 'help/leaderInjury.html'
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},

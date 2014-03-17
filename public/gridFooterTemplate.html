@@ -3,8 +3,9 @@
         <div class="ngFooterTotalItems" ng-class="{'ngNoMultiSelect': !multiSelect}" >
             <span class="ngLabel">{{i18n.ngTotalItemsLabel}} {{maxRows()}}</span><span ng-show="filterText.length > 0" class="ngLabel">({{i18n.ngShowingItemsLabel}} {{totalFilteredItemsLength()}})</span>
             <span class="pull-right">
-            	<button class="btn btn-success" ng-click="newRow()">Add New</button>
-				<button type="button" class="btn btn-primary" bs-aside="aside">Help</button>
+                <button class="btn btn-danger" bs-aside="simulator" data-placement="left" data-animation="am-slide-left"><i class="fa fa-fw fa-cogs fa-lg"></i></button>
+            	<button class="btn btn-success" bs-modal="addNewRow"><i class="fa fa-fw fa-plus-square fa-lg"></i></button>
+				<button type="button" class="btn btn-primary" bs-aside="help"><i class="fa fa-fw fa-folder-open"></i></button>
 			<span>
             <div style='clear:both'></div>
         </div>
