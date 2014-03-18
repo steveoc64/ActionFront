@@ -1,0 +1,14 @@
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{title}}
+      <span class="pull-right"> 
+        <add-btn action="addRow"></add-btn>
+        <help-btn action="help"></help-btn>
+      </span>
+
+    </h3> {{docs}}
+  </div>
+  <div class="panel-body">
+    <div class="gridStyle bigGrid" ng-grid="gridOptions"></div>
+  </div>
+</div>

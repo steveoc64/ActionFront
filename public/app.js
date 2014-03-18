@@ -50,306 +50,333 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
  	$stateProvider
  		.state('unitTypes', {
  			url: '/unitTypes',
- 			templateUrl: 'unitTypes.html',
+ 			templateUrl: 'navs/unitTypes.html',
  			controller: 'UnitTypesCtrl'
  		})
  		.state('unitTypes.formations', {
  			url: '/formations',
- 			templateUrl: 'unitTypes.formations.html',
+ 			templateUrl: 'forms/unitTypes.formations.html',
  			controller: 'FormationsCtrl'
  		})
  		.state('unitTypes.cavalerie', {
  			url: '/cavalerie',
- 			templateUrl: 'unitTypes.cavalerie.html',
+ 			templateUrl: 'forms/unitTypes.cavalerie.html',
  			controller: 'CavalryCtrl'
  		})
  		.state('unitTypes.infanterie', {
  			url: '/infanterie',
- 			templateUrl: 'unitTypes.infanterie.html',
+ 			templateUrl: 'forms/unitTypes.infanterie.html',
  			controller: 'InfantryCtrl'
  		})
  		.state('unitTypes.artillerie', {
  			url: '/artillerie',
- 			templateUrl: 'unitTypes.artillerie.html',
+ 			templateUrl: 'forms/unitTypes.artillerie.html',
  			controller: 'ArtilleryCtrl'
  		})
  		.state('unitTypes.etat', {
  			url: '/etat',
- 			templateUrl: 'unitTypes.etat.html',
+ 			templateUrl: 'forms/unitTypes.etat.html',
  			controller: 'EtatCtrl'
  		})
  		.state('unitTypes.reglement', {
  			url: '/reglement',
- 			templateUrl: 'unitTypes.reglement.html',
+ 			templateUrl: 'forms/unitTypes.reglement.html',
  			controller: 'DrillBookCtrl'
  		})
  		.state('unitTypes.equip', {
  			url: '/equip',
- 			templateUrl: 'unitTypes.equip.html',
+ 			templateUrl: 'forms/unitTypes.equip.html',
  			controller: 'EquipCtrl'
  		})
 		.state('cc', {
  			url: '/cc',
- 			templateUrl: 'commandControl.html',
+ 			templateUrl: 'navs/commandControl.html',
  			controller: 'CommandControlCtrl'
  		})
  		.state('cc.initTables', {
  			url: '/initTables',
- 			templateUrl: 'initTables.html',
+ 			templateUrl: 'forms/initTables.html',
  			controller: 'InitTablesCtrl'
  		})
  		.state('cc.corpsOrders', {
  			url: '/corpsOrders',
- 			templateUrl: 'corpsOrders.html',
+ 			templateUrl: 'forms/corpsOrders.html',
  			controller: 'CorpsOrdersCtrl'
  		})
  		.state('cc.meOrders', {
  			url: '/meOrders',
- 			templateUrl: 'meOrders.html',
+ 			templateUrl: 'forms/meOrders.html',
  			controller: 'MEOrdersCtrl'
  		})
 		.state('cc.orderArrival', {
  			url: '/orderArrival',
- 			templateUrl: 'orderArrival.html',
+ 			templateUrl: 'forms/orderArrival.html',
  			controller: 'OrderArrivalCtrl'
  		})
  		.state('cc.orderActivation', {
  			url: '/orderActivation',
- 			templateUrl: 'orderActivation.html',
+ 			templateUrl: 'forms/orderActivation.html',
  			controller: 'OrderActivationCtrl'
  		})
  		.state('cc.commanderAction', {
  			url: '/commanderAction',
- 			templateUrl: 'commanderAction.html',
+ 			templateUrl: 'forms/commanderAction.html',
  			controller: 'CommanderActionCtrl'
  		})
 		.state('mf', {
  			url: '/mf',
- 			templateUrl: 'moraleFatigue.html',
+ 			templateUrl: 'navs/moraleFatigue.html',
  			controller: 'MoraleFatigueCtrl'
  		})
  		.state('mf.MEMorale', {
  			url: '/MEMorale',
- 			templateUrl: 'MEMorale.html',
+ 			templateUrl: 'forms/MEMorale.html',
  			controller: 'MEMoraleCtrl'
  		})
  		.state('mf.MEPanic', {
  			url: '/MEPanic',
- 			templateUrl: 'MEPanic.html',
+ 			templateUrl: 'forms/MEPanic.html',
  			controller: 'MEPanicCtrl'
  		})
  		.state('mf.UnitMorale', {
  			url: '/UnitMorale',
- 			templateUrl: 'UnitMorale.html',
+ 			templateUrl: 'forms/UnitMorale.html',
  			controller: 'UnitMoraleCtrl'
  		})
  		.state('mf.FireDisc', {
  			url: '/FireDisc',
- 			templateUrl: 'FireDisc.html',
+ 			templateUrl: 'forms/FireDisc.html',
  			controller: 'FireDiscCtrl'
  		})
  		.state('mf.InitBadMorale', {
  			url: '/InitBadMorale',
- 			templateUrl: 'InitBadMorale.html',
+ 			templateUrl: 'forms/InitBadMorale.html',
  			controller: 'InitBadMoraleCtrl'
  		})
  		.state('mf.BonusImpulse', {
  			url: '/BonusImpulse',
- 			templateUrl: 'BonusImpulse.html',
+ 			templateUrl: 'forms/BonusImpulse.html',
  			controller: 'BonusImpulseCtrl'
  		})
  		.state('mf.MEFatigue', {
  			url: '/MEFatigue',
- 			templateUrl: 'MEFatigue.html',
+ 			templateUrl: 'forms/MEFatigue.html',
  			controller: 'MEFatigueCtrl'
  		})
  		.state('mf.FatigueRecovery', {
  			url: '/FatigueRecovery',
- 			templateUrl: 'FatigueRecovery.html',
+ 			templateUrl: 'forms/FatigueRecovery.html',
  			controller: 'FatigueRecoveryCtrl'
  		})
  		.state('mf.MoraleRecovery', {
  			url: '/MoraleRecovery',
- 			templateUrl: 'MoraleRecovery.html',
+ 			templateUrl: 'forms/MoraleRecovery.html',
  			controller: 'MoraleRecoveryCtrl'
  		})
 		.state('mv', {
  			url: '/mv',
- 			templateUrl: 'movement.html',
+ 			templateUrl: 'navs/movement.html',
  			controller: 'MovementCtrl'
  		})		
  		.state('mv.GTMovement', {
  			url: '/GTMovement',
- 			templateUrl: 'GTMovement.html',
+ 			templateUrl: 'forms/GTMovement.html',
  			controller: 'GTMovementCtrl'
  		})
  		.state('mv.Deployment', {
  			url: '/Deployment',
- 			templateUrl: 'Deployment.html',
+ 			templateUrl: 'forms/Deployment.html',
  			controller: 'DeploymentCtrl'
  		})
  		.state('mv.TacMovement', {
  			url: '/TacMovement',
- 			templateUrl: 'TacMovement.html',
+ 			templateUrl: 'forms/TacMovement.html',
  			controller: 'TacMovementCtrl'
  		})
  		.state('mv.ArtyMovement', {
  			url: '/ArtyMovement',
- 			templateUrl: 'ArtyMovement.html',
+ 			templateUrl: 'forms/ArtyMovement.html',
  			controller: 'ArtyMovementCtrl'
  		})
  		.state('mv.ArtyExtra', {
  			url: '/ArtyExtra',
- 			templateUrl: 'ArtyExtra.html',
+ 			templateUrl: 'forms/ArtyExtra.html',
  			controller: 'ArtyExtraCtrl'
  		})
  		.state('mv.SKRelocate', {
  			url: '/SKRelocate',
- 			templateUrl: 'SKRelocate.html',
+ 			templateUrl: 'forms/SKRelocate.html',
  			controller: 'SKRelocateCtrl'
  		}) 		
  		.state('mv.BUAMovement', {
  			url: '/BUAMovement',
- 			templateUrl: 'BUAMovement.html',
+ 			templateUrl: 'forms/BUAMovement.html',
  			controller: 'BUAMovementCtrl'
  		})
  		.state('mv.FormationChange', {
  			url: '/FormationChange',
- 			templateUrl: 'FormationChange.html',
+ 			templateUrl: 'forms/FormationChange.html',
  			controller: 'FormationChangeCtrl'
  		})
 		.state('fire', {
  			url: '/fire',
- 			templateUrl: 'fire.html',
+ 			templateUrl: 'navs/fire.html',
  			controller: 'FireCtrl'
  		})		
  		.state('fire.SKFire', {
  			url: '/SKFire',
- 			templateUrl: 'SKFire.html',
+ 			templateUrl: 'forms/SKFire.html',
  			controller: 'SKFireCtrl'
  		})
  		.state('fire.VolleyFire', {
  			url: '/VolleyFire',
- 			templateUrl: 'VolleyFire.html',
+ 			templateUrl: 'forms/VolleyFire.html',
  			controller: 'VolleyFireCtrl'
  		})
  		.state('fire.FireFight', {
  			url: '/FireFight',
- 			templateUrl: 'FireFight.html',
+ 			templateUrl: 'forms/FireFight.html',
  			controller: 'FireFightCtrl'
  		})
  		.state('fire.ArtyFire', {
  			url: '/ArtyFire',
- 			templateUrl: 'ArtyFire.html',
+ 			templateUrl: 'forms/ArtyFire.html',
  			controller: 'ArtyFireCtrl'
  		})
  		.state('fire.Bouncethru', {
  			url: '/Bouncethru',
- 			templateUrl: 'Bouncethru.html',
+ 			templateUrl: 'forms/Bouncethru.html',
  			controller: 'BouncethruCtrl'
  		})
  		.state('fire.CounterBtyFire', {
  			url: '/CounterBtyFire',
- 			templateUrl: 'CounterBtyFire.html',
+ 			templateUrl: 'forms/CounterBtyFire.html',
  			controller: 'CounterBtyFireCtrl'
  		})
  		.state('fire.BridgeFire', {
  			url: '/BridgeFire',
- 			templateUrl: 'BridgeFire.html',
+ 			templateUrl: 'forms/BridgeFire.html',
  			controller: 'BridgeFireCtrl'
  		})
 		.state('ca', {
  			url: '/ca',
- 			templateUrl: 'ca.html',
+ 			templateUrl: 'navs/ca.html',
  			controller: 'CaCtrl'
  		})		 		
  		.state('ca.DefFire', {
  			url: '/DefFire',
- 			templateUrl: 'DefFire.html',
+ 			templateUrl: 'forms/DefFire.html',
  			controller: 'DefFireCtrl'
  		})
  		.state('ca.FormSquare', {
  			url: '/FormSquare',
- 			templateUrl: 'FormSquare.html',
+ 			templateUrl: 'forms/FormSquare.html',
  			controller: 'FormSquareCtrl'
  		})
  		.state('ca.LimberIfCharged', {
  			url: '/LimberIfCharged',
- 			templateUrl: 'LimberIfCharged.html',
+ 			templateUrl: 'forms/LimberIfCharged.html',
  			controller: 'LimberIfChargedCtrl'
  		})
  		.state('ca.ShockValue', {
  			url: '/ShockValue',
- 			templateUrl: 'ShockValue.html',
+ 			templateUrl: 'forms/ShockValue.html',
  			controller: 'ShockValueCtrl'
  		})
  		.state('ca.CACav', {
  			url: '/CACav',
- 			templateUrl: 'CACav.html',
+ 			templateUrl: 'forms/CACav.html',
  			controller: 'CACavCtrl'
  		})
  		.state('ca.CAInf', {
  			url: '/CAInf',
- 			templateUrl: 'CAInf.html',
+ 			templateUrl: 'forms/CAInf.html',
  			controller: 'CAInfCtrl'
  		})
  		.state('ca.CAResult', {
  			url: '/CAResult',
- 			templateUrl: 'CAResult.html',
+ 			templateUrl: 'forms/CAResult.html',
  			controller: 'CAResultCtrl'
  		}) 		
  		.state('ca.CAStreetFight', {
  			url: '/CAStreetFight',
- 			templateUrl: 'CAStreetFight.html',
+ 			templateUrl: 'forms/CAStreetFight.html',
  			controller: 'CAStreetFightCtrl'
  		}) 		
  		.state('ca.CAFlag', {
  			url: '/CAFlag',
- 			templateUrl: 'CAFlag.html',
+ 			templateUrl: 'forms/CAFlag.html',
  			controller: 'CAFlagCtrl'
  		}) 		
 		.state('ca.CALeaderDeath', {
  			url: '/CALeaderDeath',
- 			templateUrl: 'CALeaderDeath.html',
+ 			templateUrl: 'forms/CALeaderDeath.html',
  			controller: 'CALeaderDeathCtrl'
  		}) 		
 		.state('eng', {
  			url: '/eng',
- 			templateUrl: 'eng.html',
+ 			templateUrl: 'navs/eng.html',
  			controller: 'EngCtrl'
  		})		 		 		
  		.state('eng.Engineering', {
  			url: '/Engineering',
- 			templateUrl: 'Engineering.html',
+ 			templateUrl: 'forms/Engineering.html',
  			controller: 'EngineeringCtrl'
  		}) 		
  		.state('eng.Demolition', {
  			url: '/Demolition',
- 			templateUrl: 'Demolition.html',
+ 			templateUrl: 'forms/Demolition.html',
  			controller: 'DemolitionCtrl'
  		}) 		
  		.state('eng.Weather', {
  			url: '/Weather',
- 			templateUrl: 'Weather.html',
+ 			templateUrl: 'forms/Weather.html',
  			controller: 'WeatherCtrl'
  		}) 		
  		.state('eng.WeatherRegion', {
  			url: '/WeatherRegion',
- 			templateUrl: 'WeatherRegion.html',
+ 			templateUrl: 'forms/WeatherRegion.html',
  			controller: 'WeatherRegionCtrl'
  		}) 		
 		.state('oob', {
  			url: '/oob',
- 			templateUrl: 'oob.html',
+ 			templateUrl: 'navs/oob.html',
  			controller: 'OOBCtrl'
  		})		 		 		 		
  		.state('oob.Formations', {
  			url: '/formations',
- 			templateUrl: 'unitTypes.formations.html',
+ 			templateUrl: 'forms/unitTypes.formations.html',
  			controller: 'FormationsCtrl'
  		}) 		
  		;
  }])
+.directive('helpBtn', function(){
+	return {
+		restrict: 'E',
+		scope: {
+			action: '='
+		},
+		template: '<button type="button" class="btn btn-info" bs-aside="{{action}}"><i class="fa fa-fw fa-folder-open"></i></button>'
+	}
+})
+.directive('addBtn', function(){
+	return {
+		restrict: 'E',
+		scope: {
+			action: '='
+		},		
+		template: '<button type="button" class="btn btn-success" bs-modal="{{action}}"><i class="fa fa-fw fa-plus-square"></i></button>'
+	}
+})
+.directive('simBtn', function(){
+	return {
+		restrict: 'E',
+		scope: {
+			action: '='
+		},				
+		template: '<button type="button" class="btn btn-danger" bs-modal="{{action}}"><i class="fa fa-fw fa-cogs fa-lg"></i></button>'
+	}
+})
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
   var service = {};
   $rootScope.FilterValues = {};
@@ -597,8 +624,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     }
 
 	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
+		title: $scope.title + ' Help',
+		content: "Help Content"
 	};
 
 	DataSocket.connect([
@@ -627,15 +654,15 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'From', width: 50}, 
            	{field:'To', width: 50}, 
         	{field:'Name', width: 160}, 
-        	{field:'Rating', width: 100, editableCellTemplate: 'ratingTemplate.html'},
-        	{field:'DrillBook', width: 100, editableCellTemplate: 'drillBookTemplate.html'},
+        	{field:'Rating', width: 100, editableCellTemplate: 'tpl/ratingTemplate.html'},
+        	{field:'DrillBook', width: 100, editableCellTemplate: 'tpl/drillBookTemplate.html'},
         	{field:'Layout', width: 80},
         	{field:'Fire', width: 40},
         	{field:'Elite', width: 40},
-        	{field:'Equip', width: 100, editableCellTemplate: 'equipTemplate.html'},
-        	{field:'Skirmish', width: 100, editableCellTemplate: 'skirmishRatingTemplate.html'},
-        	{field:'Street', width: 100, editableCellTemplate: 'streetRatingTemplate.html'},
-        	{field:'Shock', width: 100, editableCellTemplate: 'shockTemplate.html'}
+        	{field:'Equip', width: 100, editableCellTemplate: 'tpl/equipTemplate.html'},
+        	{field:'Skirmish', width: 100, editableCellTemplate: 'tpl/skirmishRatingTemplate.html'},
+        	{field:'Street', width: 100, editableCellTemplate: 'tpl/streetRatingTemplate.html'},
+        	{field:'Shock', width: 100, editableCellTemplate: 'tpl/shockTemplate.html'}
         ];
 
 	$scope.$on('FilterUpdate', function(e,data) {
@@ -699,8 +726,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     }
 
 	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
+		title: $scope.title + ' Help',
+		content: 'Help Content',
+		template: 'this is a template'
+	};
+	$scope.addRow = {
+		title: 'Add New Infantry Type',
+		contentTemplate: 'Help Content'
 	};
 
 	DataSocket.connect([
@@ -729,11 +761,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'From', width: 50}, 
            	{field:'To', width: 50}, 
         	{field:'Name', width: 160}, 
-        	{field:'Rating', width: 100, editableCellTemplate: 'ratingTemplate.html'},
+        	{field:'Rating', width: 100, editableCellTemplate: 'tpl/ratingTemplate.html'},
         	{field:'Shock', width: 80},
         	{field:'Squadrons', width: 80},
-        	{field:'Move', width: 100, editableCellTemplate: 'cavMovesTemplate.html'},
-        	{field:'Skirmish', width: 100, editableCellTemplate: 'skirmishRatingTemplate.html'}
+        	{field:'Move', width: 100, editableCellTemplate: 'tpl/cavMovesTemplate.html'},
+        	{field:'Skirmish', width: 100, editableCellTemplate: 'tpl/skirmishRatingTemplate.html'}
         ];
 
 	$scope.update = function(row) {
@@ -844,12 +876,12 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'From', width: 50}, 
            	{field:'To', width: 50}, 
         	{field:'Name', width: 160}, 
-        	{field:'Rating', width: 100, editableCellTemplate: 'ratingTemplate.html'},
+        	{field:'Rating', width: 100, editableCellTemplate: 'tpl/ratingTemplate.html'},
         	{field:'Class', width: 60},
-        	{field:'Guns', width: 100, editableCellTemplate: 'gunTypeTemplate.html'},
-        	{field:'HW', width: 100, editableCellTemplate: 'hwTemplate.html'},
+        	{field:'Guns', width: 100, editableCellTemplate: 'tpl/gunTypeTemplate.html'},
+        	{field:'HW', width: 100, editableCellTemplate: 'tpl/hwTemplate.html'},
         	{field:'Sections', width: 80},
-        	{field:'Horse', width: 100, editableCellTemplate: 'horseArtyTemplate.html'}
+        	{field:'Horse', width: 100, editableCellTemplate: 'tpl/horseArtyTemplate.html'}
 
         ]
 	};
@@ -956,7 +988,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'Nation', width: 250}, 
            	{field:'From', width: 50}, 
            	{field:'To', width: 50}, 
-        	{field:'Rating', width: 120, editableCellTemplate: 'staffRatingTemplate.html'},
+        	{field:'Rating', width: 120, editableCellTemplate: 'tpl/staffRatingTemplate.html'},
         	{field:'Value', width: 60}
         ]
 	};
@@ -1055,8 +1087,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
             {field:'Entries', 
            	 width: 500, 
            	 displayName: 'Formations',
-           	 editableCellTemplate: 'meOrdersTemplate.html', 
-           	 cellTemplate: 'reglementTable.html'
+           	 editableCellTemplate: 'tpl/meOrdersTemplate.html', 
+           	 cellTemplate: 'forms/reglementTable.html'
            	},
 
         ]
@@ -1138,7 +1170,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields: ['Long'],
         	directions: ['asc']
@@ -1306,7 +1338,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'MEOrders', 
            	 width: 500, 
            	 displayName: 'Allowed ME Orders',
-           	 editableCellTemplate: 'meOrdersTemplate.html', 
+           	 editableCellTemplate: 'tpl/meOrdersTemplate.html', 
            	 cellTemplate: '<div class="ngBigCell"><ul><li ng-repeat="i in row.entity.MEOrders">{{i}}</li></ul></div>'
            	},
            	{field: 'Stipulation', width: 400}
@@ -1372,11 +1404,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'Order', width: 120}, 
            	{field:'Purpose', width: 400},
            	{field:'Notes', width: '40%'},
-           	{field:'IfNonEngaged', width: 100, editableCellTemplate: 'ifNonEngagedTemplate.html'},
-           	{field:'IfEngaged', width: 100, editableCellTemplate: 'ifEngagedTemplate.html'},
-           	{field:'CavalryOnly', width: 100, editableCellTemplate: 'cavalryOnlyTemplate.html'},
-           	{field:'DefendIfEngaged', width: 100, editableCellTemplate: 'defendIfEngagedTemplate.html'},
-           	{field:'ShakenIfEngaged', width: 100, editableCellTemplate: 'shakenIfEngagedTemplate.html'}
+           	{field:'IfNonEngaged', width: 100, editableCellTemplate: 'tpl/ifNonEngagedTemplate.html'},
+           	{field:'IfEngaged', width: 100, editableCellTemplate: 'tpl/ifEngagedTemplate.html'},
+           	{field:'CavalryOnly', width: 100, editableCellTemplate: 'tpl/cavalryOnlyTemplate.html'},
+           	{field:'DefendIfEngaged', width: 100, editableCellTemplate: 'tpl/defendIfEngagedTemplate.html'},
+           	{field:'ShakenIfEngaged', width: 100, editableCellTemplate: 'tpl/shakenIfEngagedTemplate.html'}
         ]
 	};
 
@@ -1523,7 +1555,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Points'],
         	directions:['asc']
@@ -1652,7 +1684,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
            	fields: ['Code'],
         	directions: ['asc']    	
@@ -1766,10 +1798,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Score', width: 80}, 
            	{field:'Descr', displayName: 'Description', width: 600}, 
-           	{field:'Broken', width: 80, editableCellTemplate: 'moraleBrokenTemplate.html'}, 
-           	{field:'Retreat', width: 80, editableCellTemplate: 'moraleRetreatTemplate.html'}, 
-           	{field:'Shaken', width: 80, editableCellTemplate: 'moraleShakenTemplate.html'}, 
-           	{field:'Steady', width: 80, editableCellTemplate: 'moraleSteadyTemplate.html'}, 
+           	{field:'Broken', width: 80, editableCellTemplate: 'tpl/moraleBrokenTemplate.html'}, 
+           	{field:'Retreat', width: 80, editableCellTemplate: 'tpl/moraleRetreatTemplate.html'}, 
+           	{field:'Shaken', width: 80, editableCellTemplate: 'tpl/moraleShakenTemplate.html'}, 
+           	{field:'Steady', width: 80, editableCellTemplate: 'tpl/moraleSteadyTemplate.html'}, 
            	{field:'Fatigue', width: 80}, 
         ]
 	};
@@ -1784,7 +1816,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -1920,7 +1952,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -2046,7 +2078,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -2173,7 +2205,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -2287,7 +2319,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'Score', width: 80}, 
            	{field:'Descr', displayName:'Description',width: 300}, 
            	{field:'Hits', width: 80}, 
-           	{field:'Stay', width: 80, editableCellTemplate: 'stayTemplate.html'}
+           	{field:'Stay', width: 80, editableCellTemplate: 'tpl/stayTemplate.html'}
         ]
 	};
 
@@ -2301,7 +2333,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -2414,10 +2446,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Score', width: 60}, 
            	{field:'Descr', displayName:'Description',width: 280}, 
-           	{field:'Another', displayName:'Bonus',width: 80, editableCellTemplate: 'anotherTemplate.html'},
-           	{field:'Fatigue', width: 80, editableCellTemplate: 'fatigueTemplate.html'},
-           	{field:'OneUnitOnly', width: 80, editableCellTemplate: 'oneUnitOnlyTemplate.html'},
-           	{field:'FFOnly', width: 80, editableCellTemplate: 'FFOnlyTemplate.html'}
+           	{field:'Another', displayName:'Bonus',width: 80, editableCellTemplate: 'tpl/anotherTemplate.html'},
+           	{field:'Fatigue', width: 80, editableCellTemplate: 'tpl/fatigueTemplate.html'},
+           	{field:'OneUnitOnly', width: 80, editableCellTemplate: 'tpl/oneUnitOnlyTemplate.html'},
+           	{field:'FFOnly', width: 80, editableCellTemplate: 'tpl/FFOnlyTemplate.html'}
         ]
 	};
 
@@ -2431,7 +2463,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -2544,7 +2576,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Score', width: 80}, 
            	{field:'Descr', displayName:'Description',width: 300}, 
-           	{field:'OnlyIfNotLastTurn', displayName:'Only if not last turn',width: 120, editableCellTemplate: 'onlyNotLastTurnTemplate.html'},
+           	{field:'OnlyIfNotLastTurn', displayName:'Only if not last turn',width: 120, editableCellTemplate: 'tpl/onlyNotLastTurnTemplate.html'},
         ]
 	};
 
@@ -2558,7 +2590,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -2685,7 +2717,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -2812,7 +2844,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -2957,8 +2989,16 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     }
 
 	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
+		title: $scope.title + ' Help',
+		content: "Help Content"
+	};
+	$scope.addRow = {
+		title: $scope.title + ' Add New Record',
+		content: "Add Content"
+	};
+	$scope.simulator = {
+		title: $scope.title + ' Simulator',
+		content: "Simulator Content"
 	};
 
 	DataSocket.connect([
@@ -3011,7 +3051,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -3033,7 +3073,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['State'],
         	directions:['asc']
@@ -3189,7 +3229,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Terrain'],
         	directions:['asc']
@@ -3325,7 +3365,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Terrain'],
         	directions:['asc']
@@ -3346,7 +3386,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['R6'],
         	directions:['asc']
@@ -3379,7 +3419,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate4.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -3539,7 +3579,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Score'],
         	directions:['asc']
@@ -3560,7 +3600,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -3699,7 +3739,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -3825,7 +3865,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -3846,7 +3886,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Mode'],
         	directions:['asc']
@@ -4068,7 +4108,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['ID'],
         	directions:['asc']
@@ -4090,7 +4130,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['asc']
@@ -4111,7 +4151,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate4.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Code'],
         	directions:['asc']
@@ -4271,7 +4311,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['ID'],
         	directions:['asc']
@@ -4293,7 +4333,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['desc']
@@ -4418,10 +4458,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Dice', width: 60}, 
            	{field:'Descr', displayName:'Description',width:200},
-           	{field:'Fallback', width:80, editableCellTemplate: 'fallbackTemplate.html'},
-           	{field:'HoldCover', width:80, editableCellTemplate: 'holdTemplate.html'},
-           	{field:'Disorder', width:80, editableCellTemplate: 'disorderTemplate.html'},
-           	{field:'Rout', width:80, editableCellTemplate: 'routTemplate.html'},
+           	{field:'Fallback', width:80, editableCellTemplate: 'tpl/fallbackTemplate.html'},
+           	{field:'HoldCover', width:80, editableCellTemplate: 'tpl/holdTemplate.html'},
+           	{field:'Disorder', width:80, editableCellTemplate: 'tpl/disorderTemplate.html'},
+           	{field:'Rout', width:80, editableCellTemplate: 'tpl/routTemplate.html'},
         ]
 	};
 
@@ -4435,7 +4475,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['desc']
@@ -4560,7 +4600,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['ID'],
         	directions:['asc']
@@ -4585,7 +4625,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['desc']
@@ -4728,7 +4768,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['desc']
@@ -4834,7 +4874,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'Crew', width: 100},
            	{field:'LHorses', displayName:'Limbered - Horses',width: 180},
            	{field:'LCrew', displayName: 'Limbered - Crew',width: 180},
-           	{field:'Caisson', displayName:'Caisson Explodes', editableCellTemplate: 'caissonTemplate.html',width: 180},
+           	{field:'Caisson', displayName:'Caisson Explodes', editableCellTemplate: 'tpl/caissonTemplate.html',width: 180},
         ]
 	};
 
@@ -5006,7 +5046,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Code'],
         	directions:['asc']
@@ -5131,7 +5171,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Code'],
         	directions:['asc']
@@ -5402,7 +5442,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Code'],
         	directions:['asc']
@@ -5524,7 +5564,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Code'],
         	directions:['asc']
@@ -5654,7 +5694,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['ID'],
         	directions:['asc']
@@ -5676,7 +5716,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['desc']
@@ -6012,7 +6052,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Score'],
         	directions:['asc']
@@ -6036,7 +6076,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate3.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Value'],
         	directions:['desc']
@@ -6459,7 +6499,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showColumnMenu: false,
         showFilter: false,
         showFooter: true,
-        footerTemplate: 'gridFooterTemplate2.html',
+        footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
         	fields:['Hi'],
         	directions:['asc']

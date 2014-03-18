@@ -1,0 +1,28 @@
+<div class="panel panel-primary col-xs-8">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{title}}
+      <span class="pull-right"> 
+        <add-btn action="addRow"></add-btn>
+        <help-btn action="help"></help-btn>
+      </span>
+
+    </h3> {{docs}}
+  </div>
+  <div class="panel-body">
+    <div class="gridStyle bigGrid" ng-grid="gridOptions"></div>
+  </div>
+</div>
+<div class="panel panel-primary col-xs-4">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{title2}}
+      <span class="pull-right"> 
+        <add-btn action="addRow2"></add-btn>
+        <help-btn action="help2"></help-btn>
+      </span>
+
+    </h3> {{docs2}}
+  </div>
+  <div class="panel-body">
+    <div class="gridStyle bigGrid" ng-grid="gridOptions2"></div>
+  </div>
+</div>
