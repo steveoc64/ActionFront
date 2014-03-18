@@ -727,8 +727,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.help = {
 		title: $scope.title + ' Help',
-		content: 'Help Content',
-		template: 'this is a template'
+		content: 'Help Content'
 	};
 	$scope.addRow = {
 		title: 'Add New Infantry Type',
@@ -2990,7 +2989,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.help = {
 		title: $scope.title + ' Help',
-		content: "Help Content"
+		content: "so whos a bleeding jacksy then ?",
+		contentTemplate: "help/leaderInjury.html"
 	};
 	$scope.addRow = {
 		title: $scope.title + ' Add New Record',
@@ -2998,7 +2998,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	};
 	$scope.simulator = {
 		title: $scope.title + ' Simulator',
-		content: "Simulator Content"
+		//content: "Simulator Content",
+		contentTemplate: "help/leaderInjury.html"
 	};
 
 	DataSocket.connect([
