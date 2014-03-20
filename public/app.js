@@ -354,9 +354,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	return {
 		restrict: 'E',
 		scope: {
-			action: '='
+			file: '=file'
 		},
-		template: '<button type="button" class="btn btn-info" bs-aside="{{action}}"><i class="fa fa-fw fa-folder-open"></i></button>'
+		template: '<button type="button" class="btn btn-info" bs-aside="help" data-content-template="{{file}}"><i class="fa fa-fw fa-folder-open"></i></button>'
 	}
 })
 .directive('addBtn', function(){
@@ -2987,19 +2987,17 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-	$scope.help = {
-		title: $scope.title + ' Help',
-		content: "so whos a bleeding jacksy then ?",
-		contentTemplate: "help/leaderInjury.html"
-	};
+    $scope.help = {
+    	title: "GT Movement Help"
+    };
+	$scope.helpfile = "help/GTMovement.html";
 	$scope.addRow = {
 		title: $scope.title + ' Add New Record',
 		content: "Add Content"
 	};
 	$scope.simulator = {
 		title: $scope.title + ' Simulator',
-		//content: "Simulator Content",
-		contentTemplate: "help/leaderInjury.html"
+		content: "Simulator<br> Content",
 	};
 
 	DataSocket.connect([
