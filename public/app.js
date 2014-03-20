@@ -535,6 +535,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 .controller("FireCtrl", ["$scope", "$rootScope", "$state",function($scope, $rootScope,$state){
 }])
 .controller("CaCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+	$scope.help = {
+		title: "Close Action"
+	}
 }])
 .controller("EngCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 }])
