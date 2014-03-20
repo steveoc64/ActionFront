@@ -524,24 +524,46 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.FilterUpdate = function() {
 		$rootScope.FilterValues = {"Nation":$scope.Nation, "Year":$scope.Year, "Name":$scope.Name};
 		$scope.$broadcast('FilterUpdate', $rootScope.FilterValues);
+	}		
+	$scope.help = {
+		title: "Unit Types Database"
 	}
+
 }])
 .controller("CommandControlCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+	$scope.help = {
+		title: "Command and Control Procedures"
+	}
 }])
 .controller("MoraleFatigueCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+	$scope.help = {
+		title: "Morale and Fatigue Tests"
+	}
 }])
 .controller("MovementCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+	$scope.help = {
+		title: "Unit Movement Procedures"
+	}
 }])
 .controller("FireCtrl", ["$scope", "$rootScope", "$state",function($scope, $rootScope,$state){
+	$scope.help = {
+		title: "Musket and Cannon Fire Procedures"
+	}
 }])
 .controller("CaCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
 	$scope.help = {
-		title: "Close Action"
+		title: "Close Action Procedure"
 	}
 }])
 .controller("EngCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+	$scope.help = {
+		title: "Engineering and Weather"
+	}
 }])
 .controller("OOBCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
+	$scope.help = {
+		title: "Orders of Battle Database"
+	}
 }])
 .controller("FormationsCtrl", ["$scope", "DataSocket", "$rootScope", function($scope, DataSocket, $rootScope){
 	$scope.Data = [];
