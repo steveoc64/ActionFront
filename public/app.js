@@ -354,9 +354,20 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	return {
 		restrict: 'E',
 		scope: {
-			file: '=file'
+			title: '=',
+			file: '='
 		},
-		template: '<button type="button" class="btn btn-info" bs-aside="help" data-content-template="{{file}}"><i class="fa fa-fw fa-folder-open"></i></button>'
+		template: '<button type="button" class="btn btn-info" bs-aside data-title="{{title}}" data-content-template="{{file}}"><i class="fa fa-fw fa-folder-open"></i></button>'
+	}
+})
+.directive('generalHelpBtn', function(){
+	return {
+		restrict: 'E',
+		scope: {
+			title: '=',
+			file: '='
+		},
+		template: '<button type="button" class="btn btn-primary" data-placement="left" data-animation="am-slide-left" bs-aside data-title="{{title}}" data-content-template="{{file}}"><i class="fa fa-fw fa-folder-open"></i></button>'
 	}
 })
 .directive('addBtn', function(){
@@ -525,45 +536,20 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$rootScope.FilterValues = {"Nation":$scope.Nation, "Year":$scope.Year, "Name":$scope.Name};
 		$scope.$broadcast('FilterUpdate', $rootScope.FilterValues);
 	}		
-	$scope.help = {
-		title: "Unit Types Database"
-	}
-
 }])
 .controller("CommandControlCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
-	$scope.help = {
-		title: "Command and Control Procedures"
-	}
 }])
 .controller("MoraleFatigueCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
-	$scope.help = {
-		title: "Morale and Fatigue Tests"
-	}
 }])
 .controller("MovementCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
-	$scope.help = {
-		title: "Unit Movement Procedures"
-	}
 }])
 .controller("FireCtrl", ["$scope", "$rootScope", "$state",function($scope, $rootScope,$state){
-	$scope.help = {
-		title: "Musket and Cannon Fire Procedures"
-	}
 }])
 .controller("CaCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
-	$scope.help = {
-		title: "Close Action Procedure"
-	}
 }])
 .controller("EngCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
-	$scope.help = {
-		title: "Engineering and Weather"
-	}
 }])
 .controller("OOBCtrl", ["$scope", "$rootScope", function($scope, $rootScope){
-	$scope.help = {
-		title: "Orders of Battle Database"
-	}
 }])
 .controller("FormationsCtrl", ["$scope", "DataSocket", "$rootScope", function($scope, DataSocket, $rootScope){
 	$scope.Data = [];
@@ -647,11 +633,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.updateFilters();
     	$scope.$apply();
     }
-
-	$scope.help = {
-		title: $scope.title + ' Help',
-		content: "Help Content"
-	};
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -750,10 +731,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-	$scope.help = {
-		title: $scope.title + ' Help',
-		content: 'Help Content'
-	};
 	$scope.addRow = {
 		title: 'Add New Infantry Type',
 		contentTemplate: 'Help Content'
@@ -856,11 +833,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.updateFilters();
     	$scope.$apply();
     }
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -972,11 +944,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);	
@@ -1076,11 +1043,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);		
@@ -1141,11 +1103,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -1261,15 +1218,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
@@ -1328,11 +1276,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -1396,11 +1339,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);	
@@ -1463,11 +1401,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
 	]);
@@ -1527,11 +1460,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -1649,15 +1577,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -1778,15 +1697,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     $scope.changeData2 = function(d) {
     	$scope.$apply();
     }
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -1918,15 +1828,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	content: 'Simulator'
     };
 
-	$scope.help = {
-		title: $scope.title + ' Help',
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2 + ' Help',
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
@@ -2046,15 +1947,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -2171,15 +2063,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -2299,15 +2182,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -2426,15 +2300,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -2557,15 +2422,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -2683,15 +2539,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -2811,15 +2658,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -2938,15 +2776,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
@@ -3012,10 +2841,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-    $scope.help = {
-    	title: "GT Movement Help"
-    };
-	$scope.helpfile = "help/GTMovement.html";
 	$scope.addRow = {
 		title: $scope.title + ' Add New Record',
 		content: "Add Content"
@@ -3186,19 +3011,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		title: $scope.title3,
-		"content": "Help Content3"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData},
@@ -3319,15 +3131,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -3533,23 +3336,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		title: $scope.title3,
-		"content": "Help Content3"
-	};
-	$scope.help4 = {
-		title: $scope.title4,
-		"content": "Help Content4"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -3701,19 +3487,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		title: $scope.title3,
-		"content": "Help Content3"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -3826,15 +3599,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -3985,19 +3749,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		"title": "Help Information",
-		"content": "Help Content3"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4072,11 +3823,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -4265,23 +4011,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		title: $scope.title3,
-		"content": "Help Content3"
-	};
-	$scope.help4 = {
-		title: $scope.title4,
-		"content": "Help Content4"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4434,19 +4163,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		title: $scope.title3,
-		"content": "Help Content3"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4562,15 +4278,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -4728,19 +4435,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		title: $scope.title3,
-		"content": "Help Content3"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4856,15 +4550,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -4939,11 +4624,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
@@ -5014,11 +4694,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5132,15 +4807,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5259,15 +4925,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -5341,11 +4998,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
@@ -5414,11 +5066,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5530,15 +5177,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5652,15 +5290,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -5817,19 +5446,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		title: $scope.title3,
-		"content": "Help Content3"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -5942,15 +5558,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -6020,11 +5627,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -6177,19 +5779,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-	$scope.help3 = {
-		title: $scope.title3,
-		"content": "Help Content3"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -6261,11 +5850,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -6380,15 +5964,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		"content": "Help Content2"
-	};
-
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
@@ -6470,11 +6045,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		"content": "Help Content"
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -6587,15 +6157,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.help = {
-		title: $scope.title,
-		content: "some help info"	
-	};
-	$scope.help2 = {
-		title: $scope.title2,
-		contentTemplate: 'help/leaderInjury.html'
-	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
