@@ -31,3 +31,7 @@
 .aside.left {
   min-width: 640px;
 }
+
+.modal {
+  color: black;
+}
