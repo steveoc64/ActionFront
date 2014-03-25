@@ -354,8 +354,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	return {
 		restrict: 'E',
 		scope: {
-			title: '=',
-			file: '='
+			title: '@',
+			file: '@'
 		},
 		template: '<button type="button" class="btn btn-info" bs-aside data-title="{{title}}" data-content-template="{{file}}"><i class="fa fa-fw fa-folder-open"></i></button>'
 	}
@@ -364,8 +364,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	return {
 		restrict: 'E',
 		scope: {
-			title: '=',
-			file: '='
+			title: '@',
+			file: '@'
 		},
 		template: '<button type="button" class="btn btn-primary" data-placement="left" data-animation="am-slide-left" bs-aside data-title="{{title}}" data-content-template="{{file}}"><i class="fa fa-fw fa-folder-open"></i></button>'
 	}
@@ -374,18 +374,32 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	return {
 		restrict: 'E',
 		scope: {
-			action: '='
+			actionName: '@action',
+			action: '=',
+			form: '@'
 		},		
-		template: '<button type="button" class="btn btn-success" bs-modal="{{action}}"><i class="fa fa-fw fa-plus-square"></i></button>'
+		template: '<button type="button" class="btn btn-success" bs-modal="{{actionName}}" data-content-template="{{form}}"><i class="fa fa-fw fa-plus-square"></i></button>'
 	}
 })
 .directive('simBtn', function(){
 	return {
 		restrict: 'E',
 		scope: {
-			action: '='
+			action: '@'
 		},				
 		template: '<button type="button" class="btn btn-danger" bs-modal="{{action}}"><i class="fa fa-fw fa-cogs fa-lg"></i></button>'
+	}
+})
+.directive('entryField', function(){
+	return {
+		restrict: 'E',
+		scope: {
+			id: '@',
+			label: '@',
+			span: '@',
+			bindModel: '=ngModel'
+		},
+		template: '<div class="form-group"><label for="{{id}}" class="col-sm-2 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
 	}
 })
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -441,8 +455,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 				switch (RxMsg.Action) {
 					case "List":
-						//sub.Data = RxMsg.Data;	
 						angular.copy(RxMsg.Data,sub.Data);
+						gotSome = true;
+						break;
+					case "Add":
+						sub.Data.push(RxMsg.Data);
 						gotSome = true;
 						break;
 					case "Update":
@@ -457,21 +474,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 							}
 						});
 
-						// else if any of our records have a blank ID, overwrite that as the new record
-						if (!gotSome) {
-							console.log("Add New Record", data);
-							angular.forEach(sub.Data, function(v,i){
-								if (v["@id"] === "0") {
-									console.log("Overwriting Blank record at pos",i);
-									angular.copy(data,sub.Data[i]);
-									gotSome = true;
-								}
-							});
-						}
-						// otherwise - just append to the list
+						// Could not find this record - then just append to the list
 						if (!gotSome) {
 							console.log("Adding new record",data);
 							sub.Data.push(data);
+							gotSome = true;
 						}			
 				} // switch
 				if (gotSome) {
@@ -2819,9 +2826,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
-	$scope.updateFilters = function() {
-	}
-
 	// Capture the cell on start edit, and update if the cell contents change
 	$scope.$on('ngGridEventStartCellEdit',function(evt){
 		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
@@ -2833,18 +2837,27 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', METype: '~ ??? ~'})
-    }
-
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
 
-	$scope.addRow = {
-		title: $scope.title + ' Add New Record',
-		content: "Add Content"
-	};
+    $scope.addRecord = {
+    	title: "Add GT Movement Record",
+    	rec: {
+    		METype: "New ME Type",
+    		D1: 26,
+    		D2: 10,
+    		D3: 0,
+    		D4: 36,
+    		D5: 45,
+    		D6: 54
+    	},
+    	save: function() {
+			console.log("GTMoveAdd -> ",this.rec);
+			DataSocket.send(JSON.stringify({"Action":"Add","Entity":$scope.Entity,"Data":this.rec}));
+    	}
+    };
+
 	$scope.simulator = {
 		title: $scope.title + ' Simulator',
 		content: "Simulator<br> Content",

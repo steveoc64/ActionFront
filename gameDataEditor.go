@@ -226,6 +226,24 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			msg, _ = json.Marshal(records)
 			sendMsg(conn, msg)
 
+		case "Add":
+			// Invalidate the LIST cache for this entity before we do any updates
+			theEntity := RxMsg["Entity"].(string)
+
+			delete(ListCache, theEntity)
+			log.Println("ADD request:", theEntity, RxMsg["Data"])
+
+			myGameData = RxMsg["Data"].(map[string]interface{})
+			myDocID, err := gameData.Insert(gamedatadb.DataMap(theEntity, myGameData))
+			if err != nil {
+				panic(err)
+			}
+			delete(ListCache, theEntity)
+			log.Printf("Inserted as ID %d", myDocID)
+			myGameData["@id"] = strconv.FormatUint(myDocID, 10)
+			msg, _ := json.Marshal(messageFormat{"Add", theEntity, myGameData})
+			sendAll(msg)
+
 		case "Update":
 			// Invalidate the LIST cache for this entity before we do any updates
 			theEntity := RxMsg["Entity"].(string)
@@ -238,21 +256,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			docID := myGameData["@id"]
 			delete(myGameData, "@id") // strip the ID out of this record
 			myDocID, _ := strconv.ParseUint(docID.(string), 0, 64)
-			switch myDocID {
-			case 0:
-				// Insert as new record
-				log.Println("Add NEW Record", myGameData)
-				if myDocID, err = gameData.Insert(gamedatadb.DataMap(theEntity, myGameData)); err != nil {
-					panic(err)
-				}
-				delete(ListCache, theEntity)
-				log.Printf("Inserted as ID %d", myDocID)
-				myGameData["@id"] = myDocID
-				//gameData.Read(myDocID, &myGameData)
-				msg, _ := json.Marshal(messageFormat{"Update", theEntity, myGameData})
-				sendAll(msg)
-
-			default:
+			if myDocID > 0 {
 				// Write to existing record
 				log.Println("Write Record ID", myDocID, myGameData)
 				if err := gameData.Update(myDocID, gamedatadb.DataMap(theEntity, myGameData)); err != nil {
