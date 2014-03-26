@@ -3,67 +3,57 @@
 <div class="modal-inner-content">
 
 	<div class="form-group">
-		<label for="METype" class="col-sm-4 control-label">ME Type</label>
+		<label for="METype" class="col-sm-3 control-label">ME Type</label>
 		<div class="col-sm-6">
 			<select id="METype" ng-model="sim.METype" ng-options="t for t in sim.Lookups.METypes" ng-change="sim.calc()"></select>
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label for="DState" class="col-sm-4 control-label">Deployment State</label>
+		<label for="DState" class="col-sm-3 control-label">Deployment State</label>
 		<div class="col-sm-6">
 			<select id="DState" ng-model="sim.DeploymentState" ng-options="d for d in sim.Lookups.DeploymentStates" ng-change="sim.calc()"></select>
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label for="Terrain" class="col-sm-4 control-label">Terrain Type</label>
+		<label for="Terrain" class="col-sm-3 control-label">Terrain Type</label>
 		<div class="col-sm-6">
 			<select id="Terrain" ng-model="sim.Terrain" ng-options="r for r in sim.Lookups.TerrainTypes" ng-change="sim.calc()"></select>
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label for="Weather" class="col-sm-4 control-label">Weather Conditions</label>
+		<label for="Weather" class="col-sm-3 control-label">Weather Conditions</label>
 		<div class="col-sm-6">
 			<select id="Weather" ng-model="sim.Weather" ng-options="w for w in sim.Lookups.WeatherStates" ng-change="sim.calc()"></select>
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label for="Accumulated" class="col-sm-4 control-label">Accumulated Movement</label>
-		<div class="col-sm-3">
-			<input id="Accumulated" ng-model="sim.Accumulated" disabled>
-		</div>
+	<div class="checkbox">
+		<label class="col-sm-3"></label>
+    	<label>
+      		<input type="checkbox" ng-model="sim.Forced" ng-change="sim.calc()"> Forced March</input>
+    	</label>
 	</div>
+	<div class="checkbox">
+		<label class="col-sm-3"></label>
+    	<label>
+      		<input type="checkbox" ng-model="sim.MarchOrder" ng-change="sim.calc()"> March Orders</input>
+    	</label>
+    </div>
 
-	<div class="form-group">
-		<label for="Inches" class="col-sm-4 control-label">Distance in Inches</label>
-		<div class="col-sm-6">
-			<input id="Inches" ng-model="sim.Inches" disabled>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="Distance" class="col-sm-4 control-label">Distance in Grids</label>
-		<div class="col-sm-6">
-			<input id="Distance" ng-model="sim.Distance" disabled>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="Diagonal" class="col-sm-4 control-label">Diagonal Grids</label>
-		<div class="col-sm-6">
-			<input id="Diagonal" ng-model="sim.Diagonal" disabled>
-		</div>
-	</div>
-
-
+	<display-field id="Accumulated" span="3" label="Accumulated Movement" ng-model="sim.Accumulated"></display-field>
+	<display-field id="Inches" span="3" label="Distance in Inches" ng-model="sim.Inches"></display-field>
+	<display-field id="Distance" span="3" label="Distance in Grids" ng-model="sim.Distance"></display-field>
+	<display-field id="Diagonal" span="3" label="Diagonal Grids" ng-model="sim.Diagonal"></display-field>
 
 </div>
 
 <div class="modal-footer" style="margin: 15px -20px -20px;">
 
   <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="sim.clear()">Clear Accumulated</button>
   <button type="button" class="btn btn-primary" ng-click="sim.calc()">Calculate</button>
 
 </div>

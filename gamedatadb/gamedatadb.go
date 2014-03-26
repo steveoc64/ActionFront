@@ -2208,7 +2208,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Class II III Arty", 6, 3, 0, 20, 34, 42}))
 	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Pontoon Train", 0, 0, 0, 0, 0, 32}))
 	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Corps Baggage", 26, 10, 0, 36, 45, 54}))
-	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Forced March", 26, 10, 0, 10, 10, 12}))
+	gameData.Insert(DataMap("GTMove", GrandTacticalMove{"Forced March", 8, 0, 0, 10, 10, 12}))
 
 	gameData.Insert(DataMap("Deployment", Deployment{1, 1}))
 	gameData.Insert(DataMap("Deployment", Deployment{10, 2}))

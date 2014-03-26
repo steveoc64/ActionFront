@@ -432,7 +432,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			span: '@',
 			bindModel: '=ngModel'
 		},
-		template: '<div class="form-group"><label for="{{id}}" class="col-sm-2 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
+		template: '<div class="form-group"><label for="{{id}}" class="col-sm-3 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
 	}
 })
 .directive('displayField', function(){
@@ -444,7 +444,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			span: '@',
 			bindModel: '=ngModel'
 		},
-		template: '<div class="form-group"><label for="{{id}}" class="col-sm-2 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" disabled class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
+		template: '<div class="form-group"><label for="{{id}}" class="col-sm-3 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" disabled class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
 	}
 })
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -2974,8 +2974,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		Distance: 2,
 		Diagonal: 1,
 		Inches: 20,
+		Forced: false,
+		MarchOrder: false,
 		Lookups: Lookups,
-		calc: function(from) {
+		clear: function() {
+			this.Accumulated = 0
+		},
+		calc: function() {
 			var Data = {
 				METype: this.METype,
 				DeploymentState: this.DeploymentState,
@@ -2986,7 +2991,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 				Diagonal: this.Diagonal,
 				Inches: this.Inches,
 				Accumulated: this.Accumulated,
-				From: from
+				Forced: this.Forced,
+				MarchOrder: this.MarchOrder
 			}
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":Data}));
 		}
@@ -3004,6 +3010,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.simulator.Accumulated = data.Accumulated;
 		//$scope.simulator.Remaining = data.Remaining;
 		$scope.simulator.Time = data.Time;
+		$scope.simulator.Forced = data.Forced;
+		$scope.simulator.MarchOrder = data.MarchOrder;
 		$scope.$apply();
 	}
 

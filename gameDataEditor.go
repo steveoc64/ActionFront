@@ -157,14 +157,14 @@ func tilde(c bool) string {
 func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	retval := make(map[string]interface{})
-	log.Println("Calculating GT Move based on ", params)
 
 	retval["METype"] = params["METype"]
 	retval["DeploymentState"] = params["DeploymentState"]
 	retval["Terrain"] = params["Terrain"]
 	retval["Weather"] = params["Weather"]
 	retval["Accumulated"] = params["Accumulated"]
-	//retval["Time"] = params["Time"]
+	retval["Forced"] = params["Forced"]
+	retval["MarchOrder"] = params["MarchOrder"]
 	retval["Distance"] = 0
 	retval["Diagonal"] = 0
 	retval["Inches"] = 0
@@ -180,6 +180,9 @@ func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 			switch params["DeploymentState"] {
 			case "Deployed":
 				baseMove = GTMove["D1"].(float64)
+				if params["MarchOrder"].(bool) {
+					baseMove += 4
+				}
 			case "Bde Out":
 				baseMove = GTMove["D2"].(float64)
 			case "Deploying":
@@ -192,10 +195,31 @@ func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 				baseMove = GTMove["D6"].(float64)
 			}
 
-			//acc, _ := strconv.ParseFloat(params["Accumulated"].(string), 64)
-			//turns, _ := strconv.ParseFloat(params["Time"].(string), 64)
+			// Lets see if we have a forced march on our hands
+			if params["Forced"].(bool) {
+				for _, fmove := range GTMoves.Data.([]interface{}) {
+					checkf := fmove.(map[string]interface{})
+					if checkf["METype"] == "Forced March" {
+						switch params["DeploymentState"] {
+						case "Deployed":
+							baseMove += checkf["D1"].(float64)
+						case "Bde Out":
+							baseMove += checkf["D2"].(float64)
+						case "Deploying":
+							baseMove += checkf["D3"].(float64)
+						case "Condensed Col":
+							baseMove += checkf["D4"].(float64)
+						case "Regular Col":
+							baseMove += checkf["D5"].(float64)
+						case "Extended Col":
+							baseMove += checkf["D6"].(float64)
+						}
+
+					}
+				}
+			}
+
 			acc := params["Accumulated"].(float64)
-			//			turns := params["Time"].(float64)
 			turns := 1.0
 
 			// Get the appropriate weather modifier
