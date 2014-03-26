@@ -270,7 +270,19 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			}
 
 		case "Delete":
-			log.Println("DELETE request:", RxMsg["Entity"])
+			log.Println("DELETE request:", RxMsg["Entity"], RxMsg["ID"])
+
+			theEntity := RxMsg["Entity"].(string)
+			delete(ListCache, theEntity)
+
+			myDocID, _ := strconv.ParseUint(RxMsg["ID"].(string), 0, 64)
+			if myDocID > 0 {
+				gameData.Delete(myDocID)
+				myData := make(map[string]interface{})
+				myData["ID"] = RxMsg["ID"]
+				msg, _ := json.Marshal(messageFormat{"Delete", theEntity, myData})
+				sendAll(msg)
+			}
 
 		case "Get":
 			log.Println("GET request:", RxMsg["Entity"])

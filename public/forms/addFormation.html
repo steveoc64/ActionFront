@@ -1,0 +1,27 @@
+<form role="form" class="form-horizontal">
+
+<button type="button" class="close" ng-click="$hide()">&times;</button>
+<h3>Add {{editor.title}}</h3>
+
+<hr>
+
+<div class="modal-inner-content">
+
+  <entry-field id="Nation" ng-model="editor.rec.Nation" label="Nation" span="6"></entry-field>
+  <entry-field id="from" ng-model="editor.rec.From" label="Year From" span="3"></entry-field>
+  <entry-field id="to" ng-model="editor.rec.To" label="Year To" span="3"></entry-field>
+  <entry-field id="inf" ng-model="editor.rec.InfantryME" label="Infantry ME" span="10"></entry-field>
+  <entry-field id="cav" ng-model="editor.rec.CavalryME" label="Cavalry ME" span="10"></entry-field>
+  <entry-field id="corps" ng-model="editor.rec.Corps" label="Corps" span="10"></entry-field>
+
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-primary" ng-click="$hide(); editor.add();">Add Record</button>
+
+</div>
+</form>
+
+

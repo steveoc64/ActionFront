@@ -374,11 +374,21 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	return {
 		restrict: 'E',
 		scope: {
-			actionName: '@action',
-			action: '=',
+			editorName: '@editor',
+			editor: '=',
 			form: '@'
 		},		
-		template: '<button type="button" class="btn btn-success" bs-modal="{{actionName}}" data-content-template="{{form}}"><i class="fa fa-fw fa-plus-square"></i></button>'
+		template: '<button type="button" class="btn btn-success" bs-modal="{{editorName}}" data-content-template="{{form}}"><i class="fa fa-fw fa-plus-square"></i></button>'
+	}
+})
+.directive('editBtn', function(){
+	return {
+		restrict: 'E',
+		scope: {
+			action: '@',
+			form: '@'
+		},		
+		template: '<button type="button" class="btn btn-s" ng-click="console.log(editForm); editForm(row,\'{{form}}\')"><i class="fa fa-fw fa-file-text"></i></button>'
 	}
 })
 .directive('simBtn', function(){
@@ -400,6 +410,18 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			bindModel: '=ngModel'
 		},
 		template: '<div class="form-group"><label for="{{id}}" class="col-sm-2 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
+	}
+})
+.directive('displayField', function(){
+	return {
+		restrict: 'E',
+		scope: {
+			id: '@',
+			label: '@',
+			span: '@',
+			bindModel: '=ngModel'
+		},
+		template: '<div class="form-group"><label for="{{id}}" class="col-sm-2 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" disabled class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
 	}
 })
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -479,7 +501,20 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 							console.log("Adding new record",data);
 							sub.Data.push(data);
 							gotSome = true;
-						}			
+						}		
+					case "Delete":
+						var data = RxMsg.Data;
+
+						// If the ID of the record exists, remove the record from the dataset
+						angular.forEach(sub.Data, function(v,i){
+							if (data["ID"] === v["@id"]) {
+								console.log("Removing record at pos",i,"with id",data);
+								sub.Data.splice(i,1);
+								gotSome = true;
+							}
+						});
+
+
 				} // switch
 				if (gotSome) {
 					sub.Callback(sub.Data);
@@ -632,14 +667,26 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		} 
     });
 
-    $scope.newRow = function() {
-    	$scope.FilteredData.push({"@id": '0', Nation: '~ ??? ~', From: 1792, To: 1815})
-    }
-
     $scope.changeData = function(d) {
     	$scope.updateFilters();
     	$scope.$apply();
     }
+
+    $scope.editor = {
+    	title: "Add National Organisation Record",
+    	rec: {
+    		Nation: 'Nation',
+    		YearFrom: '1792',
+    		YearTo: '1815',
+    		InfantryME: 'Div of 1-3 Bde',
+    		CavalryME: 'Bde of 1-2 Regt',
+    		Corps: 'Corps of 1-3 Div'
+    	},
+    	add: function() {
+			console.log("FormationAdd -> ",this.rec);
+			DataSocket.send(JSON.stringify({"Action":"Add","Entity":$scope.Entity,"Data":this.rec}));
+    	}
+    };
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
@@ -2789,7 +2836,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("GTMovementCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("GTMovementCtrl", ["$scope", "DataSocket", "$modal", "$rootScope", function($scope, DataSocket, $modal, $rootScope){
 	$scope.Data = [];
 	$scope.title = "Grand Tactical Movement";
 	$scope.docs = "Table 9.3";
@@ -2817,7 +2864,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'D3', displayName: 'Deploying',width: 120},
            	{field:'D4', displayName: 'Cond Column',width: 120},
            	{field:'D5', displayName: 'Reg Column',width: 120},
-           	{field:'D6', displayName: 'Extd Column',width: 120}
+           	{field:'D6', displayName: 'Extd Column',width: 120},
+           	{field: '', cellTemplate: '<button type="button" class="btn btn-s" ng-click="editForm(row, \'forms/editGTMovement.html\')"><i class="fa fa-fw fa-file-text"></i></button>'},
+//           	{field: 'e2', cellTemplate: '<edit-btn action="editForm" form="forms/editGTMovement.html"></edit-btn>'}
         ]
 	};
 
@@ -2841,9 +2890,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     	$scope.$apply();
     }
 
-    $scope.addRecord = {
-    	title: "Add GT Movement Record",
-    	rec: {
+    $scope.editor = {
+    	title: "GT Movement Record",
+    	newRec: {
     		METype: "New ME Type",
     		D1: 26,
     		D2: 10,
@@ -2852,10 +2901,30 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     		D5: 45,
     		D6: 54
     	},
-    	save: function() {
-			console.log("GTMoveAdd -> ",this.rec);
-			DataSocket.send(JSON.stringify({"Action":"Add","Entity":$scope.Entity,"Data":this.rec}));
-    	}
+    	editRec: {},
+    	add: function() {
+			console.log("GTMoveAdd -> ",this.newRec);
+			DataSocket.send(JSON.stringify({"Action":"Add","Entity":$scope.Entity,"Data":this.newRec}));
+    	},
+		update: function() {
+			console.log("GTMoveUpdate -> ",this.editRec);
+			DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":this.editRec}));
+		},
+		delete: function() {
+			console.log("GTMoveDelete -> ",this.editRec);
+			DataSocket.send(JSON.stringify({"Action":"Delete","Entity":$scope.Entity,"ID":$scope.ID}));
+		}
+    };
+
+    $scope.editForm = function(row, template) {
+    	$scope.editor.editRec = row.entity;
+    	var myEditor = {
+    		title: "Edit "+$scope.editor.title,
+    		contentTemplate: template,
+    		scope: $scope
+    	};
+    	$scope.ID = row.entity["@id"];
+    	$modal(myEditor);
     };
 
 	$scope.simulator = {
