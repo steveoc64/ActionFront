@@ -9,6 +9,7 @@ import (
 	"github.com/steveoc64/ActionFront/gamedatadb"
 	"github.com/steveoc64/tiedot/db"
 	"log"
+	"math"
 	"math/rand"
 	"net/http"
 	"os"
@@ -94,16 +95,6 @@ func sendMsg(conn *websocket.Conn, msg []byte) {
 	}
 }
 
-// Get all GameData records into a slice of bytes
-func getsdfsdfAllUnitTypes(col *db.Col) map[uint64]struct{} {
-	queryResult := make(map[uint64]struct{}) // query result (document IDs) goes into map keys
-
-	if err := db.EvalAllIDs(col, &queryResult); err != nil {
-		panic(err)
-	}
-	return queryResult
-}
-
 // For a given entity, return a slice of bytes, being a JSON representation of that list
 func getList(col *db.Col, theEntity string) (messageFormat, bool) {
 	var myData map[string]interface{}
@@ -160,6 +151,75 @@ func tilde(c bool) string {
 	} else {
 		return ""
 	}
+}
+
+// For a given set of parameters, calculate the GTMove, and return this as a result set
+func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	retval := make(map[string]interface{})
+	log.Println("Calculating GT Move based on ", params)
+
+	retval["METype"] = params["METype"]
+	retval["DeploymentState"] = params["DeploymentState"]
+	retval["Terrain"] = params["Terrain"]
+	retval["Weather"] = params["Weather"]
+	retval["Accumulated"] = params["Accumulated"]
+	//retval["Time"] = params["Time"]
+	retval["Distance"] = 0
+	retval["Diagonal"] = 0
+	retval["Inches"] = 0
+
+	var baseMove float64
+
+	// get the GT Movement record for this METype
+	GTMoves, _ := getList(col, "GTMove")
+	for _, myMove := range GTMoves.Data.([]interface{}) {
+		GTMove := myMove.(map[string]interface{})
+		if GTMove["METype"] == params["METype"] {
+			// We now have the correct GT Move record
+			switch params["DeploymentState"] {
+			case "Deployed":
+				baseMove = GTMove["D1"].(float64)
+			case "Bde Out":
+				baseMove = GTMove["D2"].(float64)
+			case "Deploying":
+				baseMove = GTMove["D3"].(float64)
+			case "Condensed Col":
+				baseMove = GTMove["D4"].(float64)
+			case "Regular Col":
+				baseMove = GTMove["D5"].(float64)
+			case "Extended Col":
+				baseMove = GTMove["D6"].(float64)
+			}
+
+			//acc, _ := strconv.ParseFloat(params["Accumulated"].(string), 64)
+			//turns, _ := strconv.ParseFloat(params["Time"].(string), 64)
+			acc := params["Accumulated"].(float64)
+			//			turns := params["Time"].(float64)
+			turns := 1.0
+
+			// Get the appropriate weather modifier
+			w, _ := getList(col, "Weather")
+			for _, myWeather := range w.Data.([]interface{}) {
+				Weather := myWeather.(map[string]interface{})
+				if Weather["Code"] == params["Weather"] {
+					// We now have the appropriate weather as well
+					//log.Println("Weather does this ", Weather)
+
+					baseMove = baseMove * Weather["Move"].(float64) / 10.0
+					//log.Println("Weather alters base move to ", baseMove)
+				}
+			}
+
+			baseMove *= turns
+			retval["Inches"] = math.Trunc(baseMove)
+			retval["Distance"] = math.Trunc((baseMove + acc) / 10)
+			retval["Diagonal"] = math.Trunc((baseMove + acc) / 15)
+			retval["Accumulated"] = math.Trunc(math.Mod(baseMove+acc, 10))
+		}
+	}
+
+	return retval
 }
 
 func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col) {
@@ -286,6 +346,17 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 
 		case "Get":
 			log.Println("GET request:", RxMsg["Entity"])
+
+		case "Simulator":
+			log.Println("SIMULATE request", RxMsg["Entity"])
+			theEntity := RxMsg["Entity"].(string)
+
+			switch theEntity {
+			case "GTMove":
+				results := GTMove(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(messageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
+			}
 
 		default:
 			log.Println("WTF ?", RxMsg)

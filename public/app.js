@@ -8,6 +8,27 @@ var GunTypes = ['12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
 var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
 var MEOrders = ['Attack','Defend','Bombard','Support/Intercept','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
 var StaffRatings = ['Good','Average','Poor'];
+var METypes = ['A Infantry','B Infantry','Cavalry','Class I Arty', 'Class II III Arty','Corps Baggage', 'Horse Arty', 'Pontoon Train'];
+var DeploymentStates = ['Deployed','Bde Out','Deploying','Condensed Col','Regular Col','Extended Col'];
+var TerrainTypes = ['Marchfeld','Rolling','Rough','Hill','Town'];
+var WeatherStates = ['Clear','Calm','Cold','Frost','Fog','Hot','HvRain','HvSnow','LtRain','Mud','Sleet','Snow']
+
+var Lookups = {
+	Ratings: Ratings,
+	DrillBooks: DrillBooks,
+	Equips: Equips,
+	SkirmishRatings: SkirmishRatings,
+	CavMoveTypes: CavMoveTypes,
+	GunneryClasses: GunneryClasses,
+	GunTypes: GunTypes,
+	HWTypes: HWTypes,
+	MEOrders: MEOrders,
+	StaffRatings: StaffRatings,
+	METypes: METypes,
+	DeploymentStates: DeploymentStates,
+	TerrainTypes: TerrainTypes,
+	WeatherStates: WeatherStates
+}
 
 var defaultGridOptions = { 
 		data: 'FilteredData',
@@ -388,16 +409,18 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			action: '@',
 			form: '@'
 		},		
-		template: '<button type="button" class="btn btn-s" ng-click="console.log(editForm); editForm(row,\'{{form}}\')"><i class="fa fa-fw fa-file-text"></i></button>'
+		template: '<button type="button" class="btn btn-s" ng-click="editForm(row,\'{{form}}\')"><i class="fa fa-fw fa-file-text"></i></button>'
 	}
 })
 .directive('simBtn', function(){
 	return {
 		restrict: 'E',
 		scope: {
-			action: '@'
+			simName: '@sim',
+			sim: '=',
+			form: '@'
 		},				
-		template: '<button type="button" class="btn btn-danger" bs-modal="{{action}}"><i class="fa fa-fw fa-cogs fa-lg"></i></button>'
+		template: '<button type="button" class="btn btn-danger" bs-modal="{{sim}}" data-content-template="{{form}}"><i class="fa fa-fw fa-cogs fa-lg"></i></button>'
 	}
 })
 .directive('entryField', function(){
@@ -480,10 +503,12 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 						angular.copy(RxMsg.Data,sub.Data);
 						gotSome = true;
 						break;
+
 					case "Add":
 						sub.Data.push(RxMsg.Data);
 						gotSome = true;
 						break;
+
 					case "Update":
 						var data = RxMsg.Data;
 
@@ -502,6 +527,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 							sub.Data.push(data);
 							gotSome = true;
 						}		
+						break;
+
 					case "Delete":
 						var data = RxMsg.Data;
 
@@ -513,6 +540,15 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 								gotSome = true;
 							}
 						});
+						break;
+
+					case "Simulate":
+						var data = RxMsg.Data;
+						if (sub.Simulator) {
+							sub.Simulator(data);
+						}
+						break;
+
 
 
 				} // switch
@@ -792,8 +828,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	DataSocket.connect([
 		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
-	]);	
-	
+	]);		
 }])
 .controller("CavalryCtrl", ["$scope", "DataSocket", "$rootScope", function($scope, DataSocket, $rootScope){
 	$scope.Data = [];
@@ -2858,13 +2893,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         	directions: ['asc']    	
         },
         columnDefs: [
-           	{field:'METype', width: 240}, 
+           	{field:'METype', width: 200}, 
            	{field:'D1', displayName: 'Deployed',width: 120},
            	{field:'D2', displayName: 'Bde Out',width: 120},
            	{field:'D3', displayName: 'Deploying',width: 120},
-           	{field:'D4', displayName: 'Cond Column',width: 120},
-           	{field:'D5', displayName: 'Reg Column',width: 120},
-           	{field:'D6', displayName: 'Extd Column',width: 120},
+           	{field:'D4', displayName: 'Condensed Col',width: 120},
+           	{field:'D5', displayName: 'Regular Col',width: 120},
+           	{field:'D6', displayName: 'Extended Col',width: 120},
            	{field: '', cellTemplate: '<button type="button" class="btn btn-s" ng-click="editForm(row, \'forms/editGTMovement.html\')"><i class="fa fa-fw fa-file-text"></i></button>'},
 //           	{field: 'e2', cellTemplate: '<edit-btn action="editForm" form="forms/editGTMovement.html"></edit-btn>'}
         ]
@@ -2928,12 +2963,52 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     };
 
 	$scope.simulator = {
-		title: $scope.title + ' Simulator',
-		content: "Simulator<br> Content",
+		title: 'GT Movement Simulator',
+		METype: 'A Infantry',
+		DeploymentState: 'Condensed Col',
+		Terrain: 'Marchfeld',
+		Weather: 'Calm',
+		Accumulated: 0,
+		//Remaining: 0,
+		Time: 1,
+		Distance: 2,
+		Diagonal: 1,
+		Inches: 20,
+		Lookups: Lookups,
+		calc: function(from) {
+			var Data = {
+				METype: this.METype,
+				DeploymentState: this.DeploymentState,
+				Terrain: this.Terrain,
+				Weather: this.Weather,
+				Time: this.Time,
+				Distance: this.Distance,
+				Diagonal: this.Diagonal,
+				Inches: this.Inches,
+				Accumulated: this.Accumulated,
+				From: from
+			}
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":Data}));
+		}
 	};
 
+	$scope.simResults = function(data) {
+		console.log("Received Simulation results", data);
+		$scope.simulator.Inches = data.Inches;
+		$scope.simulator.Distance = data.Distance;
+		$scope.simulator.Diagonal = data.Diagonal;
+		$scope.simulator.METype = data.METype;
+		$scope.simulator.DeploymentState = data.DeploymentState;
+		$scope.simulator.Terrain = data.Terrain;
+		$scope.simulator.Weather = data.Weather;
+		$scope.simulator.Accumulated = data.Accumulated;
+		//$scope.simulator.Remaining = data.Remaining;
+		$scope.simulator.Time = data.Time;
+		$scope.$apply();
+	}
+
 	DataSocket.connect([
-		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
+		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData, "Simulator": $scope.simResults}
 	]);
 	
 }])
