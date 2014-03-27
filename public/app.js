@@ -359,6 +359,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
  			templateUrl: 'forms/WeatherRegion.html',
  			controller: 'WeatherRegionCtrl'
  		}) 		
+ 		.state('eng.TerrainEffect', {
+ 			url: '/TerrainEffect',
+ 			templateUrl: 'forms/TerrainEffect.html',
+ 			controller: 'TerrainEffectCtrl'
+ 		}) 		
 		.state('oob', {
  			url: '/oob',
  			templateUrl: 'navs/oob.html',
@@ -6206,6 +6211,78 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     $scope.newRow = function() {
     	$scope.Data.push({"@id": '0', Region: '~ ??? ~'})
     }
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+	]);
+}])
+.controller("TerrainEffectCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Terrain Effects";
+	$scope.docs = "Chapitre 25, pp176-179";
+	$scope.Entity = "Terrain";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Code'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 100}, 
+           	{field:'Descr', displayName: 'Description', width: 240},
+           	{field:'Sight', width: 100},
+           	{field:'Disorder', width: 100},
+           	{field:'Obstacle', width: 100},
+           	{field:'Move', width: 100},
+           	{field:'FireTarget', width: 100},
+           	{field:'ArtyTarget', width: 100},
+           	{field:'Defence', width: 100},
+           	{field:'Morale', width: 100},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("TerrainUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
 
 	$scope.changeData = function(d) {
 		$scope.$apply();

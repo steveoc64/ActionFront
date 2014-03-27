@@ -693,6 +693,19 @@ type WeatherRegion struct {
 	D13    string
 }
 
+type Terrain struct {
+	Code       string
+	Descr      string
+	Sight      uint8
+	Disorder   bool
+	Obstacle   uint8
+	Move       uint8
+	FireTarget int8
+	ArtyTarget int8
+	Defence    int8
+	Morale     int8
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -3122,6 +3135,24 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Italy/Spain/Med", "Winter", "HvSnow", "Snow", "Snow", "Sleet", "LtRain", "Mud", "Calm", "Clear", "Clear", "Fog", "HvRain", "Sleet", "Snow"}))
 	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Russia/Poland", "Winter", "HvSnow", "Mud", "Frost", "LtRain", "Sleet", "Sleet", "Calm", "Clear", "Cold", "Snow", "Snow", "HvSnow", "HvSnow"}))
 	gameData.Insert(DataMap("WeatherRegion", WeatherRegion{"Middle East", "Winter", "Snow", "LtRain", "LtRain", "Fog", "Clear", "Clear", "Clear", "Clear", "Clear", "Calm", "Calm", "LtRain", "HvRain"}))
+
+	gameData.Insert(DataMap("Terrain", Terrain{"Marchfeld", "Clear, open ground", 10, false, 0, 11, 1, 1, -1, 1}))
+	gameData.Insert(DataMap("Terrain", Terrain{"Rolling", "Rolling terrain, with areas of dead ground", 10, false, 0, 10, 0, -1, 1, 1}))
+	gameData.Insert(DataMap("Terrain", Terrain{"Rough", "Rough and uneven ground", 10, false, 1, 8, -1, -1, 1, 0}))
+	gameData.Insert(DataMap("Terrain", Terrain{"Soft", "Soft marshy ground, with mud", 10, true, 2, 6, -1, -2, 0, -1}))
+	gameData.Insert(DataMap("Terrain", Terrain{"Swamp", "Permanent swamp", 10, true, 3, 4, -1, -2, 1, -2}))
+	gameData.Insert(DataMap("Terrain", Terrain{"PlowedField", "Plowed Fields", 10, false, 2, 8, -1, -2, 1, 1}))
+	gameData.Insert(DataMap("Terrain", Terrain{"RockyField", "Fields with rocks", 10, false, 1, 8, 0, 2, 1, -1}))
+	gameData.Insert(DataMap("Terrain", Terrain{"Ditch", "Drainage ditches", 10, true, 3, 6, -2, -2, 2, 2}))
+	gameData.Insert(DataMap("Terrain", Terrain{"LtWoods", "Light Woods", 3, true, 2, 7, -2, 0, 2, 0}))
+	gameData.Insert(DataMap("Terrain", Terrain{"MdWoods", "Medium Woods", 1, true, 3, 5, -3, -1, 2, -1}))
+	gameData.Insert(DataMap("Terrain", Terrain{"HvWoods", "Heavy Woods", 1, true, 3, 3, -4, -2, 3, -2}))
+	gameData.Insert(DataMap("Terrain", Terrain{"RockyHill", "Rocky Hills", 5, true, 3, 5, -1, 2, 2, 1}))
+	gameData.Insert(DataMap("Terrain", Terrain{"SteepHill", "Steep Hills", 5, true, 4, 2, -2, -1, 3, 3}))
+	gameData.Insert(DataMap("Terrain", Terrain{"WoodedHill", "Wooded Hills", 3, true, 4, 3, -3, -3, 4, 2}))
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Commanders Database
 
 	// Now create some indexes
 	log.Println("Creating Index on Type")
