@@ -1,6 +1,10 @@
 <div class="panel panel-primary col-xs-12" >
   <div class="panel-heading">
-    <h3 class="panel-title">{{title}}</h3> {{docs}}
+    <h3 class="panel-title">{{title}}
+      <span class="pull-right"> 
+        <help-btn title="Deployment Result" file="help/WeatherRegion.html"><help-btn>
+      </span>      
+    </h3> {{docs}}
   </div>
   <div class="panel-body">
     <div class="gridStyle" ng-grid="gridOptions"></div>

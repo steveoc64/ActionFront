@@ -1,6 +1,10 @@
 <div class="panel panel-primary col-xs-6" >
   <div class="panel-heading">
-    <h3 class="panel-title">{{maintitle}}</h3> {{docs}}
+    <h3 class="panel-title">{{maintitle}}
+      <span class="pull-right"> 
+        <help-btn title="Deployment Result" file="help/MEFatigue.html"><help-btn>
+      </span>      
+    </h3> {{docs}}
   </div>
   <div class="panel-body">
     <div class="gridStyle" ng-grid="gridOptions"></div>
@@ -8,7 +12,11 @@
 </div>
 <div class="panel panel-primary col-xs-6">
   <div class="panel-heading">
-    <h3 class="panel-title">{{modtitle}}</h3> {{moddocs}}
+    <h3 class="panel-title">{{modtitle}}
+      <span class="pull-right"> 
+        <help-btn title="Deployment Result" file="help/MEFatigueMods.html"><help-btn>
+      </span>      
+    </h3> {{moddocs}}
   </div>
   <div class="panel-body">
     <div class="gridStyle" ng-grid="gridOptionsMods"></div>

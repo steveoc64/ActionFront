@@ -1,6 +1,10 @@
 <div class="panel panel-primary col-xs-6" >
   <div class="panel-heading">
-    <h3 class="panel-title">{{title}}</h3> {{docs}}
+    <h3 class="panel-title">{{title}}
+      <span class="pull-right"> 
+        <help-btn title="Deployment Result" file="help/StreetFight.html"><help-btn>
+      </span>      
+    </h3> {{docs}}
   </div>
   <div class="panel-body">
     <div class="gridStyle" ng-grid="gridOptions"></div>
@@ -8,7 +12,11 @@
 </div>
 <div class="panel panel-primary col-xs-6">
   <div class="panel-heading">
-    <h3 class="panel-title">{{title2}}</h3> {{docs2}}
+    <h3 class="panel-title">{{title2}}
+      <span class="pull-right"> 
+        <help-btn title="Deployment Result" file="help/StreetFightMods.html"><help-btn>
+      </span>      
+    </h3> {{docs2}}
   </div>
   <div class="panel-body">
     <div class="gridStyle" ng-grid="gridOptions2"></div>
