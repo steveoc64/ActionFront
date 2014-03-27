@@ -2545,7 +2545,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Score', width: 80}, 
            	{field:'Descr', displayName:'Description',width: 300}, 
-           	{field:'OnlyIfNotLastTurn', displayName:'Only if not last turn',width: 120, editableCellTemplate: 'tpl/onlyNotLastTurnTemplate.html'},
+           	{field:'OnlyIfNotLastTurn', displayName:'Only if not last turn',width: 120, editableCellTemplate: 'tpl/onlyIfNotLastTurnTemplate.html'},
         ]
 	};
 
