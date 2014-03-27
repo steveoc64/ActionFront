@@ -706,6 +706,15 @@ type Terrain struct {
 	Morale     int8
 }
 
+type Supply struct {
+	Code   string
+	Descr  string
+	Food   uint16
+	Powder uint16
+	Gold   uint16
+	Hay    uint16
+}
+
 // Create a DataMap envelope with type name and a JSON representation of the thing
 func DataMap(typeName string, thing interface{}) map[string]interface{} {
 	var jsonThing, err = json.Marshal(thing)
@@ -3150,6 +3159,24 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Terrain", Terrain{"RockyHill", "Rocky Hills", 5, true, 3, 5, -1, 2, 2, 1}))
 	gameData.Insert(DataMap("Terrain", Terrain{"SteepHill", "Steep Hills", 5, true, 4, 2, -2, -1, 3, 3}))
 	gameData.Insert(DataMap("Terrain", Terrain{"WoodedHill", "Wooded Hills", 3, true, 4, 3, -3, -3, 4, 2}))
+
+	gameData.Insert(DataMap("Supply", Supply{"I0", "Local Militia - Per Base", 0, 1, 0, 0}))
+	gameData.Insert(DataMap("Supply", Supply{"I1", "'Volunteer' Infantry - Per Base", 1, 1, 0, 0}))
+	gameData.Insert(DataMap("Supply", Supply{"I2", "Conscript Infantry - Per Base", 1, 1, 1, 0}))
+	gameData.Insert(DataMap("Supply", Supply{"I3", "Regular Infantry - Per Base", 2, 1, 2, 0}))
+	gameData.Insert(DataMap("Supply", Supply{"I4", "Light Infantry - Per Base", 1, 2, 2, 0}))
+	gameData.Insert(DataMap("Supply", Supply{"I5", "Elite Infantry - Per Base", 3, 2, 4, 0}))
+	gameData.Insert(DataMap("Supply", Supply{"C1", "Dubious Cavalry - Per Sqn", 1, 1, 1, 1}))
+	gameData.Insert(DataMap("Supply", Supply{"C2", "Light Cavalry - Per Sqn", 1, 1, 2, 1}))
+	gameData.Insert(DataMap("Supply", Supply{"C3", "Medium Cavalry - Per Sqn", 2, 1, 3, 2}))
+	gameData.Insert(DataMap("Supply", Supply{"C4", "Heavy Cavalry - Per Sqn", 3, 1, 5, 3}))
+	gameData.Insert(DataMap("Supply", Supply{"A1", "Light Artillery - Per Section", 1, 5, 5, 5}))
+	gameData.Insert(DataMap("Supply", Supply{"A2", "Field Artillery - Per Section", 2, 10, 10, 10}))
+	gameData.Insert(DataMap("Supply", Supply{"A3", "Heavy Artillery - Per Section", 2, 20, 20, 20}))
+	gameData.Insert(DataMap("Supply", Supply{"L1", "Brigade Leader", 10, 1, 100, 10}))
+	gameData.Insert(DataMap("Supply", Supply{"L2", "Division / ME Commander", 20, 1, 200, 20}))
+	gameData.Insert(DataMap("Supply", Supply{"L3", "Corps Commander", 30, 1, 400, 40}))
+	gameData.Insert(DataMap("Supply", Supply{"L4", "Army / Wing Commander", 40, 1, 1000, 100}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Commanders Database

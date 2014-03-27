@@ -364,6 +364,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
  			templateUrl: 'forms/TerrainEffect.html',
  			controller: 'TerrainEffectCtrl'
  		}) 		
+ 		.state('eng.Supply', {
+ 			url: '/Supply',
+ 			templateUrl: 'forms/Supply.html',
+ 			controller: 'SupplyCtrl'
+ 		}) 		
 		.state('oob', {
  			url: '/oob',
  			templateUrl: 'navs/oob.html',
@@ -6257,6 +6262,74 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.update = function(row) {
 		console.log("TerrainUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+	]);
+}])
+.controller("SupplyCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Weekly Supply Costs";
+	$scope.docs = "House Rules";
+	$scope.Entity = "Supply";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Code'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Code', width: 100}, 
+           	{field:'Descr', displayName: 'Description', width: 240},
+           	{field:'Food', width: 100},
+           	{field:'Powder', width: 100},
+           	{field:'Gold', width: 100},
+           	{field:'Hay', width: 100},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("SupplyUpdated -> ",row.entity);
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
