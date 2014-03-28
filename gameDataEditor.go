@@ -7,6 +7,7 @@ import (
 	"github.com/appio/websocket"
 	"github.com/codegangsta/martini"
 	"github.com/steveoc64/ActionFront/gamedatadb"
+	"github.com/steveoc64/ActionFront/oob"
 	"github.com/steveoc64/tiedot/db"
 	"log"
 	"math"
@@ -57,6 +58,13 @@ func initDB() *db.Col {
 		gamedatadb.CreateGameData(gameData)
 	}
 	myDB.Scrub("GameData")
+
+	if err := myDB.Create("OOB", 1); err == nil {
+		// This is a fresh OOB database, so insert some default OOBs
+
+		oobData := myDB.Use("OOB")
+		oob.CreateOOB(oobData)
+	}
 	ListCache = make(map[string]interface{})
 
 	return myDB.Use("GameData")
