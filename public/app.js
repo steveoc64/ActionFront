@@ -379,6 +379,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
  			templateUrl: 'forms/unitTypes.formations.html',
  			controller: 'FormationsCtrl'
  		}) 		
+ 		.state('oob.Commanders', {
+ 			url: '/commanders',
+ 			templateUrl: 'forms/Commanders.html',
+ 			controller: 'CommandersCtrl'
+ 		}) 		
  		;
  }])
 .directive('helpBtn', function(){
@@ -6330,6 +6335,73 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.update = function(row) {
 		console.log("SupplyUpdated -> ",row.entity);
+		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
+	}
+
+	// Capture the cell on start edit, and update if the cell contents change
+	$scope.$on('ngGridEventStartCellEdit',function(evt){
+		$scope.saveCell = evt.targetScope.row.entity[evt.targetScope.col.field];
+	});
+	$scope.$on('ngGridEventEndCellEdit', function(evt){
+		// Nasty problem here - need to work out WHICH GRID this even belongs to
+		row = evt.targetScope.row.entity;
+		if (row[evt.targetScope.col.field] != $scope.saveCell) {
+			console.log($scope.saveCell, ':', row);
+			targetID = row["@id"];
+			gotSome = false;
+			angular.forEach($scope.Data, function(v,i){
+				if (v["@id"] == targetID) {
+					//console.log("The update is on the first grid");
+					DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row}));
+					gotSome = true;
+				}
+			});
+			if (!gotSome) {
+				$scope.update(evt.targetScope.row);	
+			}
+		}
+    });
+
+	$scope.changeData = function(d) {
+		$scope.$apply();
+	}
+
+	DataSocket.connect([
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+	]);
+}])
+.controller("CommandersCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+	$scope.Data = [];
+	$scope.title = "Commanders";
+	$scope.docs = "Appendix A";
+	$scope.Entity = "Commander";
+
+	$scope.gridOptions = { 
+		data: 'Data',
+		enableCellSelection: true,
+        enableCellEdit: true,
+        enableColumnResize: true,
+        enableColumnReordering: false,
+        enableSorting: true,
+        showColumnMenu: false,
+        showFilter: false,
+        showFooter: true,
+        footerTemplate: 'gridFooterTemplate.html',
+        sortInfo: {
+        	fields:['Nation'],
+        	directions:['asc']
+        },
+        columnDefs: [
+           	{field:'Nation', width: 180}, 
+           	{field:'Name',  width: 240},
+           	{field:'Army', displayName:'Army Command', width: 200},
+           	{field:'Corps', displayName: 'Corps Command', width: 200},
+           	{field:'Inspiration', width: 120},
+        ]
+	};
+
+	$scope.update = function(row) {
+		console.log("CommanderUpdated -> ",row.entity);
 		DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":row.entity}));
 	}
 
