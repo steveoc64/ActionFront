@@ -1,16 +1,22 @@
 <div class="panel panel-default">
-	<div class="panel-heading">Extra Movement</div>
+	<div class="panel-heading">Changing Formation</div>
 	<div class="panel-body">
-		During tactical movement, the player may attempt to spend a CommanderAction to urge his formed troops forward faster.
+		During tactical movement, a unit may change formation as part of its movement, which in turn affects the distance that the unit may move.
 
 		<p><p>
-		Select which units this applies to, and select the extent of the extra move - 50m, 100m, 150m.  (1", 2", 3")
+		To use this table, cross reference the Movement Class of the unit (Either Divisional, or Ancien Regime), with the current formation. The resultant values show the movement cost of changing formation.
 
 		<p><p>
-		The Extra Movement table shows the probability of the unit becoming disordered from this extra movement, as a function of the extra distance itself and the type of terrain they are moving through.
+		The resulting number is the number of inches that the unit may continue to move.
+		If the value is Zero or negative, then the following notes apply :
 
-		<p><p>
-		Roll 1D10  <=  the resulting number to become disordered due to the extra move.
+		<ul>
+			<li>0 - Not Allowed</li>
+			<li>-1 - Formation change takes entire turn, unit may fire.</li>
+			<li>-2 - Formation change takes entire turn, no fire.</li>
+			<li>-3 - Formation change takes entire turn, no fire and disordered.</li>
+		</ul>
+
 	</div>
 </div>
 
