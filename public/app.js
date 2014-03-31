@@ -2987,10 +2987,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		//Remaining: 0,
 		Time: 1,
 		Distance: 2,
-		Diagonal: 1,
 		Inches: 20,
 		Forced: false,
 		MarchOrder: false,
+		Diagonal: false,
 		Lookups: Lookups,
 		clear: function() {
 			this.Accumulated = 0
@@ -3023,9 +3023,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.simulator.Terrain = data.Terrain;
 		$scope.simulator.Weather = data.Weather;
 		$scope.simulator.Accumulated = data.Accumulated;
-		//$scope.simulator.Remaining = data.Remaining;
 		$scope.simulator.Time = data.Time;
 		$scope.simulator.Forced = data.Forced;
+		$scope.simulator.Diagonal = data.Diagonal;
 		$scope.simulator.MarchOrder = data.MarchOrder;
 		$scope.$apply();
 	}

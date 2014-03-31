@@ -42,11 +42,16 @@
       		<input type="checkbox" ng-model="sim.MarchOrder" ng-change="sim.calc()"> March Orders</input>
     	</label>
     </div>
+	<div class="checkbox">
+		<label class="col-sm-3"></label>
+    	<label>
+      		<input type="checkbox" ng-model="sim.Diagonal" ng-change="sim.calc()"> Diagonal Movement</input>
+    	</label>
+    </div>
 
 	<display-field id="Accumulated" span="3" label="Accumulated Movement" ng-model="sim.Accumulated"></display-field>
 	<display-field id="Inches" span="3" label="Distance in Inches" ng-model="sim.Inches"></display-field>
 	<display-field id="Distance" span="3" label="Distance in Grids" ng-model="sim.Distance"></display-field>
-	<display-field id="Diagonal" span="3" label="Diagonal Grids" ng-model="sim.Diagonal"></display-field>
 
 </div>
 
@@ -54,7 +59,7 @@
 
   <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
   <button type="button" class="btn btn-warning" ng-click="sim.clear()">Clear Accumulated</button>
-  <button type="button" class="btn btn-primary" ng-click="sim.calc()">Calculate</button>
+  <button type="button" class="btn btn-primary" ng-click="sim.calc()">GT Move</button>
 
 </div>
 </form>

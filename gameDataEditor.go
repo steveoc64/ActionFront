@@ -173,8 +173,8 @@ func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 	retval["Accumulated"] = params["Accumulated"]
 	retval["Forced"] = params["Forced"]
 	retval["MarchOrder"] = params["MarchOrder"]
+	retval["Diagonal"] = params["Diagonal"]
 	retval["Distance"] = 0
-	retval["Diagonal"] = 0
 	retval["Inches"] = 0
 
 	var baseMove float64
@@ -244,10 +244,13 @@ func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 			}
 
 			baseMove *= turns
+			inchesPerGrid := 10.0
+			if params["Diagonal"].(bool) {
+				inchesPerGrid = 15.0
+			}
 			retval["Inches"] = math.Trunc(baseMove)
-			retval["Distance"] = math.Trunc((baseMove + acc) / 10)
-			retval["Diagonal"] = math.Trunc((baseMove + acc) / 15)
-			retval["Accumulated"] = math.Trunc(math.Mod(baseMove+acc, 10))
+			retval["Distance"] = math.Trunc((baseMove + acc) / inchesPerGrid)
+			retval["Accumulated"] = math.Trunc(math.Mod(baseMove+acc, inchesPerGrid))
 		}
 	}
 
