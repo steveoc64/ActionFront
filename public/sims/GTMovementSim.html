@@ -5,53 +5,53 @@
 	<div class="form-group">
 		<label for="METype" class="col-sm-3 control-label">ME Type</label>
 		<div class="col-sm-6">
-			<select id="METype" ng-model="simulator.METype" ng-options="t for t in Lookups.METypes" ng-change="simulator.calc()"></select>
+			<select id="METype" ng-model="simulator.data.METype" ng-options="t for t in Lookups.METypes" ng-change="simulator.calc()"></select>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label for="DState" class="col-sm-3 control-label">Deployment State</label>
 		<div class="col-sm-6">
-			<select id="DState" ng-model="simulator.DeploymentState" ng-options="d for d in Lookups.DeploymentStates" ng-change="simulator.calc()"></select>
+			<select id="DState" ng-model="simulator.data.DeploymentState" ng-options="d for d in Lookups.DeploymentStates" ng-change="simulator.calc()"></select>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label for="Terrain" class="col-sm-3 control-label">Terrain Type</label>
 		<div class="col-sm-6">
-			<select id="Terrain" ng-model="simulator.Terrain" ng-options="r for r in Lookups.TerrainTypes" ng-change="simulator.calc()"></select>
+			<select id="Terrain" ng-model="simulator.data.Terrain" ng-options="r for r in Lookups.TerrainTypes" ng-change="simulator.calc()"></select>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label for="Weather" class="col-sm-3 control-label">Weather Conditions</label>
 		<div class="col-sm-6">
-			<select id="Weather" ng-model="simulator.Weather" ng-options="w for w in Lookups.WeatherStates" ng-change="simulator.calc()"></select>
+			<select id="Weather" ng-model="simulator.data.Weather" ng-options="w for w in Lookups.WeatherStates" ng-change="simulator.calc()"></select>
 		</div>
 	</div>
 
 	<div class="checkbox">
 		<label class="col-sm-3"></label>
     	<label>
-      		<input type="checkbox" ng-model="simulator.Forced" ng-change="simulator.calc()"> Forced March</input>
+      		<input type="checkbox" ng-model="simulator.data.Forced" ng-change="simulator.calc()"> Forced March</input>
     	</label>
 	</div>
 	<div class="checkbox">
 		<label class="col-sm-3"></label>
     	<label>
-      		<input type="checkbox" ng-model="simulator.MarchOrder" ng-change="simulator.calc()"> March Orders</input>
+      		<input type="checkbox" ng-model="simulator.data.MarchOrder" ng-change="simulator.calc()"> March Orders</input>
     	</label>
     </div>
 	<div class="checkbox">
 		<label class="col-sm-3"></label>
     	<label>
-      		<input type="checkbox" ng-model="simulator.Diagonal" ng-change="simulator.calc()"> Diagonal Movement</input>
+      		<input type="checkbox" ng-model="simulator.data.Diagonal" ng-change="simulator.calc()"> Diagonal Movement</input>
     	</label>
     </div>
 
-	<display-field id="Accumulated" span="3" label="Accumulated Movement" ng-model="simulator.Accumulated"></display-field>
-	<display-field id="Inches" span="3" label="Distance in Inches" ng-model="simulator.Inches"></display-field>
-	<display-field id="Distance" span="3" label="Distance in Grids" ng-model="simulator.Distance"></display-field>
+	<display-field id="Accumulated" span="3" label="Accumulated Movement" ng-model="simulator.data.Accumulated"></display-field>
+	<display-field id="Inches" span="3" label="Distance in Inches" ng-model="simulator.data.Inches"></display-field>
+	<display-field id="Distance" span="3" label="Distance in Grids" ng-model="simulator.data.Distance"></display-field>
 
 </div>
 

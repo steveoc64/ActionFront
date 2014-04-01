@@ -11,7 +11,8 @@ var StaffRatings = ['Good','Average','Poor'];
 var METypes = ['A Infantry','B Infantry','Cavalry','Class I Arty', 'Class II III Arty','Corps Baggage', 'Horse Arty', 'Pontoon Train'];
 var DeploymentStates = ['Deployed','Bde Out','Deploying','Condensed Col','Regular Col','Extended Col'];
 var TerrainTypes = ['Marchfeld','Rolling','Rough','Hill','Town'];
-var WeatherStates = ['Clear','Calm','Cold','Frost','Fog','Hot','HvRain','HvSnow','LtRain','Mud','Sleet','Snow']
+var WeatherStates = ['Clear','Calm','Cold','Frost','Fog','Hot','HvRain','HvSnow','LtRain','Mud','Sleet','Snow'];
+var DeploymentRatings = ['Average','French Guard','French 1792-1799','French 1800-1807','French 1808-1812','French 1815','French Allied 1807','French Conscript','British','Austrian 1792-1805','Russian 1802-1805','Prussian 1792-1806','Militia'];
 
 var Lookups = {
 	Ratings: Ratings,
@@ -27,7 +28,8 @@ var Lookups = {
 	METypes: METypes,
 	DeploymentStates: DeploymentStates,
 	TerrainTypes: TerrainTypes,
-	WeatherStates: WeatherStates
+	WeatherStates: WeatherStates,
+	DeploymentRatings: DeploymentRatings,
 }
 
 var defaultGridOptions = { 
@@ -549,7 +551,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 					case "Simulate":
 						var data = RxMsg.Data;
 						if (sub.Simulator) {
-							sub.Simulator(data);
+							sub.Simulator.results(data);
 						}
 						break;
 
@@ -1898,28 +1900,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-//    $scope.newRow = function() {
-//    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-//    }
-
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
-
-	$scope.addNewRow = {
-		title: 'Add new record',
-		content: 'Need to create a dialog here to add a new record'
-	};
-
-    $scope.simulator = {
-    	title: $scope.title + ' Simulator',
-    	content: 'Simulator'
-    };
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
@@ -2025,24 +2008,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
-		$scope.$apply();
-	}
-
-	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
-		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	
 }])
@@ -2930,7 +2902,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     }
 
     $scope.editor = {
-    	title: "GT Movement Record",
     	newRec: {
     		METype: "New ME Type",
     		D1: 26,
@@ -2974,18 +2945,20 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
     };
 
 	$scope.simulator = {
-		METype: 'A Infantry',
-		DeploymentState: 'Condensed Col',
-		Terrain: 'Marchfeld',
-		Weather: 'Calm',
-		Accumulated: 0,
-		Time: 1,
-		Distance: 2,
-		Inches: 20,
-		Forced: false,
-		MarchOrder: false,
-		Diagonal: false,
-		
+		data: {
+			METype: 'A Infantry',
+			DeploymentState: 'Condensed Col',
+			Terrain: 'Marchfeld',
+			Weather: 'Calm',
+			Accumulated: 0,
+			Time: 1,
+			Distance: 2,
+			Inches: 20,
+			Forced: false,
+			MarchOrder: false,
+			Diagonal: false,
+		},
+
 		showForm: function() {
 			var myEditor = {
 				title: "GT Movement Simulator",
@@ -2998,46 +2971,21 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.Accumulated = 0
 		},
 		calc: function() {
-			var Data = {
-				METype: this.METype,
-				DeploymentState: this.DeploymentState,
-				Terrain: this.Terrain,
-				Weather: this.Weather,
-				Time: this.Time,
-				Distance: this.Distance,
-				Diagonal: this.Diagonal,
-				Inches: this.Inches,
-				Accumulated: this.Accumulated,
-				Forced: this.Forced,
-				MarchOrder: this.MarchOrder
-			}
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":Data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
 		}
 	};
 
-	$scope.simResults = function(data) {
-		console.log("Received Simulation results", data);
-		$scope.simulator.Inches = data.Inches;
-		$scope.simulator.Distance = data.Distance;
-		$scope.simulator.Diagonal = data.Diagonal;
-		$scope.simulator.METype = data.METype;
-		$scope.simulator.DeploymentState = data.DeploymentState;
-		$scope.simulator.Terrain = data.Terrain;
-		$scope.simulator.Weather = data.Weather;
-		$scope.simulator.Accumulated = data.Accumulated;
-		$scope.simulator.Time = data.Time;
-		$scope.simulator.Forced = data.Forced;
-		$scope.simulator.Diagonal = data.Diagonal;
-		$scope.simulator.MarchOrder = data.MarchOrder;
-		$scope.$apply();
-	}
-
 	DataSocket.connect([
-		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData, "Simulator": $scope.simResults}
+		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData, "Simulator": $scope.simulator}
 	]);
 	
 }])
-.controller("DeploymentCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("DeploymentCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.ModData = [];
 	$scope.DepData = [];
@@ -3050,6 +2998,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.Entity = "Deployment";
 	$scope.ModEntity = "DeploymentMod";
 	$scope.DepEntity = "DeploymentState";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -3175,26 +3124,79 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-    $scope.newRow3 = function() {
-    	$scope.DepData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
-	$scope.changeModData = function(d) {
-		$scope.$apply();
-	}
+    $scope.editor = {
+    	newRec: {
+    		Score: 0,
+    		Change: 0,
+    	},
+    	editRec: {},
+    	add: function() {
+			DataSocket.send(JSON.stringify({"Action":"Add","Entity":$scope.Entity,"Data":this.newRec}));
+    	},
+		update: function() {
+			DataSocket.send(JSON.stringify({"Action":"Update","Entity":$scope.Entity,"Data":this.editRec}));
+		},
+		delete: function() {
+			DataSocket.send(JSON.stringify({"Action":"Delete","Entity":$scope.Entity,"ID":$scope.ID}));
+		},
+		showAddForm: function() {
+			var myEditor = {
+				title: "Add "+this.title,
+				contentTemplate: "forms/addDeploymentResult.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		showEditForm: function(row) {
+			this.editRec = row.entity;
+			var myEditor = {
+				title: "Edit "+this.title,
+				contentTemplate: "forms/editGTMovement.html",
+				scope: $scope
+			}
+			$scope.ID = row.entity["@id"];
+			$modal(myEditor);
+		}
+    };
+
+	$scope.simulator = {
+		data: {
+			DepRating: 'Average',
+			DepState: 'Condensed Col',
+			MarchCol: false,
+			Darkness: false, 
+			Choke: false,
+			Mud: false,
+			Fog: false,
+			Dice: 0,
+			DieMods: 0,
+			Grids: 0,
+			Result: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Deployment Simulator",
+				contentTemplate: "sims/Deployment.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData},
 		{Entity: $scope.DepEntity, Data: $scope.DepData, Callback: $scope.changeData}
 	]);
