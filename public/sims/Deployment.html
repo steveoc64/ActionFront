@@ -1,0 +1,72 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<div class="form-group">
+		<label for="DepRating" class="col-sm-3 control-label">Rating</label>
+		<div class="col-sm-6">
+			<select id="DepRating" ng-model="simulator.data.DepRating" ng-options="t for t in Lookups.DeploymentRatings"></select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="DepState" class="col-sm-3 control-label">Deployment State</label>
+		<div class="col-sm-6">
+			<select id="DepState" ng-model="simulator.data.DepState" ng-options="t for t in Lookups.DeploymentStates"></select>
+		</div>
+	</div>
+
+    <entry-field id="Grids" span="5" label="Grids Moved This Turn" ng-model="simulator.Grids"></entry-field>
+    <hr>
+
+	<display-field id="Bonus" span="3" label="Die Mods" ng-model="simulator.data.DieMods"></display-field>
+	<display-field id="Dice" span="3" label="Die Roll" ng-model="simulator.data.Dice"></display-field>
+	<display-field id="Result" span="9" label="Result" ng-model="simulator.data.Result"></display-field>
+
+
+	<div class="checkbox">
+		<label class="col-sm-3"></label>
+    	<label>
+      		<input type="checkbox" ng-model="simulator.data.MarchCol"> Deploy to March Column</input>
+    	</label>
+	</div>
+	<div class="checkbox">
+		<label class="col-sm-3"></label>
+    	<label>
+      		<input type="checkbox" ng-model="simulator.data.Darkness"> Darkness</input>
+    	</label>
+	</div>
+
+	<div class="checkbox">
+		<label class="col-sm-3"></label>
+    	<label>
+      		<input type="checkbox" ng-model="simulator.data.Choke"> Deploy from Chokepoint</input>
+    	</label>
+    </div>
+
+	<div class="checkbox">
+		<label class="col-sm-3"></label>
+    	<label>
+      		<input type="checkbox" ng-model="simulator.data.Mud"> Mud in Deployment Area</input>
+    	</label>
+    </div>
+	<div class="checkbox">
+		<label class="col-sm-3"></label>
+    	<label>
+      		<input type="checkbox" ng-model="simulator.data.Fog"> Foggy Conditions</input>
+    	</label>
+    </div>
+
+
+
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Deploy</button>
+
+</div>
+</form>
+
+
