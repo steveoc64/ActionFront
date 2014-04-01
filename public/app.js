@@ -409,33 +409,22 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 .directive('addBtn', function(){
 	return {
 		restrict: 'E',
-		scope: {
-			editorName: '@editor',
-			editor: '=',
-			form: '@'
-		},		
-		template: '<button type="button" class="btn btn-success" bs-modal="{{editorName}}" data-content-template="{{form}}"><i class="fa fa-fw fa-plus-square"></i></button>'
+		scope: true,
+		template: '<button type="button" class="btn btn-success" ng-click="editor.showAddForm()"><i class="fa fa-fw fa-plus-square"></i></button>'
 	}
 })
 .directive('editBtn', function(){
 	return {
 		restrict: 'E',
-		scope: {
-			action: '@',
-			form: '@'
-		},		
-		template: '<button type="button" class="btn btn-s" ng-click="editForm(row,\'{{form}}\')"><i class="fa fa-fw fa-file-text"></i></button>'
+		scope: true,
+		template: '<button type="button" class="btn btn-s" ng-click="editor.showEditForm(row)"><i class="fa fa-fw fa-file-text"></i></button>'
 	}
 })
 .directive('simBtn', function(){
 	return {
 		restrict: 'E',
-		scope: {
-			simName: '@sim',
-			sim: '=',
-			form: '@'
-		},				
-		template: '<button type="button" class="btn btn-danger" bs-modal="{{sim}}" data-content-template="{{form}}"><i class="fa fa-fw fa-cogs fa-lg"></i></button>'
+		scope: true,
+		template: '<button type="button" class="btn btn-danger" ng-click="simulator.showForm()"><i class="fa fa-fw fa-cogs fa-lg"></i></button>'
 	}
 })
 .directive('entryField', function(){
@@ -2891,6 +2880,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.title = "Grand Tactical Movement";
 	$scope.docs = "Table 9.3";
 	$scope.Entity = "GTMove";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -2915,8 +2905,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'D4', displayName: 'Condensed Col',width: 120},
            	{field:'D5', displayName: 'Regular Col',width: 120},
            	{field:'D6', displayName: 'Extended Col',width: 120},
-           	{field: '', cellTemplate: '<button type="button" class="btn btn-s" ng-click="editForm(row, \'forms/editGTMovement.html\')"><i class="fa fa-fw fa-file-text"></i></button>'},
-//           	{field: 'e2', cellTemplate: '<edit-btn action="editForm" form="forms/editGTMovement.html"></edit-btn>'}
+           	{field:'', cellTemplate: '<edit-btn></edit-btn>'}
         ]
 	};
 
@@ -2963,35 +2952,48 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		delete: function() {
 			console.log("GTMoveDelete -> ",this.editRec);
 			DataSocket.send(JSON.stringify({"Action":"Delete","Entity":$scope.Entity,"ID":$scope.ID}));
+		},
+		showAddForm: function() {
+			var myEditor = {
+				title: "Add "+this.title,
+				contentTemplate: "forms/addGTMovement.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		showEditForm: function(row) {
+			this.editRec = row.entity;
+			var myEditor = {
+				title: "Edit "+this.title,
+				contentTemplate: "forms/editGTMovement.html",
+				scope: $scope
+			}
+			$scope.ID = row.entity["@id"];
+			$modal(myEditor);
 		}
     };
 
-    $scope.editForm = function(row, template) {
-    	$scope.editor.editRec = row.entity;
-    	var myEditor = {
-    		title: "Edit "+$scope.editor.title,
-    		contentTemplate: template,
-    		scope: $scope
-    	};
-    	$scope.ID = row.entity["@id"];
-    	$modal(myEditor);
-    };
-
 	$scope.simulator = {
-		title: 'GT Movement Simulator',
 		METype: 'A Infantry',
 		DeploymentState: 'Condensed Col',
 		Terrain: 'Marchfeld',
 		Weather: 'Calm',
 		Accumulated: 0,
-		//Remaining: 0,
 		Time: 1,
 		Distance: 2,
 		Inches: 20,
 		Forced: false,
 		MarchOrder: false,
 		Diagonal: false,
-		Lookups: Lookups,
+		
+		showForm: function() {
+			var myEditor = {
+				title: "GT Movement Simulator",
+				contentTemplate: "sims/GTMovementSim.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
 		clear: function() {
 			this.Accumulated = 0
 		},
@@ -6388,9 +6390,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
-        	fields:['Nation'],
+        	fields:['Name'],
         	directions:['asc']
         },
+        groups: ['Nation'],
         columnDefs: [
            	{field:'Nation', width: 180}, 
            	{field:'Name',  width: 240},
