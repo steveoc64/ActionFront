@@ -1,0 +1,90 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Unit Type</label>
+		<div class="col-sm-9">
+			<select id="UnitType" ng-model="simulator.data.UnitType" ng-change="simulator.clear()" ng-options="t for t in Lookups.TacMoveTypes"></select>
+			<select id="DrillBook" ng-model="simulator.data.DrillBook" ng-change="simulator.clear()" ng-options="t for t in Lookups.DrillBooks"></select>
+			<select id="DrillBook" ng-model="simulator.data.Trained" ng-change="simulator.clear()" ng-options="t for t in Lookups.TrainedTypes"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="Formation" class="col-sm-3 control-label">Formation</label>
+		<div class="col-sm-9">
+			<select id="Formation" ng-model="simulator.data.Formation" ng-change="simulator.syncFormations()" ng-options="t for t in Lookups.TacFormations"></select>
+			<i class="fa fa-lg fa-arrow-right"></i>
+			<select id="FormationTo" ng-model="simulator.data.FormationTo" ng-options="t for t in Lookups.TacFormationTos"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="Terrain" class="col-sm-3 control-label">Terrain</label>
+		<div class="col-sm-6">
+			<select id="Terrain" ng-model="simulator.data.Terrain" ng-options="t for t in Lookups.TerrainTypes"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="Weather" class="col-sm-3 control-label">Weather</label>
+		<div class="col-sm-6">
+			<select id="Weather" ng-model="simulator.data.Weather" ng-options="t for t in Lookups.WeatherStates"></select>
+		</div>
+	</div>
+
+
+	<hr>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Conditions</label>
+		<label>
+			<div class="btn-group">
+				<button type="button" class="btn btn-default" ng-model="simulator.data.LtWood" bs-checkbox>LtWood</button>
+				<button type="button" class="btn btn-default" ng-model="simulator.data.HvWood" bs-checkbox>HvWood</button>
+				<button type="button" class="btn btn-default" ng-model="simulator.data.Mud" bs-checkbox>Mud</button>
+				<button type="button" class="btn btn-default" ng-model="simulator.data.Marsh" bs-checkbox>Marsh</button>
+				<button type="button" class="btn btn-default" ng-model="simulator.data.LoWall" bs-checkbox>LoWall</button>
+				<button type="button" class="btn btn-default" ng-model="simulator.data.HiWall" bs-checkbox>HiWall</button>
+			</div>
+    	</label>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">March Pace</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Extra" bs-radio>Slow March</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Extra" bs-radio>Quick March</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Extra" bs-radio>Double Time</label>
+	    	</div>
+		</label>
+	</div>
+	<hr>
+
+	<div class="form-group">
+		<label class="col-sm-3"></label>
+		<label>
+			<button type="button" class="btn btn-default" ng-model="simulator.data.Diagonal" bs-checkbox>Diagonal</button>
+		</label>
+	</div>
+
+	<display-field label="Quadrants" ng-model="simulator.data.Quadrants" span="2"></display-field>
+
+	<display-field label="Inches" ng-model="simulator.data.Inches" span="3"></display-field>
+	<display-field label="Accumulated" ng-model="simulator.data.Accumulated" span="3"></display-field>
+
+	<display-field label="Disorder" ng-model="simulator.data.Disorder" span="3"></display-field>
+	<display-field label="CanFire" ng-model="simulator.data.Fire" span="3"></display-field>
+	<display-field label="Frontage" ng-model="simulator.data.Frontage" span="3"></display-field>
+	<display-field label="Skirmishers" ng-model="simulator.data.SK" span="3"></display-field>
+
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Tactical Move</button>
+
+</div>
+</form>
+
+

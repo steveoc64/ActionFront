@@ -1,5 +1,5 @@
 var Ratings = ['OldGuard','Guard','Grenadier','Elite','CrackLine','Veteran','Regular','Conscript','Landwehr','Militia','Rabble'];
-var DrillBooks = ['Light Infantry','French','Prussian','Russian','Austrian','British','Old School','Conscript','Militia','Mob'];
+var DrillBooks = ['ClassA','ClassB','Light Infantry','French','Prussian','Russian','Austrian','British','Old School','Conscript','Militia','Mob'];
 var Equips = ['Musket','Carbine','Superior Musket','Poor Musket','Rifle','Bayonet Only','Pike'];
 var SkirmishRatings = ['Superior','Excellent','Good','Average','Poor'];
 var CavMoveTypes = ['Heavy','Medium','Light','Lancer'];
@@ -13,6 +13,10 @@ var DeploymentStates = ['Deployed','Bde Out','Deploying','Condensed Col','Regula
 var TerrainTypes = ['Marchfeld','Rolling','Rough','Hill','Town'];
 var WeatherStates = ['Clear','Calm','Cold','Frost','Fog','Hot','HvRain','HvSnow','LtRain','Mud','Sleet','Snow'];
 var DeploymentRatings = ['Average','French Guard','French 1792-1799','French 1800-1807','French 1808-1812','French 1815','French Allied 1807','French Conscript','British','Austrian 1792-1805','Russian 1802-1805','Prussian 1792-1806','Militia'];
+var TacMoveTypes = ['Artillery','Infantry','Cavalry','LightCav']
+var TacFormations = ['AttackColumn','ClosedColumn','Line','Square','Skirmish',"MarchColumn"]
+var TacFormationTos = ['AttackColumn','ClosedColumn','Line Centre','Line Left','Line Right','Square','Skirmish',"MarchColumn"]
+var TrainedTypes = ['Trained','UnTrained']
 
 var Lookups = {
 	Ratings: Ratings,
@@ -30,6 +34,10 @@ var Lookups = {
 	TerrainTypes: TerrainTypes,
 	WeatherStates: WeatherStates,
 	DeploymentRatings: DeploymentRatings,
+	TacMoveTypes: TacMoveTypes,
+	TacFormations: TacFormations,
+	TacFormationTos: TacFormationTos,
+	TrainedTypes: TrainedTypes,
 }
 
 var defaultGridOptions = { 
@@ -3202,7 +3210,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("TacMovementCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("TacMovementCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.maintitle = "Tactical Movement";
@@ -3211,6 +3219,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.moddocs = "Table 14.3";
 	$scope.Entity = "TacMove";
 	$scope.Entity2 = "AdditionalMove";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -3305,19 +3314,69 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			UnitType: 'Infantry',
+			DrillBook: 'ClassA',
+			Trained: 'Trained',
+			Formation: 'AttackColumn',
+			FormationTo: 'AttackColumn',
+			Terrain: 'Marchfeld', 
+			Extra: 0,
+			Diagonal: false,
+			Mud: false,
+			Marsh: false,
+			LoWall: false,
+			HiWall: false,
+			LtWood: false,
+			HvWood: false,
+			Weather: 'Clear',
+			Accumulated: 0,
+			Quadrants: 0,
+			Inches: 0,
+			Disorder: false,
+			Fire: false,
+			Frontage: 1,
+			SK: 0,
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Tactical Movement Simulator",
+				contentTemplate: "sims/TacMove.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Accumulated = 0;
+			this.data.Inches = 0;
+			this.data.Disorder = false;
+			this.data.LtWood = this.data.HvWood = this.data.Mud = this.data.LoWall = this.data.HiWall = this.data.Marsh = false;
+			this.data.Extra = 0;
+		},
+		syncFormations: function() {
+			if (this.data.Formation == 'Line') {
+				this.data.FormationTo = 'Line Left'
+			} else {
+				this.data.FormationTo = this.data.Formation
+			}
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
 	]);
 	

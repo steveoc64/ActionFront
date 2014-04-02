@@ -760,76 +760,76 @@ func CreateGameData(gameData *db.Col) {
 		"DisorderedMob": Drill{4, 2, 2, 0}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"ClassA", map[string]Drill{
-		"Line":         Drill{6, 3, 0, 0},
-		"Skirmish":     Drill{15, 3, 0, 0},
-		"MarchColumn":  Drill{12, 1, 0, 0},
+		"Line":         Drill{6, 4, 0, 1},
+		"Skirmish":     Drill{15, 2, 2, 1},
+		"MarchColumn":  Drill{12, 1, 0, 1},
 		"AttackColumn": Drill{10, 2, 1, 1},
 		"ClosedColumn": Drill{10, 1, 0, 1},
 		"Square":       Drill{4, 1, 0, 1}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"ClassB", map[string]Drill{
-		"Line":         Drill{5, 3, 0, 0},
-		"Skirmish":     Drill{13, 3, 0, 0},
+		"Line":         Drill{5, 4, 0, 0},
+		"Skirmish":     Drill{13, 2, 2, 1},
 		"MarchColumn":  Drill{10, 1, 0, 0},
-		"AttackColumn": Drill{8, 2, 1, 1},
+		"AttackColumn": Drill{8, 2, 2, 0},
 		"ClosedColumn": Drill{8, 1, 0, 1},
 		"Square":       Drill{4, 1, 0, 1}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"French", map[string]Drill{
-		"Line":         Drill{7, 3, 0, 0},
-		"MarchColumn":  Drill{10, 1, 0, 0},
-		"AttackColumn": Drill{9, 2, 1, 1},
-		"ClosedColumn": Drill{8, 1, 0, 1},
-		"Square":       Drill{5, 1, 0, 1}}}))
+		"Line":         Drill{6, 4, 0, 1},
+		"Skirmish":     Drill{15, 2, 2, 1},
+		"MarchColumn":  Drill{12, 1, 0, 1},
+		"AttackColumn": Drill{10, 2, 1, 1},
+		"ClosedColumn": Drill{10, 1, 0, 1},
+		"Square":       Drill{4, 1, 0, 1}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"Light Infantry", map[string]Drill{
-		"Skirmish":     Drill{7, 8, 4, 4},
-		"Screen":       Drill{8, 6, 3, 3},
-		"Line":         Drill{7, 3, 2, 1},
-		"MarchColumn":  Drill{10, 1, 0, 1},
-		"AttackColumn": Drill{9, 1, 1, 1},
-		"ClosedColumn": Drill{8, 1, 0, 1},
-		"Square":       Drill{5, 1, 0, 1}}}))
+		"Line":         Drill{6, 4, 0, 1},
+		"Skirmish":     Drill{15, 1, 2, 2},
+		"MarchColumn":  Drill{12, 1, 0, 1},
+		"AttackColumn": Drill{10, 2, 1, 1},
+		"ClosedColumn": Drill{10, 1, 0, 1},
+		"Square":       Drill{4, 1, 0, 1}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"Prussian", map[string]Drill{
-		"Line":         Drill{7, 4, 0, 1},
-		"Oblique":      Drill{6, 4, 0, 1},
-		"ScreenedLine": Drill{7, 3, 1, 1},
-		"MarchColumn":  Drill{9, 1, 0, 0},
-		"AttackColumn": Drill{8, 2, 1, 1},
-		"ClosedColumn": Drill{7, 2, 0, 0},
-		"Square":       Drill{5, 1, 0, 0}}}))
+		"Line":         Drill{6, 4, 0, 1},
+		"Skirmish":     Drill{15, 2, 2, 1},
+		"MarchColumn":  Drill{12, 1, 0, 1},
+		"AttackColumn": Drill{10, 2, 2, 0},
+		"ClosedColumn": Drill{10, 1, 0, 1},
+		"Square":       Drill{4, 1, 0, 1}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"British", map[string]Drill{
-		"Line":         Drill{7, 4, 0, 1},
-		"ScreenedLine": Drill{7, 3, 1, 1},
-		"MarchColumn":  Drill{10, 1, 0, 0},
-		"AttackColumn": Drill{8, 1, 1, 1},
-		"ClosedColumn": Drill{7, 1, 0, 0},
-		"Square":       Drill{5, 1, 0, 0}}}))
+		"Line":         Drill{6, 5, 0, 1},
+		"Skirmish":     Drill{15, 3, 2, 1},
+		"MarchColumn":  Drill{12, 1, 0, 1},
+		"AttackColumn": Drill{10, 2, 2, 0},
+		"ClosedColumn": Drill{10, 1, 0, 1},
+		"Square":       Drill{4, 1, 0, 1}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"OldSchool", map[string]Drill{
-		"Line":         Drill{6, 4, 0, 0},
-		"Oblique":      Drill{5, 4, 0, 0},
-		"ScreenedLine": Drill{6, 4, 0, 1},
-		"MarchColumn":  Drill{9, 1, 0, 0},
-		"AttackColumn": Drill{7, 1, 0, 0},
+		"Line":         Drill{5, 4, 0, 0},
+		"Skirmish":     Drill{13, 2, 2, 0},
+		"MarchColumn":  Drill{10, 1, 0, 0},
+		"AttackColumn": Drill{8, 2, 1, 0},
+		"ClosedColumn": Drill{8, 1, 0, 0},
 		"Square":       Drill{4, 1, 0, 0}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"Russian", map[string]Drill{
-		"Line":         Drill{7, 2, 0, 0},
-		"MarchColumn":  Drill{9, 1, 0, 0},
-		"AttackColumn": Drill{8, 1, 0, 0},
-		"Square":       Drill{5, 1, 0, 0}}}))
+		"Line":         Drill{5, 4, 0, 0},
+		"Skirmish":     Drill{13, 2, 1, 0},
+		"MarchColumn":  Drill{10, 1, 0, 0},
+		"AttackColumn": Drill{8, 2, 0, 0},
+		"ClosedColumn": Drill{8, 2, 0, 0},
+		"Square":       Drill{4, 1, 0, 0}}}))
 
 	gameData.Insert(DataMap("Drill", DrillBook{"Austrian", map[string]Drill{
-		"Line":         Drill{6, 6, 0, 1},
-		"ScreenedLine": Drill{6, 5, 1, 1},
-		"MarchColumn":  Drill{9, 1, 0, 0},
-		"AttackColumn": Drill{8, 2, 1, 1},
-		"ClosedColumn": Drill{7, 2, 0, 0},
-		"Mass":         Drill{6, 3, 2, 0},
-		"Square":       Drill{4, 1, 0, 0}}}))
+		"Line":         Drill{5, 6, 0, 1},
+		"Skirmish":     Drill{13, 3, 0, 1},
+		"MarchColumn":  Drill{10, 1, 0, 0},
+		"AttackColumn": Drill{8, 2, 0, 1},
+		"ClosedColumn": Drill{8, 2, 0, 1},
+		"Square":       Drill{4, 1, 0, 1}}}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Add some Equipment Types
