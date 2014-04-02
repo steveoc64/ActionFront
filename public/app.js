@@ -474,13 +474,17 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		if (service.subscriptions.length > 1) {
 			Entities = [];
 		 	angular.forEach(service.subscriptions, function(v,i){
-		 		Entities.push(v.Entity)
+		 		if (v.Data) {
+		 			Entities.push(v.Entity)
+		 		}
 		 	});
     		initMsg = JSON.stringify({"Action":"MList", "Entities":Entities});
 			service.ws.send(initMsg);
 		} else {
-	    	initMsg = JSON.stringify({"Action":"List", "Entity":service.subscriptions[0].Entity});
-			service.ws.send(initMsg);			
+			if (service.subscriptions[0].Data) {
+	    		initMsg = JSON.stringify({"Action":"List", "Entity":service.subscriptions[0].Entity});
+				service.ws.send(initMsg);			
+			}
 		}
     	return; 
     }
@@ -582,13 +586,17 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			if (service.subscriptions.length > 1) {
 				Entities = [];
 			 	angular.forEach(service.subscriptions, function(v,i){
-			 		Entities.push(v.Entity)
+			 		if (v.Data) {
+			 			Entities.push(v.Entity)
+			 		}
 			 	});
 	    		initMsg = JSON.stringify({"Action":"MList", "Entities":Entities});
     			service.ws.send(initMsg);
    			} else {
-		    	initMsg = JSON.stringify({"Action":"List", "Entity":service.subscriptions[0].Entity});
-    			service.ws.send(initMsg);			
+   				if (service.subscriptions[0].Data) {
+		    		initMsg = JSON.stringify({"Action":"List", "Entity":service.subscriptions[0].Entity});
+    				service.ws.send(initMsg);			
+    			}
 			}
 			service.isOpen = true;
 		}
@@ -4262,7 +4270,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("VolleyFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("VolleyFireCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.Data3 = [];
@@ -4275,6 +4283,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.Entity = "FireChart";
 	$scope.Entity2 = "FireEffect";
 	$scope.Entity3 = "FireMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -4392,24 +4401,67 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
-    }
-    $scope.newRow3 = function() {
-    	$scope.Data3.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.simulator = {
+		data: {
+			Rating: 'Regular',
+			FirstFire: true,
+			OppFire: false,
+			FSquare: false,
+			Disordered: false,
+			Shaken: false,
+			Ammo: 0,
+			Hits: 0,
+			Fatigue: 0,
+			Range: 1,
+			Cover: 0,
+			Bases: 2,
+			LtWood: false,
+			MdWood: false,
+			HvWood: false,
+			Rain: false,
+			HRain: false,
+			Enfilade: false,
+			TargetF: "",
+			Dice: 0,
+			Effect: '',
+			EffectHits: 0,
+			EffectAmmo: false
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Volley Fire Simulator",
+				contentTemplate: "sims/VolleyFire.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Hits = this.data.Fatigue = this.data.Cover = 0;
+			this.data.FirstFire = true;
+			this.data.Range = 1;
+			this.data.TargetF = "";
+			this.data.LtWood = this.data.MdWood = this.data.HvWood = this.data.Rain = this.data.Enfilade = this.data.HRain = this.data.OppFire = this.data.FSquare = this.data.Shaken = this.data.Disordered = false;
+			this.data.Ammo = 0;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"VolleyFire","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+		{Entity: "VolleyFire", Simulator: $scope.simulator},
 	]);
 	
 }])

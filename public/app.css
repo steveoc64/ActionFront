@@ -40,6 +40,8 @@
   color: black;
 }
 
+.modal .modal-dialog { width: 800px; }
+
 h3 {
   color: blue;
 }

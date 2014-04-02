@@ -2460,7 +2460,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireEffect", FireEffect{5, 12, "Deadly"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{6, 15, "Withering"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{7, 19, "Crushing"}))
-	gameData.Insert(DataMap("FireEffect", FireEffect{8, 23, "Devestating"}))
+	gameData.Insert(DataMap("FireEffect", FireEffect{8, 23, "Devastating"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{9, 29, "Magnificent"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{10, 34, "Extraordinaire"}))
 
