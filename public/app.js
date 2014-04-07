@@ -156,6 +156,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
  			templateUrl: 'forms/commanderAction.html',
  			controller: 'CommanderActionCtrl'
  		})
+ 		.state('cc.BonusImpulse', {
+ 			url: '/BonusImpulse',
+ 			templateUrl: 'forms/BonusImpulse.html',
+ 			controller: 'BonusImpulseCtrl'
+ 		})
 		.state('mf', {
  			url: '/mf',
  			templateUrl: 'navs/moraleFatigue.html',
@@ -185,11 +190,6 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
  			url: '/InitBadMorale',
  			templateUrl: 'forms/InitBadMorale.html',
  			controller: 'InitBadMoraleCtrl'
- 		})
- 		.state('mf.BonusImpulse', {
- 			url: '/BonusImpulse',
- 			templateUrl: 'forms/BonusImpulse.html',
- 			controller: 'BonusImpulseCtrl'
  		})
  		.state('mf.MEFatigue', {
  			url: '/MEFatigue',
