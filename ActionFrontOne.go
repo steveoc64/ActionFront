@@ -246,8 +246,8 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			log.Println("GET:", RxMsg["Entity"])
 
 		case "Simulator":
-			log.Println("SIMULATE:", RxMsg["Entity"])
 			theEntity := RxMsg["Entity"].(string)
+			startTime := time.Now()
 
 			switch theEntity {
 			case "GTMove":
@@ -270,9 +270,14 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				results := simulation.SkirmishFire(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+			case "FireFight":
+				results := simulation.FireFight(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
 			default:
 				log.Println("Unknown Simulator", theEntity)
 			}
+			log.Printf("SIMULATE: %s (%s)", theEntity, time.Since(startTime))
 
 		default:
 			log.Println("WTF ?", RxMsg)

@@ -442,7 +442,7 @@ type SKEffect struct {
 type FireFight struct {
 	Dice      int8
 	Descr     string
-	Fallback  bool
+	FallBack  bool
 	HoldCover bool
 	Disorder  bool
 	Rout      bool
@@ -2548,9 +2548,9 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireFight", FireFight{20, "Fallback in disorder", true, false, true, false}))
 	gameData.Insert(DataMap("FireFight", FireFight{23, "Rout", true, false, true, true}))
 
-	gameData.Insert(DataMap("FireFightMod", FireFightMod{"HIT", "Per Hit", -1}))
-	gameData.Insert(DataMap("FireFightMod", FireFightMod{"NHIT", "Per Hit this turn", -2}))
-	gameData.Insert(DataMap("FireFightMod", FireFightMod{"HITX", "Per Hit inflicted this turn", 2}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"HIT", "Per Hit", 1}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"NHIT", "Per Hit suffered this turn", 2}))
+	gameData.Insert(DataMap("FireFightMod", FireFightMod{"HITX", "Per Hit inflicted this turn", -2}))
 	gameData.Insert(DataMap("FireFightMod", FireFightMod{"LCH", "Loser has Charismatic leader", -3}))
 	gameData.Insert(DataMap("FireFightMod", FireFightMod{"LIN", "Loser has Inspirational leader", -2}))
 	gameData.Insert(DataMap("FireFightMod", FireFightMod{"LAV", "Loser has Average/Poor leader", -1}))

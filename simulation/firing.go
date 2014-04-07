@@ -9,7 +9,6 @@ import (
 	"strconv"
 )
 
-// For a given set of parameters, calculate the Tactical Move stats, and return this as a result set
 func VolleyFire(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	adder := float64(0)
@@ -219,7 +218,6 @@ func VolleyFire(col *db.Col, params map[string]interface{}) map[string]interface
 	return params
 }
 
-// For a given set of parameters, calculate the Tactical Move stats, and return this as a result set
 func SkirmishFire(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	adder := float64(0)
@@ -393,5 +391,85 @@ func SkirmishFire(col *db.Col, params map[string]interface{}) map[string]interfa
 	// No longer has first fire advantage
 	params["FirstFire"] = false
 
+	return params
+}
+
+func FireFight(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	adder := float64(0)
+
+	// Go through the whole FireFightMod table
+	LoserHits := params["LoserHits"].(float64)
+	LHitsNow := params["LHitsNow"].(float64)
+	WHitsNow := params["WHitsNow"].(float64)
+
+	FireFightMods, _ := list.Get(col, "FireFightMod")
+	for _, fmod := range FireFightMods.Data.([]interface{}) {
+		myFireMod := fmod.(map[string]interface{})
+
+		code := myFireMod["Code"].(string)
+		val := myFireMod["Value"].(float64)
+		switch code {
+		case "AMM":
+			if params["Ammo"].(float64) > 0 {
+				adder += val
+			}
+		case "HITX":
+			adder += (val * WHitsNow)
+		case "HIT":
+			adder += (val * LoserHits)
+		case "NHIT":
+			adder += (val * LHitsNow)
+		case "LAV":
+			switch params["LCmd"] {
+			case "Poor", "Average":
+				adder += val
+			}
+		case "LIN":
+			switch params["LCmd"] {
+			case "Inspirational":
+				adder += val
+			}
+		case "LCH":
+			switch params["LCmd"] {
+			case "Charismatic":
+				adder += val
+			}
+		}
+	}
+
+	d := dice.DieRoll()
+	d2 := int(adder)
+	dieScore := d + d2
+	params["Dice"] = fmt.Sprintf("%d  +%d  (%d)", d, d2, dieScore)
+
+	fid := 2
+
+	if dieScore >= 13 {
+		fid = 13
+		if dieScore >= 17 {
+			fid = 17
+			if dieScore >= 20 {
+				fid = 20
+				if dieScore >= 23 {
+					fid = 23
+				}
+			}
+		}
+	}
+
+	fidString := strconv.Itoa(fid)
+	FireFightLookup, _ := list.Lookup(col, "FireFight", "Dice")
+	FireFight := FireFightLookup[fidString]
+
+	params["Result"] = FireFight["Descr"]
+	params["FallBack"] = FireFight["FallBack"]
+	params["HoldCover"] = FireFight["HoldCover"]
+	params["Disorder"] = FireFight["Disorder"]
+	params["Rout"] = FireFight["Rout"]
+
+	if FireFight["HoldCover"].(bool) && params["Cover"].(bool) {
+		params["FallBack"] = false
+	}
 	return params
 }

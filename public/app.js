@@ -17,6 +17,7 @@ var TacMoveTypes = ['Artillery','Infantry','Cavalry','LightCav']
 var TacFormations = ['AttackColumn','ClosedColumn','Line','Square','Skirmish',"MarchColumn"]
 var TacFormationTos = ['AttackColumn','ClosedColumn','Line Centre','Line Left','Line Right','Square','Skirmish',"MarchColumn"]
 var TrainedTypes = ['Trained','UnTrained']
+var LeaderInspiration = ['Poor','Average','Inspirational','Charismatic']
 
 var Lookups = {
 	Ratings: Ratings,
@@ -38,6 +39,7 @@ var Lookups = {
 	TacFormations: TacFormations,
 	TacFormationTos: TacFormationTos,
 	TrainedTypes: TrainedTypes,
+	LeaderInspiration: LeaderInspiration,
 }
 
 var defaultGridOptions = { 
@@ -4499,7 +4501,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("FireFightCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("FireFightCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Fire Fight Results";
@@ -4508,6 +4510,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 15.2";
 	$scope.Entity = "FireFight";
 	$scope.Entity2 = "FireFightMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -4527,8 +4530,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Dice', width: 60}, 
            	{field:'Descr', displayName:'Description',width:200},
-           	{field:'Fallback', width:80, editableCellTemplate: 'tpl/fallbackTemplate.html'},
-           	{field:'HoldCover', width:80, editableCellTemplate: 'tpl/holdTemplate.html'},
+           	{field:'FallBack', width:80, editableCellTemplate: 'tpl/fallbackTemplate.html'},
+           	{field:'HoldCover', width:120, editableCellTemplate: 'tpl/holdTemplate.html'},
            	{field:'Disorder', width:80, editableCellTemplate: 'tpl/disorderTemplate.html'},
            	{field:'Rout', width:80, editableCellTemplate: 'tpl/routTemplate.html'},
         ]
@@ -4597,19 +4600,52 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			LoserHits: 0,
+			WHitsNow: 0,
+			LHitsNow: 0,
+			Ammo: 0,
+			Cover: false,
+			FallBack: '',
+			HoldCover: '',
+			Disorder: '',
+			Rout: '',
+			LCmd: '',
+			Result: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "FightFight Results Simulator",
+				contentTemplate: "sims/FireFight.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.LoserHits = 0;
+			this.data.WHitsNow = this.data.LHitsNow = 0;
+			this.data.Ammo = 0;
+			this.data.LCmd = '';
+			this.data.Cover = false;
+			this.data.FallBack = this.data.HoldCover = this.data.Disorder = this.data.Rout = this.data.Result = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"FireFight","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 	

@@ -1,4 +1,4 @@
-all: gde1
+all: ActionFrontOne
 
-gde1: gameDataEditor.go gamedatadb/gamedatadb.go
-	go build -o gde1 gameDataEditor.go
+ActionFrontOne: ActionFrontOne.go
+	go build -o ActionFrontOne ActionFrontOne.go
