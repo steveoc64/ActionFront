@@ -6,9 +6,7 @@
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Loser Situation</label>
-		<label>
-				<button type="button" class="btn btn-default" ng-model="simulator.data.Cover" bs-checkbox>In Cover</button>
-    	</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Cover" bs-checkbox>In Cover</button>
 	</div>
 
 	<div class="form-group">
@@ -53,7 +51,7 @@
 	<div class="form-group">
 		<label for="UnitType" class="col-sm-3 control-label">Attached Leader</label>
 		<div class="col-sm-9">
-			<select id="UnitType" ng-model="simulator.data.LCmd" ng-change="simulator.clear()" ng-options="t for t in Lookups.LeaderInspiration"></select>
+			<select id="UnitType" ng-model="simulator.data.LCmd" ng-options="t for t in Lookups.LeaderInspiration"></select>
 		</div>
 	</div>
 

@@ -17,46 +17,21 @@
 	</div>
 
     <entry-field id="Grids" span="5" label="Grids Moved This Turn" ng-model="simulator.Grids"></entry-field>
+
+   	<div class="form-group">
+		<label class="col-sm-3 control-label">Situation</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.MarchCol" bs-checkbox>-> March Column</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Darkness" bs-checkbox>Darkness</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Choke" bs-checkbox>Chokepoint</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Mud" bs-checkbox>Mud</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Fog" bs-checkbox>Fog</button>
+	</div>
+
     <hr>
 
 	<display-field id="Bonus" span="3" label="Die Mods" ng-model="simulator.data.DieMods"></display-field>
 	<display-field id="Dice" span="3" label="Die Roll" ng-model="simulator.data.Dice"></display-field>
 	<display-field id="Result" span="9" label="Result" ng-model="simulator.data.Result"></display-field>
-
-
-	<div class="checkbox">
-		<label class="col-sm-3"></label>
-    	<label>
-      		<input type="checkbox" ng-model="simulator.data.MarchCol"> Deploy to March Column</input>
-    	</label>
-	</div>
-	<div class="checkbox">
-		<label class="col-sm-3"></label>
-    	<label>
-      		<input type="checkbox" ng-model="simulator.data.Darkness"> Darkness</input>
-    	</label>
-	</div>
-
-	<div class="checkbox">
-		<label class="col-sm-3"></label>
-    	<label>
-      		<input type="checkbox" ng-model="simulator.data.Choke"> Deploy from Chokepoint</input>
-    	</label>
-    </div>
-
-	<div class="checkbox">
-		<label class="col-sm-3"></label>
-    	<label>
-      		<input type="checkbox" ng-model="simulator.data.Mud"> Mud in Deployment Area</input>
-    	</label>
-    </div>
-	<div class="checkbox">
-		<label class="col-sm-3"></label>
-    	<label>
-      		<input type="checkbox" ng-model="simulator.data.Fog"> Foggy Conditions</input>
-    	</label>
-    </div>
-
 
 
 </div>
