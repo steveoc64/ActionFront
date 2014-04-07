@@ -2,131 +2,83 @@ package simulation
 
 import (
 	"fmt"
+	"github.com/steveoc64/ActionFront/dice"
 	"github.com/steveoc64/ActionFront/list"
 	"github.com/steveoc64/tiedot/db"
 	"log"
 	"math"
-	"math/rand"
 )
-
-func dieRoll() int {
-	d1 := rand.Intn(9)
-	d2 := rand.Intn(9)
-	return 2 + d1 + d2
-}
-
-func shootDice(ammoOut int) (int, bool) {
-	d1 := rand.Intn(9) + 1
-	d2 := rand.Intn(9) + 1
-
-	if d1 <= ammoOut {
-		return d1 + d2, true
-	} else {
-		return d1 + d2, false
-	}
-}
-
-func percent(p int) bool {
-
-	d := rand.Intn(99)
-	if d < p {
-		return true
-	}
-	return false
-}
 
 // For a given set of parameters, calculate the GTMove, and return this as a result set
 func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
-	retval := make(map[string]interface{})
-
-	retval["METype"] = params["METype"]
-	retval["DeploymentState"] = params["DeploymentState"]
-	retval["Terrain"] = params["Terrain"]
-	retval["Weather"] = params["Weather"]
-	retval["Accumulated"] = params["Accumulated"]
-	retval["Forced"] = params["Forced"]
-	retval["MarchOrder"] = params["MarchOrder"]
-	retval["Diagonal"] = params["Diagonal"]
-	retval["Distance"] = 0
-	retval["Inches"] = 0
-
 	var baseMove float64
 
-	// get the GT Movement record for this METype
-	GTMoves, _ := list.Get(col, "GTMove")
-	for _, myMove := range GTMoves.Data.([]interface{}) {
-		GTMove := myMove.(map[string]interface{})
-		if GTMove["METype"] == params["METype"] {
-			// We now have the correct GT Move record
-			switch params["DeploymentState"] {
-			case "Deployed":
-				baseMove = GTMove["D1"].(float64)
-				if params["MarchOrder"].(bool) {
-					baseMove += 4
-				}
-			case "Bde Out":
-				baseMove = GTMove["D2"].(float64)
-			case "Deploying":
-				baseMove = GTMove["D3"].(float64)
-			case "Condensed Col":
-				baseMove = GTMove["D4"].(float64)
-			case "Regular Col":
-				baseMove = GTMove["D5"].(float64)
-			case "Extended Col":
-				baseMove = GTMove["D6"].(float64)
-			}
+	// Try this loop using the Lookup service
 
-			// Lets see if we have a forced march on our hands
-			if params["Forced"].(bool) {
-				for _, fmove := range GTMoves.Data.([]interface{}) {
-					checkf := fmove.(map[string]interface{})
-					if checkf["METype"] == "Forced March" {
-						switch params["DeploymentState"] {
-						case "Deployed":
-							baseMove += checkf["D1"].(float64)
-						case "Bde Out":
-							baseMove += checkf["D2"].(float64)
-						case "Deploying":
-							baseMove += checkf["D3"].(float64)
-						case "Condensed Col":
-							baseMove += checkf["D4"].(float64)
-						case "Regular Col":
-							baseMove += checkf["D5"].(float64)
-						case "Extended Col":
-							baseMove += checkf["D6"].(float64)
-						}
+	GTMoveLookup, _ := list.Lookup(col, "GTMove", "METype")
+	GTMove := GTMoveLookup[params["METype"].(string)]
 
-					}
-				}
-			}
+	// We now have the correct GT Move record
+	switch params["DeploymentState"] {
+	case "Deployed":
+		baseMove = GTMove["D1"].(float64)
+		if params["MarchOrder"].(bool) {
+			baseMove += 4
+		}
+	case "Bde Out":
+		baseMove = GTMove["D2"].(float64)
+	case "Deploying":
+		baseMove = GTMove["D3"].(float64)
+	case "Condensed Col":
+		baseMove = GTMove["D4"].(float64)
+	case "Regular Col":
+		baseMove = GTMove["D5"].(float64)
+	case "Extended Col":
+		baseMove = GTMove["D6"].(float64)
+	}
 
-			acc := params["Accumulated"].(float64)
-			turns := 1.0
-
-			// Get the appropriate weather modifier
-			w, _ := list.Get(col, "Weather")
-			for _, myWeather := range w.Data.([]interface{}) {
-				Weather := myWeather.(map[string]interface{})
-				if Weather["Code"] == params["Weather"] {
-					// We now have the appropriate weather as well
-
-					baseMove = baseMove * Weather["Move"].(float64) / 10.0
-				}
-			}
-
-			baseMove *= turns
-			inchesPerGrid := 10.0
-			if params["Diagonal"].(bool) {
-				inchesPerGrid = 15.0
-			}
-			retval["Inches"] = math.Trunc(baseMove)
-			retval["Distance"] = math.Trunc((baseMove + acc) / inchesPerGrid)
-			retval["Accumulated"] = math.Trunc(math.Mod(baseMove+acc, inchesPerGrid))
+	// Lets see if we have a forced march on our hands
+	if params["Forced"].(bool) {
+		checkf := GTMoveLookup["Forced March"]
+		switch params["DeploymentState"] {
+		case "Deployed":
+			baseMove += checkf["D1"].(float64)
+		case "Bde Out":
+			baseMove += checkf["D2"].(float64)
+		case "Deploying":
+			baseMove += checkf["D3"].(float64)
+		case "Condensed Col":
+			baseMove += checkf["D4"].(float64)
+		case "Regular Col":
+			baseMove += checkf["D5"].(float64)
+		case "Extended Col":
+			baseMove += checkf["D6"].(float64)
 		}
 	}
 
-	return retval
+	acc := params["Accumulated"].(float64)
+	turns := 1.0
+
+	// Get the appropriate weather modifier
+	WeatherLookup, _ := list.Lookup(col, "Weather", "Code")
+	Weather := WeatherLookup[params["Weather"].(string)]
+	if Weather["Code"] == params["Weather"] {
+		// We now have the appropriate weather as well
+
+		baseMove = baseMove * Weather["Move"].(float64) / 10.0
+	}
+
+	baseMove *= turns
+	inchesPerGrid := 10.0
+	if params["Diagonal"].(bool) {
+		inchesPerGrid = 15.0
+	}
+	params["Inches"] = math.Trunc(baseMove)
+	params["Distance"] = math.Trunc((baseMove + acc) / inchesPerGrid)
+	params["Accumulated"] = math.Trunc(math.Mod(baseMove+acc, inchesPerGrid))
+
+	return params
 }
 
 // For a given set of parameters, calculate the Deployment stats, and return this as a result set
@@ -181,7 +133,7 @@ func Deployment(col *db.Col, params map[string]interface{}) map[string]interface
 	}
 
 	retval["DieMods"] = adjust
-	d := dieRoll()
+	d := dice.DieRoll()
 	Score := d + adjust
 
 	retval["Dice"] = fmt.Sprintf("%d + %d = %d", d, adjust, Score)
@@ -428,11 +380,11 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 		} else {
 			multiplier *= 0.7
 			if !disorder {
-				disorder = percent(40)
+				disorder = dice.Percent(40)
 			}
 			frontage -= 2
 			if canFire {
-				canFire = percent(60)
+				canFire = dice.Percent(60)
 			}
 		}
 	}
@@ -444,11 +396,11 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 		} else {
 			multiplier *= 0.5
 			if !disorder {
-				disorder = percent(80)
+				disorder = dice.Percent(80)
 			}
 			frontage = 1
 			if canFire {
-				canFire = percent(30)
+				canFire = dice.Percent(30)
 			}
 		}
 	}
@@ -459,17 +411,17 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 		} else if isCav {
 			multiplier *= 0.3
 			if !disorder {
-				disorder = percent(50)
+				disorder = dice.Percent(50)
 			}
 			canFire = false
 		} else {
 			multiplier *= 0.5
 			if !disorder {
-				disorder = percent(30)
+				disorder = dice.Percent(30)
 			}
 			frontage -= 1
 			if canFire {
-				canFire = percent(60)
+				canFire = dice.Percent(60)
 			}
 		}
 	}
@@ -479,17 +431,17 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 		} else if isCav {
 			multiplier *= 0.6
 			if !disorder {
-				disorder = percent(50)
+				disorder = dice.Percent(50)
 			}
 			canFire = false
 		} else {
 			multiplier *= 0.7
 			if !disorder {
-				disorder = percent(50)
+				disorder = dice.Percent(50)
 			}
 			frontage = 2
 			if canFire {
-				canFire = percent(80)
+				canFire = dice.Percent(80)
 			}
 		}
 	}
@@ -502,10 +454,10 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 		} else {
 			adder -= 1
 			if !disorder {
-				disorder = percent(30)
+				disorder = dice.Percent(30)
 			}
 			if canFire {
-				canFire = percent(90)
+				canFire = dice.Percent(90)
 			}
 		}
 	}
@@ -517,10 +469,10 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 		} else {
 			adder -= 3
 			if !disorder {
-				disorder = percent(60)
+				disorder = dice.Percent(60)
 			}
 			if canFire {
-				canFire = percent(60)
+				canFire = dice.Percent(60)
 			}
 		}
 	}
@@ -531,7 +483,7 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 		case 0:
 			if disorder {
 				// small chance of recovering any disorder if advancing at a slow march
-				disorder = percent(70)
+				disorder = dice.Percent(70)
 			}
 		case 1:
 			adder += 1
@@ -539,15 +491,15 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 			switch params["Terrain"].(string) {
 			case "Marchfeld":
 				if !disorder {
-					disorder = percent(10)
+					disorder = dice.Percent(10)
 				}
 			case "Rolling":
 				if !disorder {
-					disorder = percent(20)
+					disorder = dice.Percent(20)
 				}
 			case "Rough":
 				if !disorder {
-					disorder = percent(30)
+					disorder = dice.Percent(30)
 				}
 			}
 
@@ -557,15 +509,15 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 			switch params["Terrain"].(string) {
 			case "Marchfeld":
 				if !disorder {
-					disorder = percent(30)
+					disorder = dice.Percent(30)
 				}
 			case "Rolling":
 				if !disorder {
-					disorder = percent(60)
+					disorder = dice.Percent(60)
 				}
 			case "Rough":
 				if !disorder {
-					disorder = percent(90)
+					disorder = dice.Percent(90)
 				}
 			}
 
@@ -578,16 +530,16 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 			adder -= 4
 			// slow trotting pace, to ensure good order
 			if disorder {
-				disorder = percent(60)
+				disorder = dice.Percent(60)
 			}
 		case 1:
 			if !disorder {
-				disorder = percent(20)
+				disorder = dice.Percent(20)
 			}
 		case 3:
 			adder += 6
 			if !disorder {
-				disorder = percent(40)
+				disorder = dice.Percent(40)
 			}
 		}
 	}
@@ -611,277 +563,6 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 	retval["Disorder"] = disorder
 	retval["Frontage"] = frontage
 	retval["Fire"] = canFire
-
-	return retval
-}
-
-// For a given set of parameters, calculate the Tactical Move stats, and return this as a result set
-func VolleyFire(col *db.Col, params map[string]interface{}) map[string]interface{} {
-
-	retval := make(map[string]interface{})
-
-	retval["Rating"] = params["Rating"]
-	retval["FirstFire"] = params["FirstFire"]
-	retval["OppFire"] = params["OppFire"]
-	retval["FSquare"] = params["FSquare"]
-	retval["Disordered"] = params["Disordered"]
-	retval["Shaken"] = params["Shaken"]
-	retval["Ammo"] = params["Ammo"]
-	retval["Hits"] = params["Hits"]
-	retval["Fatigue"] = params["Fatigue"]
-	retval["Range"] = params["Range"]
-	retval["Bases"] = params["Bases"]
-	retval["LtWood"] = params["LtWood"]
-	retval["HvWood"] = params["HvWood"]
-	retval["MdWood"] = params["MdWood"]
-	retval["Rain"] = params["Rain"]
-	retval["HRain"] = params["HRain"]
-	retval["Cover"] = params["Cover"]
-	retval["Enfilade"] = params["Enfilade"]
-	retval["TargetF"] = params["TargetF"]
-	retval["Dice"] = 0
-	retval["Effect"] = ""
-	retval["EffectHits"] = 0
-	retval["EffectAmmo"] = ""
-
-	adder := float64(0)
-
-	// Go through the whole FireMods table
-
-	firerRating := params["Rating"].(string)
-	firerFatigue := params["Fatigue"].(float64)
-	if firerFatigue > 4 {
-		firerFatigue = 4
-	}
-	firerHits := params["Hits"].(float64)
-	if firerHits > 6 {
-		firerHits = 6
-	}
-
-	FireMods, _ := list.Get(col, "FireMod")
-	for _, fmod := range FireMods.Data.([]interface{}) {
-		myFireMod := fmod.(map[string]interface{})
-
-		code := myFireMod["Code"].(string)
-		val := myFireMod["Value"].(float64)
-		switch code {
-		case "FF":
-			if params["FirstFire"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "DIS":
-			if params["Disordered"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "SHK":
-			if params["Shaken"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "SQ":
-			if params["FSquare"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "AMD":
-			if params["Ammo"].(float64) == 1 {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "AME":
-			if params["Ammo"].(float64) == 2 {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "FLW":
-			if params["LtWood"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "FMW":
-			if params["MdWood"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "FHW":
-			if params["HvWood"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "ENL":
-			if params["Enfilade"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "TSQ":
-			if params["TargetF"].(string) == "Square" {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "ART":
-			if params["TargetF"].(string) == "Artillery" {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "TCOL":
-			if params["TargetF"].(string) == "Column" {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "TCC":
-			if params["TargetF"].(string) == "ClosedCol" {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "OO":
-			if params["TargetF"].(string) == "OpenOrder" {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "SK":
-			if params["TargetF"].(string) == "Skirmish" {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "CAV":
-			if params["TargetF"].(string) == "Cavalry" {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "OPP":
-			if params["OppFire"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "RN":
-			if params["Rain"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "HR":
-			if params["HRain"].(bool) {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "C1":
-			if params["Cover"].(float64) == 1 {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "C2":
-			if params["Cover"].(float64) == 2 {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "C3":
-			if params["Cover"].(float64) == 3 {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		case "FTG":
-			adder += (val * firerFatigue)
-			log.Println("apply", code, val, "*", firerFatigue, adder)
-		case "HIT":
-			adder += (val * firerHits)
-			log.Println("apply", code, val, "*", firerHits, adder)
-		default:
-			if code == firerRating {
-				adder += val
-				log.Println("apply", code, val, adder)
-			}
-		}
-	}
-
-	d, ammoOut := shootDice(1)
-	retval["EffectAmmo"] = ammoOut
-
-	if ammoOut {
-		switch params["Ammo"].(float64) {
-		case 0:
-			retval["Ammo"] = 1
-		case 1:
-			retval["Ammo"] = 2
-		}
-	}
-	d2 := int(adder)
-	dice := d + d2
-	retval["Dice"] = fmt.Sprintf("%d  +%d  (%d)", d, d2, dice)
-
-	fid := 1
-
-	if dice >= 1 {
-		fid = 2
-		if dice >= 5 {
-			fid = 3
-			if dice >= 9 {
-				fid = 4
-				if dice >= 12 {
-					fid = 5
-					if dice >= 15 {
-						fid = 6
-						if dice >= 19 {
-							fid = 7
-							if dice >= 23 {
-								fid = 8
-								if dice >= 29 {
-									fid = 9
-									if dice >= 34 {
-										fid = 10
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	FireEffects, _ := list.Get(col, "FireEffect")
-	for _, feffect := range FireEffects.Data.([]interface{}) {
-		myFireEffect := feffect.(map[string]interface{})
-		if fid == int(myFireEffect["ID"].(float64)) {
-			retval["Effect"] = myFireEffect["Descr"]
-		}
-	}
-	percentDamage := float64(0)
-	FireCharts, _ := list.Get(col, "FireChart")
-	for _, fchart := range FireCharts.Data.([]interface{}) {
-		myFireChart := fchart.(map[string]interface{})
-		if fid == int(myFireChart["ID"].(float64)) {
-			percentDamage = myFireChart["SmallArms"].(float64)
-		}
-	}
-
-	numBases := params["Bases"].(float64)
-	damage := float64(0)
-	switch params["Range"].(float64) {
-	case 0:
-		damage = percentDamage * 10 * numBases
-	case 1:
-		damage = percentDamage * 5 * numBases
-	case 2:
-		damage = percentDamage * 1 * numBases
-	}
-
-	fullHits := int(math.Trunc(damage / 100))
-	partialHits := int(math.Mod(damage, 100))
-	log.Println(damage, fullHits, partialHits)
-	extraHit := 0
-	if percent(partialHits) {
-		extraHit = 1
-	}
-
-	//retval["EffectHits"] = fmt.Sprintf("%f (%d, %d)", damage, fullHits, extraHit)
-	retval["EffectHits"] = fullHits + extraHit
-	if dice < -5 {
-		retval["EffectHits"] = 0
-	}
-
-	// No longer has first fire advantage
-	retval["FirstFire"] = false
 
 	return retval
 }
