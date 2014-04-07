@@ -412,12 +412,13 @@ type FireEffect struct {
 }
 
 type FireChart struct {
-	ID        uint8
-	SmallArms uint8
-	LtArt     uint8
-	MdArt     uint8
-	MdHvArt   uint8
-	HvArt     uint8
+	ID      uint8
+	Volley  uint8
+	SK      uint8
+	LtArt   uint8
+	MdArt   uint8
+	MdHvArt uint8
+	HvArt   uint8
 }
 
 type FireMod struct {
@@ -838,12 +839,14 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Equip", Equip{"Carbine", 1, 8, 2, 0}))
 	gameData.Insert(DataMap("Equip", Equip{"Superior Musket", 1, 11, 6, 1}))
 	gameData.Insert(DataMap("Equip", Equip{"Poor Musket", -1, 8, 4, 0}))
-	gameData.Insert(DataMap("Equip", Equip{"Rifle", 3, 8, 6, 2}))
+	gameData.Insert(DataMap("Equip", Equip{"Rifle", 6, 8, 6, 2}))
+	gameData.Insert(DataMap("Equip", Equip{"Half Rifled", 3, 9, 6, 1}))
 	gameData.Insert(DataMap("Equip", Equip{"Minie", 4, 9, 6, 3}))
 	gameData.Insert(DataMap("Equip", Equip{"Bayonet", 0, 0, 0, 0}))
 	gameData.Insert(DataMap("Equip", Equip{"Pike", 0, 0, 0, 0}))
-	gameData.Insert(DataMap("Equip", Equip{"Breechloader", 4, 14, 7, 4}))
-	gameData.Insert(DataMap("Equip", Equip{"Chasspot", 5, 15, 8, 6}))
+	gameData.Insert(DataMap("Equip", Equip{"Breechloader", 8, 14, 7, 4}))
+	gameData.Insert(DataMap("Equip", Equip{"Superior BL", 9, 15, 8, 6}))
+	gameData.Insert(DataMap("Equip", Equip{"Bolt Action", 10, 16, 9, 7}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Add some Infantry
@@ -1077,16 +1080,16 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1792, 1808, "Jager", "CrackLine", "Light Infantry", "4E", 0, 0, "Rifle", "Average", "Average", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1809, 1815, "Jager", "Grenadier", "Light Infantry", "4E", 0, 0, "Rifle", "Good", "Good", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1792, 1815, "Freikorps", "Regular", "Light Infantry", "6O", 0, 0, "Musket", "Poor", "Average", false}))
-	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1792, 1815, "Grenz", "Veteran", "Light Infantry", "4O", 0, 0, "Rifle", "Average", "Good", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1792, 1815, "Grenz", "Veteran", "Light Infantry", "4O", 0, 0, "Half Rifled", "Average", "Good", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1792, 1815, "Insurrection", "Militia", "Militia", "4L", 0, 0, "Musket", "", "Average", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1813, 1813, "Landwehr", "Landwehr", "Militia", "4L", 0, 0, "Musket", "", "Poor", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1792, 1815, "#4 Line", "Grenadier", "Austrian", "6L", -1, 0, "Musket", "", "Average", true}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1792, 1815, "#14 Line", "Elite", "Austrian", "6L", 0, 0, "Musket", "", "Average", true}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1809, 1815, "1/3/11/19/46/59 Line", "CrackLine", "Austrian", "6L", 0, 0, "Musket", "", "Average", false}))
 	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1811, 1815, "9/20/24/30/44/58/63 Line", "Conscript", "Conscript", "6L", 0, 0, "Rifle", "Good", "Average", false}))
-	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1811, 1815, "New Conscript", "Conscript", "Conscript", "6L", 0, 0, "Rifle", "Good", "Average", false}))
-	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1811, 1815, "#6 Grenz", "CrackLine", "Light Infantry", "4O", 0, 0, "Rifle", "Good", "Good", false}))
-	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1809, 1815, "Charles Legion", "Veteran", "Light Infantry", "6O", 0, 0, "Rifle", "Average", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1811, 1815, "New Conscript", "Conscript", "Conscript", "6L", 0, 0, "Half Rifled", "Good", "Average", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1811, 1815, "#6 Grenz", "CrackLine", "Light Infantry", "4O", 0, 0, "Half Rifled", "Good", "Good", false}))
+	gameData.Insert(DataMap("Infantry", Infantry{"Austria", 1809, 1815, "Charles Legion", "Veteran", "Light Infantry", "6O", 0, 0, "Half Rifled", "Average", "Average", false}))
 
 	// Kingdom of Spain
 	gameData.Insert(DataMap("Infantry", Infantry{"Spain", 1792, 1800, "Line", "Regular", "OldSchool", "4L", 0, 0, "Musket", "", "Poor", false}))
@@ -2464,16 +2467,16 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireEffect", FireEffect{9, 29, "Magnificent"}))
 	gameData.Insert(DataMap("FireEffect", FireEffect{10, 34, "Extraordinaire"}))
 
-	gameData.Insert(DataMap("FireChart", FireChart{1, 3, 0, 0, 1, 1}))
-	gameData.Insert(DataMap("FireChart", FireChart{2, 5, 0, 1, 2, 2}))
-	gameData.Insert(DataMap("FireChart", FireChart{3, 8, 1, 1, 2, 3}))
-	gameData.Insert(DataMap("FireChart", FireChart{4, 12, 2, 2, 3, 4}))
-	gameData.Insert(DataMap("FireChart", FireChart{5, 15, 2, 3, 4, 5}))
-	gameData.Insert(DataMap("FireChart", FireChart{6, 18, 4, 4, 5, 6}))
-	gameData.Insert(DataMap("FireChart", FireChart{7, 22, 4, 6, 7, 8}))
-	gameData.Insert(DataMap("FireChart", FireChart{8, 26, 6, 8, 8, 10}))
-	gameData.Insert(DataMap("FireChart", FireChart{9, 35, 7, 10, 10, 12}))
-	gameData.Insert(DataMap("FireChart", FireChart{10, 42, 8, 11, 12, 14}))
+	gameData.Insert(DataMap("FireChart", FireChart{1, 3, 2, 0, 0, 1, 1}))
+	gameData.Insert(DataMap("FireChart", FireChart{2, 5, 4, 0, 1, 2, 2}))
+	gameData.Insert(DataMap("FireChart", FireChart{3, 8, 6, 1, 1, 2, 3}))
+	gameData.Insert(DataMap("FireChart", FireChart{4, 12, 10, 2, 2, 3, 4}))
+	gameData.Insert(DataMap("FireChart", FireChart{5, 15, 12, 2, 3, 4, 5}))
+	gameData.Insert(DataMap("FireChart", FireChart{6, 18, 15, 4, 4, 5, 6}))
+	gameData.Insert(DataMap("FireChart", FireChart{7, 22, 18, 4, 6, 7, 8}))
+	gameData.Insert(DataMap("FireChart", FireChart{8, 26, 22, 6, 8, 8, 10}))
+	gameData.Insert(DataMap("FireChart", FireChart{9, 35, 28, 7, 10, 10, 12}))
+	gameData.Insert(DataMap("FireChart", FireChart{10, 42, 36, 8, 11, 12, 14}))
 
 	gameData.Insert(DataMap("FireMod", FireMod{"OldGuard", "OldGuard", 10}))
 	gameData.Insert(DataMap("FireMod", FireMod{"Guard", "Guard", 8}))
@@ -2516,14 +2519,17 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireMod", FireMod{"FTG", "Per Fatigue Level over Fresh", -2}))
 	gameData.Insert(DataMap("FireMod", FireMod{"HIT", "Per Hit", -1}))
 
-	gameData.Insert(DataMap("FireSKMod", FireSKMod{"1", "Superior Grade", 12}))
-	gameData.Insert(DataMap("FireSKMod", FireSKMod{"2", "Excellent Grade", 8}))
-	gameData.Insert(DataMap("FireSKMod", FireSKMod{"3", "Good Grade", 5}))
-	gameData.Insert(DataMap("FireSKMod", FireSKMod{"4", "Average Grade", 0}))
-	gameData.Insert(DataMap("FireSKMod", FireSKMod{"5", "Poor Grade", -5}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"Superior", "Superior Grade", 12}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"Excellent", "Excellent Grade", 8}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"Good", "Good Grade", 5}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"Average", "Average Grade", 0}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"Poor", "Poor Grade", -5}))
 	gameData.Insert(DataMap("FireSKMod", FireSKMod{"FTG", "Per Fatigue Level", -2}))
 	gameData.Insert(DataMap("FireSKMod", FireSKMod{"CV", "Firing from Cover/Rough/Woods", 5}))
 	gameData.Insert(DataMap("FireSKMod", FireSKMod{"SK", "Firing from Skirmish Order", 5}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"AMD", "Ammo Depleted", -3}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"AME", "Ammo Exhausted", -6}))
+	gameData.Insert(DataMap("FireSKMod", FireSKMod{"HIT", "Per Hit", -1}))
 
 	gameData.Insert(DataMap("SKEffect", SKEffect{"T1", 2, "Column or Square"}))
 	gameData.Insert(DataMap("SKEffect", SKEffect{"T2", 3, "Any Formed"}))

@@ -166,7 +166,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				theEntity := Entity.(string)
 				EntityNames = EntityNames + theEntity + " "
 				msg, cached := list.Get(gameData, theEntity)
-				log.Printf("MLIST request: %s (%s)%s", theEntity, time.Since(startTime), tilde(cached))
+				log.Printf("MLIST: %s (%s)%s", theEntity, time.Since(startTime), tilde(cached))
 				startTime = time.Now()
 
 				mmsg = append(mmsg, msg)
@@ -180,7 +180,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			theEntity := RxMsg["Entity"].(string)
 
 			records, cached := list.Get(gameData, theEntity)
-			log.Printf("LIST request: %s (%s)%s", theEntity, time.Since(startTime), tilde(cached))
+			log.Printf("LIST: %s (%s)%s", theEntity, time.Since(startTime), tilde(cached))
 			msg, _ = json.Marshal(records)
 			sendMsg(conn, msg)
 
@@ -189,7 +189,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			theEntity := RxMsg["Entity"].(string)
 
 			list.Clear(theEntity)
-			log.Println("ADD request:", theEntity, RxMsg["Data"])
+			log.Println("ADD:", theEntity, RxMsg["Data"])
 
 			myGameData = RxMsg["Data"].(map[string]interface{})
 			myDocID, err := gameData.Insert(gamedatadb.DataMap(theEntity, myGameData))
@@ -208,7 +208,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 
 			list.Clear(theEntity)
 
-			log.Println("UPDATE request:", theEntity, RxMsg["Data"])
+			log.Println("UPDATE:", theEntity, RxMsg["Data"])
 
 			myGameData = RxMsg["Data"].(map[string]interface{})
 			docID := myGameData["@id"]
@@ -228,7 +228,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			}
 
 		case "Delete":
-			log.Println("DELETE request:", RxMsg["Entity"], RxMsg["ID"])
+			log.Println("DELETE:", RxMsg["Entity"], RxMsg["ID"])
 
 			theEntity := RxMsg["Entity"].(string)
 			list.Clear(theEntity)
@@ -243,10 +243,10 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			}
 
 		case "Get":
-			log.Println("GET request:", RxMsg["Entity"])
+			log.Println("GET:", RxMsg["Entity"])
 
 		case "Simulator":
-			log.Println("SIMULATE request", RxMsg["Entity"])
+			log.Println("SIMULATE:", RxMsg["Entity"])
 			theEntity := RxMsg["Entity"].(string)
 
 			switch theEntity {
@@ -264,6 +264,10 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				sendAll(msg)
 			case "VolleyFire":
 				results := simulation.VolleyFire(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
+			case "SkirmishFire":
+				results := simulation.SkirmishFire(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
 			default:

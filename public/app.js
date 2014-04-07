@@ -1,6 +1,6 @@
 var Ratings = ['OldGuard','Guard','Grenadier','Elite','CrackLine','Veteran','Regular','Conscript','Landwehr','Militia','Rabble'];
 var DrillBooks = ['ClassA','ClassB','Light Infantry','French','Prussian','Russian','Austrian','British','Old School','Conscript','Militia','Mob'];
-var Equips = ['Musket','Carbine','Superior Musket','Poor Musket','Rifle','Bayonet Only','Pike'];
+var Equips = ['Musket','Carbine','Superior Musket','Poor Musket','Rifle','Half Rifled','Bayonet Only','Pike'];
 var SkirmishRatings = ['Superior','Excellent','Good','Average','Poor'];
 var CavMoveTypes = ['Heavy','Medium','Light','Lancer'];
 var GunneryClasses = [0,1,2,3];
@@ -4080,7 +4080,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("SKFireCtrl", ["$scope", "DataSocket", "$rootScope","$state", function($scope, DataSocket,$rootScope,$state){
+.controller("SKFireCtrl", ["$scope", "DataSocket", "$modal","$rootScope", function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.Data3 = [];
@@ -4097,6 +4097,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.Entity2 = "FireEffect";
 	$scope.Entity3 = "FireSKMod";
 	$scope.Entity4 = "SKEffect";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -4115,7 +4116,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'ID', width: 60}, 
-           	{field:'SmallArms', displayName:'Skirmish %',width: 100}, 
+           	{field:'SK', displayName:'Skirmish %',width: 200}, 
         ]
 	};
 
@@ -4158,7 +4159,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 60}, 
-           	{field:'Descr', displayName:'Description',width: 220},
+           	{field:'Descr', displayName:'Description',width: 240},
            	{field:'Value', width: 60},
         ]
 	};
@@ -4180,7 +4181,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'ECode', width: 60}, 
            	{field:'Dice', width: 60},
-           	{field:'Descr', displayName:'Target',width: 120},
+           	{field:'Descr', displayName:'Target',width: 220},
         ]
 	};
 
@@ -4245,28 +4246,61 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
-    }
-    $scope.newRow3 = function() {
-    	$scope.Data3.push({"@id": '0', Code: '~ ??? ~'})
-    }
-    $scope.newRow4 = function() {
-    	$scope.Data4.push({"@id": '0', ECode: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.simulator = {
+		data: {
+			Rating: 'Average',
+			Cover: false,
+			Ammo: 0,
+			Hits: 0,
+			Fatigue: 0,
+			Range: 1,
+			Bases: 1,
+			SkirmishOrder: false,
+			EffectAmmo: false,
+			Dice: '',
+			Effect: '',
+			EffectHits: '',
+			ActualHits: '',
+			FirstFire: true,
+			TT: 1,
+			TF: 2,
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Skirmish Fire Simulator",
+				contentTemplate: "sims/SkirmishFire.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Hits = this.data.Fatigue =  this.data.Ammo = 0;
+			this.data.FirstFire = true;
+			this.data.Cover = this.data.SkirmishOrder = false;
+			this.data.Range = 1;
+			this.data.TT = 1;
+			this.data.TF = 2;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"SkirmishFire","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
 		{Entity: $scope.Entity4, Data: $scope.Data4, Callback: $scope.changeData},
+		{Entity: "SkirmishFire", Simulator: $scope.simulator},
 	]);
 	
 }])
@@ -4302,7 +4336,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'ID', width: 60}, 
-           	{field:'SmallArms', displayName:'Musket %',width: 100}, 
+           	{field:'Volley', displayName:'Musket %',width: 100}, 
         ]
 	};
 

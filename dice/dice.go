@@ -10,6 +10,10 @@ func DieRoll() int {
 	return 2 + d1 + d2
 }
 
+func D6() int {
+	return rand.Intn(6) + 1
+}
+
 func ShootDice(ammoOut int) (int, bool) {
 	d1 := rand.Intn(9) + 1
 	d2 := rand.Intn(9) + 1

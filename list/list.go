@@ -2,6 +2,7 @@ package list
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/steveoc64/tiedot/db"
 )
 
@@ -91,8 +92,15 @@ func Lookup(col *db.Col, theEntity string, theKey string) (map[string]map[string
 		theData := myData["Data"].(map[string]interface{})
 		theData["@id"] = theID
 
+		// Get the key field, coerce it into a string, and use this for the map index
 		key := theData[theKey]
-		results[key.(string)] = theData
+		var keyString string
+		var isString bool
+
+		if keyString, isString = key.(string); !isString {
+			keyString = fmt.Sprint(key)
+		}
+		results[keyString] = theData
 	}
 	LookupCache[theEntity] = results
 	return results, false
