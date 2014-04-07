@@ -1336,11 +1336,12 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
 	]);		
 }])
-.controller("InitTablesCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("InitTablesCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.title = "Initiative Modifiers";
 	$scope.docs = "Table 11.1";
 	$scope.Entity = "InitTable";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1382,16 +1383,45 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		} 
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Factor: '~ ??? ~'})
-    }
-
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
 
+	$scope.simulator = {
+		data: {
+			AA: false,
+			AW: false,
+			ACCA: 0,
+			AB: 0,
+			BA: false,
+			BW: false,
+			BCCA: 0,
+			BB: 0,
+		},
+
+		showForm: function() {
+			var myEditor = {
+				title: "Initiative Simulator",
+				contentTemplate: "sims/Initiative.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.AA = this.data.AW = this.data.BA = this.data.BW = false;
+			this.data.ACCA = this.data.AB = this.data.BCCA = this.data.BB = 0;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 	DataSocket.connect([
-		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
+		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData, "Simulator": $scope.simulator}
 	]);	
 	
 }])

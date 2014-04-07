@@ -1,0 +1,83 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<h3>Side A</h3>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Commander Actions</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.AA" bs-checkbox>Army Commander</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.AW" bs-checkbox>Wing Commander</button>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Corps Commander CAs</label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.ACCA" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.ACCA" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.ACCA" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.ACCA" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.ACCA" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.ACCA" bs-radio>6+</label>
+	    	</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Bold Leaders Engaged</label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.AB" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.AB" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.AB" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.AB" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.AB" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.AB" bs-radio>6+</label>
+	    	</div>
+	</div>
+	<display-field id="Dice" span="3" label="Die Roll" ng-model="simulator.data.DiceA"></display-field>
+
+	<hr>
+
+	<h3>Side B</h3>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Commander Actions</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.BA" bs-checkbox>Army Commander</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.BW" bs-checkbox>Wing Commander</button>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Corps Commander CAs</label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.BCCA" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.BCCA" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.BCCA" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.BCCA" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.BCCA" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.BCCA" bs-radio>6+</label>
+	    	</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Bold Leaders Engaged</label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.BB" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.BB" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.BB" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.BB" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.BB" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.BB" bs-radio>6+</label>
+	    	</div>
+	</div>
+	<display-field id="Dice" span="3" label="Die Roll" ng-model="simulator.data.DiceB"></display-field>
+
+    <hr>
+	<display-field id="Result" span="9" label="Result" ng-model="simulator.data.Result"></display-field>
+
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Initiative</button>
+
+</div>
+</form>
+
+
