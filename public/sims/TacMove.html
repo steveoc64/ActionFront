@@ -2,6 +2,8 @@
 
 <div class="modal-inner-content">
 
+	<img src="images/TacticalMove.jpg">
+	<h3 class="bg-info">Moving Unit</h3>
 	<div class="form-group">
 		<label for="UnitType" class="col-sm-3 control-label">Unit Type</label>
 		<div class="col-sm-9">
@@ -33,16 +35,7 @@
 
 
 	<hr>
-	
-	<div class="form-group">
-		<label class="col-sm-3 control-label">Conditions</label>
-		<button type="button" class="btn btn-default" ng-model="simulator.data.LtWood" bs-checkbox>LtWood</button>
-		<button type="button" class="btn btn-default" ng-model="simulator.data.HvWood" bs-checkbox>HvWood</button>
-		<button type="button" class="btn btn-default" ng-model="simulator.data.Mud" bs-checkbox>Mud</button>
-		<button type="button" class="btn btn-default" ng-model="simulator.data.Marsh" bs-checkbox>Marsh</button>
-		<button type="button" class="btn btn-default" ng-model="simulator.data.LoWall" bs-checkbox>LoWall</button>
-		<button type="button" class="btn btn-default" ng-model="simulator.data.HiWall" bs-checkbox>HiWall</button>
-	</div>
+
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">March Pace</label>
@@ -54,7 +47,18 @@
 	    	</div>
 		</label>
 	</div>
-	<hr>
+		
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Conditions</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.LtWood" bs-checkbox>LtWood</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.HvWood" bs-checkbox>HvWood</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Mud" bs-checkbox>Mud</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Marsh" bs-checkbox>Marsh</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.LoWall" bs-checkbox>LoWall</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.HiWall" bs-checkbox>HiWall</button>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
 
 	<div class="form-group">
 		<label class="col-sm-3"></label>

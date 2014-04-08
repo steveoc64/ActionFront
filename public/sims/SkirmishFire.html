@@ -2,8 +2,11 @@
 
 <div class="modal-inner-content">
 
+<img src="images/SkirmishFire.jpg">
+
+	<h3 class="bg-info">Firing Unit</h3>
 	<div class="form-group">
-		<label for="UnitType" class="col-sm-3 control-label">Firing Unit</label>
+		<label for="UnitType" class="col-sm-3 control-label">Skirmish Rating</label>
 		<div class="col-sm-9">
 			<select id="UnitType" ng-model="simulator.data.Rating" ng-change="simulator.clear()" ng-options="t for t in Lookups.SkirmishRatings"></select>
 		</div>
@@ -75,7 +78,7 @@
 		</label>
 	</div>
 
-	<hr>
+	<h3 class="bg-warning">Target Unit</h3>
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Target Formation</label>
@@ -103,11 +106,11 @@
 		</label>
 	</div>
 
-	<hr>
+	<h3 class="bg-success">Results</h3>
 
 	<display-field label="Dice" ng-model="simulator.data.Dice" span="3"></display-field>
 	<display-field label="Fire Effect" ng-model="simulator.data.Effect" span="8"></display-field>
-	<display-field label="Effective Hits" ng-model="simulator.data.EffectHits" span="3"></display-field>
+	<display-field label="On Target" ng-model="simulator.data.EffectHits" span="3"></display-field>
 	<display-field label="Actual Hits" ng-model="simulator.data.ActualHits" span="3"></display-field>
 	<display-field label="Ammo Loss" ng-model="simulator.data.EffectAmmo" span="3"></display-field>
 </div>

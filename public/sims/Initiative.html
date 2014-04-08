@@ -2,7 +2,8 @@
 
 <div class="modal-inner-content">
 
-	<h3>Side A</h3>
+<img src="images/Initiative.jpg">
+	<h3 class="bg-info">Side A</h3>
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Commander Actions</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.AA" bs-checkbox>Army Commander</button>
@@ -33,9 +34,7 @@
 	</div>
 	<display-field id="Dice" span="3" label="Die Roll" ng-model="simulator.data.DiceA"></display-field>
 
-	<hr>
-
-	<h3>Side B</h3>
+	<h3 class="bg-warning">Side B</h3>
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Commander Actions</label>
@@ -67,7 +66,8 @@
 	</div>
 	<display-field id="Dice" span="3" label="Die Roll" ng-model="simulator.data.DiceB"></display-field>
 
-    <hr>
+    <h3 class="bg-success">Results</h3>
+    
 	<display-field id="Result" span="9" label="Result" ng-model="simulator.data.Result"></display-field>
 
 </div>

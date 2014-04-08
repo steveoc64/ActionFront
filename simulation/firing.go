@@ -5,6 +5,7 @@ import (
 	"github.com/steveoc64/ActionFront/dice"
 	"github.com/steveoc64/ActionFront/list"
 	"github.com/steveoc64/tiedot/db"
+	"log"
 	"math"
 	"strconv"
 )
@@ -325,9 +326,9 @@ func SkirmishFire(col *db.Col, params map[string]interface{}) map[string]interfa
 	// than volley fire
 	switch params["Range"].(float64) {
 	case 0:
-		damage = percentDamage * 10 * numBases
+		damage = percentDamage * 6 * numBases
 	case 1:
-		damage = percentDamage * 8 * numBases
+		damage = percentDamage * 4 * numBases
 	case 2:
 		damage = percentDamage * 2 * numBases
 	}
@@ -471,5 +472,63 @@ func FireFight(col *db.Col, params map[string]interface{}) map[string]interface{
 	if FireFight["HoldCover"].(bool) && params["Cover"].(bool) {
 		params["FallBack"] = false
 	}
+	return params
+}
+
+func ArtyFire(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	adder := float64(0)
+
+	// Go through the whole ArtMod table
+
+	/*
+		ArtMods, _ := list.Get(col, "ArtMod")
+		for _, amod := range ArtMods.Data.([]interface{}) {
+			myArtMod := amod.(map[string]interface{})
+
+			code := myArtMod["Code"].(string)
+			val := myArtMod["Value"].(float64)
+			switch code {
+			}
+		}
+	*/
+	d := dice.DieRoll()
+	d2 := int(adder)
+	dieScore := d + d2
+	params["Dice"] = fmt.Sprintf("%d  +%d  (%d)", d, d2, dieScore)
+
+	fid := 1
+
+	if dieScore >= 1 {
+		fid = 2
+		if dieScore >= 5 {
+			fid = 3
+			if dieScore >= 9 {
+				fid = 4
+				if dieScore >= 12 {
+					fid = 5
+					if dieScore >= 15 {
+						fid = 6
+						if dieScore >= 19 {
+							fid = 7
+							if dieScore >= 23 {
+								fid = 8
+								if dieScore >= 29 {
+									fid = 9
+									if dieScore >= 34 {
+										fid = 10
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	fidString := strconv.Itoa(fid)
+	log.Println(fidString)
+
 	return params
 }

@@ -2,7 +2,24 @@
 
 <div class="modal-inner-content">
 
-	<h3>Loser</h3>
+<img src="images/FireFight.jpg">
+	<h3 class="bg-info">Firefight Winner</h3>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Hits Taken This Turn</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.WHitsNow" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.WHitsNow" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.WHitsNow" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.WHitsNow" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.WHitsNow" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.WHitsNow" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.WHitsNow" bs-radio>6+</label>
+	    	</div>
+		</label>
+	</div>
+
+	<h3 class="bg-warning">Firefight Loser</h3>
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Loser Situation</label>
@@ -55,25 +72,7 @@
 		</div>
 	</div>
 
-	<hr>
-
-	<h3>Winner</h3>
-	<div class="form-group">
-		<label class="col-sm-3 control-label">Hits Taken This Turn</label>
-    	<label>
-			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.WHitsNow" bs-radio>None</label>
-	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.WHitsNow" bs-radio>1</label>
-	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.WHitsNow" bs-radio>2</label>
-	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.WHitsNow" bs-radio>3</label>
-	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.WHitsNow" bs-radio>4</label>
-	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.WHitsNow" bs-radio>5</label>
-	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.WHitsNow" bs-radio>6+</label>
-	    	</div>
-		</label>
-	</div>
-
-	<hr>
+	<h3 class="bg-success">Results</h3>
 
 	<display-field label="Dice" ng-model="simulator.data.Dice" span="3"></display-field>
 	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>

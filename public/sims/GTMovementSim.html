@@ -1,6 +1,9 @@
 <form role="form" class="form-horizontal">
 
 <div class="modal-inner-content">
+	<img src="images/GTMovement.jpg">
+
+	<h3 class="bg-info">Manoeuvre Element</h3>
 
 	<div class="form-group">
 		<label for="METype" class="col-sm-3 control-label">ME Type</label>
@@ -30,12 +33,14 @@
 		</div>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-3 control-label">Firer Situation</label>
+		<label class="col-sm-3 control-label">Orders and Situation</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.Forced" ng-change="simulator.calc()" bs-checkbox>Forced March</button>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.MarchOrder" ng-change="simulator.calc()" bs-checkbox>March Orders</button>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.Diagonal" ng-change="simulator.calc()" bs-checkbox>Diagonal</button>
 	</div>
 
+	<h3 class="bg-success">Results</h3>
+	
 	<display-field id="Accumulated" span="3" label="Accumulated Movement" ng-model="simulator.data.Accumulated"></display-field>
 	<display-field id="Inches" span="3" label="Distance in Inches" ng-model="simulator.data.Inches"></display-field>
 	<display-field id="Distance" span="3" label="Distance in Grids" ng-model="simulator.data.Distance"></display-field>

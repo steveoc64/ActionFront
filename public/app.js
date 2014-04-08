@@ -5,6 +5,7 @@ var SkirmishRatings = ['Superior','Excellent','Good','Average','Poor'];
 var CavMoveTypes = ['Heavy','Medium','Light','Lancer'];
 var GunneryClasses = [0,1,2,3];
 var GunTypes = ['12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
+var ArtyWeights = ['Light','Medium','MdHeavy','Heavy'];
 var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
 var MEOrders = ['Attack','Defend','Bombard','Support/Intercept','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
 var StaffRatings = ['Good','Average','Poor'];
@@ -27,6 +28,7 @@ var Lookups = {
 	CavMoveTypes: CavMoveTypes,
 	GunneryClasses: GunneryClasses,
 	GunTypes: GunTypes,
+	ArtyWeights: ArtyWeights,
 	HWTypes: HWTypes,
 	MEOrders: MEOrders,
 	StaffRatings: StaffRatings,
@@ -4680,7 +4682,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("ArtyFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("ArtyFireCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.Data3 = [];
@@ -4693,6 +4695,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.Entity = "FireEffect";
 	$scope.Entity2 = "FireChart";
 	$scope.Entity3 = "ArtMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -4816,24 +4819,52 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', ID: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', ID: '~ ??? ~'})
-    }
-    $scope.newRow3 = function() {
-    	$scope.Data3.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.simulator = {
+		data: {
+			ArtyWeight: 'Medium',
+			Bases: 2,
+			Range: 2,
+			Class: 1,
+			Ammo: 1,
+			Dice: '',
+			Cavalry: false,
+			Fatigue: 0,
+			TFormation: '',
+			HvRain: false,
+			CounterBty: false,
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Artillery Fire Simulator",
+				contentTemplate: "sims/ArtyFire.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Dice = this.data.TFormation = '';
+			this.data.Ammo = this.data.Fatique = 0;
+			this.data.Cavalry = this.data.HvRain = this.data.CounterBty = false;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"FireFight","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+		{Entity: "ArtyFire", Simulator: $scope.simulator},
 	]);
 	
 }])
