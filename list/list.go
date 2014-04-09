@@ -66,11 +66,11 @@ func Get(col *db.Col, theEntity string) (MessageFormat, bool) {
 }
 
 // Get a list of the given entity, mapped to a map[string]interface
-func Lookup(col *db.Col, theEntity string, theKey string) (map[string]map[string]interface{}, bool) {
+func Lookup(col *db.Col, theEntity string, theKey string) map[string]map[string]interface{} {
 	var myData map[string]interface{}
 
 	if lookupRecord, ok := LookupCache[theEntity]; ok {
-		return lookupRecord, true
+		return lookupRecord
 	}
 
 	// Not cached, so Build a new result set using tiedot embedded query processor
@@ -103,5 +103,5 @@ func Lookup(col *db.Col, theEntity string, theKey string) (map[string]map[string
 		results[keyString] = theData
 	}
 	LookupCache[theEntity] = results
-	return results, false
+	return results
 }

@@ -16,7 +16,7 @@ func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	// Try this loop using the Lookup service
 
-	GTMoveLookup, _ := list.Lookup(col, "GTMove", "METype")
+	GTMoveLookup := list.Lookup(col, "GTMove", "METype")
 	GTMove := GTMoveLookup[params["METype"].(string)]
 
 	// We now have the correct GT Move record
@@ -61,7 +61,7 @@ func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 	turns := 1.0
 
 	// Get the appropriate weather modifier
-	WeatherLookup, _ := list.Lookup(col, "Weather", "Code")
+	WeatherLookup := list.Lookup(col, "Weather", "Code")
 	Weather := WeatherLookup[params["Weather"].(string)]
 	if Weather["Code"] == params["Weather"] {
 		// We now have the appropriate weather as well

@@ -2119,6 +2119,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"L3", "Conscript or lower in Line, per base of frontage", -1}))
 	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"SQ", "Unit is in square", 3}))
 	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"CC", "Unit is in closed column", 1}))
+	gameData.Insert(DataMap("UnitMoraleMod", UnitMoraleMod{"FT", "Per Fatigue Level", -1}))
 
 	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"OldGuard", 1, -2}))
 	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Guard", 5, 2}))

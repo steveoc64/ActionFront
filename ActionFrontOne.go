@@ -282,6 +282,10 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				results := simulation.ArtyFire(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+			case "UnitMoraleTest":
+				results := simulation.UnitMoraleTest(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
 			default:
 				log.Println("Unknown Simulator", theEntity)
 			}

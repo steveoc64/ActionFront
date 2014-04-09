@@ -185,10 +185,10 @@ func VolleyFire(col *db.Col, params map[string]interface{}) map[string]interface
 	}
 
 	fidString := strconv.Itoa(fid)
-	FireEffectsLookup, _ := list.Lookup(col, "FireEffect", "ID")
+	FireEffectsLookup := list.Lookup(col, "FireEffect", "ID")
 	params["Effect"] = FireEffectsLookup[fidString]["Descr"]
 
-	FireChartLookup, _ := list.Lookup(col, "FireChart", "ID")
+	FireChartLookup := list.Lookup(col, "FireChart", "ID")
 	percentDamage := FireChartLookup[fidString]["Volley"].(float64)
 
 	numBases := params["Bases"].(float64)
@@ -317,10 +317,10 @@ func SkirmishFire(col *db.Col, params map[string]interface{}) map[string]interfa
 	}
 
 	fidString := strconv.Itoa(fid)
-	FireEffectsLookup, _ := list.Lookup(col, "FireEffect", "ID")
+	FireEffectsLookup := list.Lookup(col, "FireEffect", "ID")
 	params["Effect"] = FireEffectsLookup[fidString]["Descr"]
 
-	FireChartLookup, _ := list.Lookup(col, "FireChart", "ID")
+	FireChartLookup := list.Lookup(col, "FireChart", "ID")
 	percentDamage := FireChartLookup[fidString]["SK"].(float64)
 
 	numBases := params["Bases"].(float64)
@@ -347,7 +347,7 @@ func SkirmishFire(col *db.Col, params map[string]interface{}) map[string]interfa
 
 	// Apply saving throws
 	kill := 1.0
-	SKEffects, _ := list.Lookup(col, "SKEffect", "ECode")
+	SKEffects := list.Lookup(col, "SKEffect", "ECode")
 	switch params["TT"].(float64) {
 	case 1:
 		kill = SKEffects["C1"]["Dice"].(float64)
@@ -463,7 +463,7 @@ func FireFight(col *db.Col, params map[string]interface{}) map[string]interface{
 	}
 
 	fidString := strconv.Itoa(fid)
-	FireFightLookup, _ := list.Lookup(col, "FireFight", "Dice")
+	FireFightLookup := list.Lookup(col, "FireFight", "Dice")
 	FireFight := FireFightLookup[fidString]
 
 	params["Result"] = FireFight["Descr"]
@@ -490,7 +490,7 @@ func ArtyFire(col *db.Col, params map[string]interface{}) map[string]interface{}
 	Range := params["Range"].(float64)
 	ArtyWeight := params["ArtyWeight"].(string)
 
-	ArtyRanges, _ := list.Lookup(col, "ArtRange", "Weight")
+	ArtyRanges := list.Lookup(col, "ArtRange", "Weight")
 	GunRange := ArtyRanges[ArtyWeight]
 	ShortRange := GunRange["Short"].(float64)
 	MediumRange := GunRange["Medium"].(float64)
@@ -832,10 +832,10 @@ func ArtyFire(col *db.Col, params map[string]interface{}) map[string]interface{}
 	}
 
 	fidString := strconv.Itoa(fid)
-	FireEffectsLookup, _ := list.Lookup(col, "FireEffect", "ID")
+	FireEffectsLookup := list.Lookup(col, "FireEffect", "ID")
 	params["Effect"] = FireEffectsLookup[fidString]["Descr"]
 
-	FireChartLookup, _ := list.Lookup(col, "FireChart", "ID")
+	FireChartLookup := list.Lookup(col, "FireChart", "ID")
 	scoreToHit := float64(0)
 	switch ArtyWeight {
 	case "Light":

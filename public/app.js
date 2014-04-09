@@ -18,7 +18,7 @@ var TacMoveTypes = ['Artillery','Infantry','Cavalry','LightCav']
 var TacFormations = ['AttackColumn','ClosedColumn','Line','Square','Skirmish',"MarchColumn"]
 var TacFormationTos = ['AttackColumn','ClosedColumn','Line Centre','Line Left','Line Right','Square','Skirmish',"MarchColumn"]
 var TrainedTypes = ['Trained','UnTrained']
-var LeaderInspiration = ['Poor','Average','Inspirational','Charismatic']
+var LeaderInspiration = ['','Despicable','Poor','Average','Inspirational','Charismatic']
 
 var Lookups = {
 	Ratings: Ratings,
@@ -2069,7 +2069,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("UnitMoraleCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("UnitMoraleCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.ModData = [];
 	$scope.maintitle = "Unit Morale Test";
@@ -2078,6 +2078,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.moddocs = "Tables 19.1A - 19.1B";
 	$scope.Entity = "UnitMoraleTest";
 	$scope.ModEntity = "UnitMoraleMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -2165,24 +2166,59 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
-	$scope.changeModData = function(d) {
-		$scope.$apply();
-	}
+	$scope.simulator = {
+		data: {
+			Rating: 'Regular',
+			BBOnly: false,
+			Cover: 0,
+			Bases: 3,
+			Enfilade: 0,
+			Hits: 0,
+			Formation: '',
+			Disordered: false,
+			GCharge: false,
+			CX: false,
+			HvWoods: false,
+			Fatigue: 0,
+			Leader: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Unit Morale Simulator",
+				contentTemplate: "sims/UnitMorale.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.BBOnly = false;
+			this.data.ClosedCol = false;
+			this.data.Disordered = false;
+			this.data.Enfilade = 0;
+			this.data.Cover = 0;
+			this.data.GCharge = false;
+			this.data.CX = false;
+			this.data.Formation = '';
+			this.data.HvWoods = false;
+			this.data.Fatigue = 0;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"UnitMoraleTest","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
-		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
+		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	
 }])
