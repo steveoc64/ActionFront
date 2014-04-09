@@ -458,6 +458,7 @@ type ArtRange struct {
 	Short  uint8
 	Medium uint8
 	Long   uint8
+	Max    uint8
 }
 
 type ArtMod struct {
@@ -2132,7 +2133,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Rabble", 20, 16}))
 	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"SK", "Per hit from SK fire this turn", -1}))
 	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"HIT", "Per hit carried in total", -1}))
-	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"BG", "Battalion Guns attached", -1}))
+	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"BG", "Battalion Guns attached", 1}))
 
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{12, "Halt in reserve area. Return to good morale when ME activates Rally order", 1, true}))
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{9, "Done for the day, march to the rear in good order", 2, false}))
@@ -2556,10 +2557,10 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireFightMod", FireFightMod{"LAV", "Loser has Average/Poor leader", -1}))
 	gameData.Insert(DataMap("FireFightMod", FireFightMod{"AMM", "Loser has Ammo depleted or exhausted", 3}))
 
-	gameData.Insert(DataMap("ArtRange", ArtRange{"Heavy", 1, 2, 6}))
-	gameData.Insert(DataMap("ArtRange", ArtRange{"MdHeavy", 1, 2, 5}))
-	gameData.Insert(DataMap("ArtRange", ArtRange{"Medium", 1, 2, 4}))
-	gameData.Insert(DataMap("ArtRange", ArtRange{"Light", 1, 2, 3}))
+	gameData.Insert(DataMap("ArtRange", ArtRange{"Heavy", 1, 2, 4, 6}))
+	gameData.Insert(DataMap("ArtRange", ArtRange{"MdHeavy", 1, 2, 4, 5}))
+	gameData.Insert(DataMap("ArtRange", ArtRange{"Medium", 1, 2, 3, 4}))
+	gameData.Insert(DataMap("ArtRange", ArtRange{"Light", 1, 2, 2, 3}))
 
 	gameData.Insert(DataMap("ArtMod", ArtMod{"MO", "Mixed Order Target", 1}))
 	gameData.Insert(DataMap("ArtMod", ArtMod{"SQ", "Target in Square", 9}))

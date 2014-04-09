@@ -1275,7 +1275,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'Weight', width: 120}, 
            	{field:'Short', width: 80}, 
            	{field:'Medium', width: 80}, 
-           	{field:'Long', width: 80}, 
+           	{field:'Long', width: 80},
+           	{field:'Max', width: 80}, 
         ]
 	};
 
@@ -4826,16 +4827,33 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.simulator = {
 		data: {
 			ArtyWeight: 'Medium',
+			GunneryClass: 2,
 			Bases: 2,
 			Range: 2,
 			Class: 1,
-			Ammo: 1,
+			Ammo: 0,
 			Dice: '',
 			Cavalry: false,
 			Fatigue: 0,
-			TFormation: '',
+			FireMission: 'Tactical',
+			TFormation: 'Line',
 			HvRain: false,
+			Followup: false,
+			Screened: false,
 			CounterBty: false,
+			TType: 'Infantry',
+			TFormation: '',
+			ReverseSlope: false,
+			NapAttached: false,
+			CCAttached: false,
+			Dice: '',
+			Effect: '',
+			Hits: '',
+			EffectAmmo: '',
+			EffectRetire: '',
+			Marchfeld: false,
+			ThreeGun: false,
+
 		},
 		showForm: function() {
 			var myEditor = {
@@ -4845,13 +4863,20 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			}
 			$modal(myEditor);
 		},
+		setFormation: function() {
+			this.data.TFormation = 'Line';
+		},
 		clear: function() {
-			this.data.Dice = this.data.TFormation = '';
-			this.data.Ammo = this.data.Fatique = 0;
-			this.data.Cavalry = this.data.HvRain = this.data.CounterBty = false;
+			this.data.Dice = '';
+			this.data.TFormation = 'Line';
+			this.data.Ammo = this.data.Fatigue = 0;
+			this.data.Cavalry = this.data.HvRain = this.data.CounterBty = this.data.Followup = this.data.Screened = false;
+			this.data.FireMission = 'Tactical';
+			this.data.ReverseSlope = this.data.Marchfeld = this.data.ThreeGun = false;
+			this.data.Dice = this.data.Effect = this.data.Hits = this.data.EffectAmmo = this.data.EffectRetire = '';
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"FireFight","Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"ArtyFire","Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);
