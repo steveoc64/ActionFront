@@ -1960,6 +1960,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.simulator = {
 		data: {
 			Rating: 'Regular',
+			Leader: 'Average',
 			CFatigue: 0,
 			Good: 0,
 			Fatigue: 0,
@@ -1968,6 +1969,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			BadA: 0,
 			CAW: 0,
 			CAD: 0,
+			GT: 0,
 			Cold: false,
 			Interp: false,
 			PrevSH: false,
@@ -1975,6 +1977,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			ESP: false,
 			Sown: 0,
 			SE: 0,
+			Dice: "",
+			Effect: "",
+			EffectSteady: "",
+			EffectShaken: "",
+			EffectRetreat: "",
+			EffectBroken: "",
+			EffectFatigue: 0,
 		},
 		showForm: function() {
 			var myEditor = {
@@ -1995,9 +2004,12 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.SPQ = false;
 			this.data.ESP = false;
 			this.data.Sown = this.data.SE = 0;
+			this.data.GT = 0;
+			this.data.EffectFatigue = "";
+			this.data.EffectSteady = this.data.EffectShaken = this.data.EffectRetreat = this.data.EffectBroken = "";
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"UnitMoraleTest","Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);
@@ -2146,7 +2158,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.TRAP = this.data.WITH = false;
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"UnitMoraleTest","Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);
@@ -2300,7 +2312,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.Fatigue = 0;
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"UnitMoraleTest","Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);
@@ -4797,7 +4809,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.FallBack = this.data.HoldCover = this.data.Disorder = this.data.Rout = this.data.Result = '';
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"FireFight","Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);
