@@ -1,0 +1,86 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+<img src="images/MEPanic.jpg">
+	<h3 class="bg-info">Manoeuvre Element</h3>
+
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Rating</label>
+		<div class="col-sm-9">
+			<select id="UnitType" ng-model="simulator.data.Rating" ng-change="simulator.clear()" ng-options="t for t in Lookups.Ratings"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Fatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Fatigue" bs-radio>Winded</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Fatigue" bs-radio>Worn</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Fatigue" bs-radio>Tired</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Fatigue" bs-radio>Exhausted</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Campaign Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.CFatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.CFatigue" bs-radio>Weary</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.CFatigue" bs-radio>Haggard</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.CFatigue" bs-radio>Spent</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">ME Status</label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Status" bs-radio>All units GOOD</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Status" bs-radio>to 25% Broken</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Status" bs-radio>to 50% Broken</label>
+	    	</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Fallen Strongpoints</label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Sown" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Sown" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Sown" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Sown" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Sown" bs-radio>4+</label>
+	    	</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">OldGuard<br>(within 3Gr)</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.OGS" bs-checkbox>Becomes Shaken</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.OGB" bs-checkbox>Is Broken</button>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Other Factors</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Interp" bs-checkbox>Interpenetrated</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.PrevSH" bs-checkbox>Shaken</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.TRAP" bs-checkbox>Line of Retreat Blocked</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.WITH" bs-checkbox>Withdraw Order</button>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+	<display-field label="Dice" ng-model="simulator.data.Dice" span="3"></display-field>
+	<display-field label="Pass Score" ng-model="simulator.data.PassScore" span="3"></display-field>
+	<display-field label="Effect" ng-model="simulator.data.Effect" span="8"></display-field>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Panic Test</button>
+
+</div>
+</form>
+
+

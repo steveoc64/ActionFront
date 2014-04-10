@@ -1,0 +1,173 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+<img src="images/MEMorale.jpg">
+	<h3 class="bg-info">Manoeuvre Element</h3>
+
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Rating</label>
+		<div class="col-sm-9">
+			<select id="UnitType" ng-model="simulator.data.Rating" ng-change="simulator.clear()" ng-options="t for t in Lookups.Ratings"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Fatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Fatigue" bs-radio>Winded</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Fatigue" bs-radio>Worn</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Fatigue" bs-radio>Tired</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Fatigue" bs-radio>Exhausted</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Campaign Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.CFatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.CFatigue" bs-radio>Weary</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.CFatigue" bs-radio>Haggard</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.CFatigue" bs-radio>Spent</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Units in GOOD Morale<br>(with full Ammo)</label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Good" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Good" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Good" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Good" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Good" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.Good" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.Good" bs-radio>6</label>
+	    		<label class="btn btn-default" type="radio" value="7" ng-model="simulator.data.Good" bs-radio>7</label>
+	    		<label class="btn btn-default" type="radio" value="8" ng-model="simulator.data.Good" bs-radio>8</label>
+	    		<label class="btn btn-default" type="radio" value="9" ng-model="simulator.data.Good" bs-radio>9</label>
+	    		<label class="btn btn-default" type="radio" value="10" ng-model="simulator.data.Good" bs-radio>10</label>
+	    		<label class="btn btn-default" type="radio" value="11" ng-model="simulator.data.Good" bs-radio>11</label>
+	    		<label class="btn btn-default" type="radio" value="12" ng-model="simulator.data.Good" bs-radio>12</label>
+	    		<label class="btn btn-default" type="radio" value="13" ng-model="simulator.data.Good" bs-radio>13</label>
+	    		<label class="btn btn-default" type="radio" value="14" ng-model="simulator.data.Good" bs-radio>14</label>
+	    		<label class="btn btn-default" type="radio" value="15" ng-model="simulator.data.Good" bs-radio>15+</label>
+	    	</div>
+	</div>
+	<hr>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Units in BAD Morale</label>
+	    <label>
+			Infantry:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.BadI" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.BadI" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.BadI" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.BadI" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.BadI" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.BadI" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.BadI" bs-radio>6</label>
+	    		<label class="btn btn-default" type="radio" value="7" ng-model="simulator.data.BadI" bs-radio>7</label>
+	    		<label class="btn btn-default" type="radio" value="8" ng-model="simulator.data.BadI" bs-radio>8</label>
+	    		<label class="btn btn-default" type="radio" value="9" ng-model="simulator.data.BadI" bs-radio>9</label>
+	    		<label class="btn btn-default" type="radio" value="10" ng-model="simulator.data.BadI" bs-radio>10</label>
+	    		<label class="btn btn-default" type="radio" value="11" ng-model="simulator.data.BadI" bs-radio>11</label>
+	    		<label class="btn btn-default" type="radio" value="12" ng-model="simulator.data.BadI" bs-radio>12+</label>
+	    	</div>
+	    </label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label"></label>
+		<label>
+			Cavalry:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.BadC" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.BadC" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.BadC" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.BadC" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.BadC" bs-radio>4+</label>
+	    	</div>
+			Artillery:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.BadA" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.BadA" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.BadA" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.BadA" bs-radio>3+</label>
+	    	</div>
+	    </label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Structures Held</label>
+		<label>
+			Own:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Sown" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Sown" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Sown" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Sown" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Sown" bs-radio>4+</label>
+	    	</div>
+			Enemy:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.SE" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.SE" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.SE" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.SE" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.SE" bs-radio>4+</label>
+	    	</div>
+	    </label>
+	</div>
+
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Close Actions<br>(this turn)</label>
+    	<label>
+    		Won:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.CAW" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.CAW" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.CAW" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.CAW" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.CAW" bs-radio>4+</label>
+	    	</div>
+	    	Lost:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.CAD" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.CAD" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.CAD" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.CAD" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.CAD" bs-radio>4+</label>
+	    	</div>
+		</label>
+	</div>
+	<hr>
+
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Other Factors</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Cold" bs-checkbox>Cold Weather</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Interp" bs-checkbox>Interpenetrated</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.PrevSH" bs-checkbox>Shaken</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.SPQ" bs-checkbox>Adj ME Runs</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.ESP" bs-checkbox>Enemy Strongpoint Taken</button>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+	<display-field label="Dice" ng-model="simulator.data.Dice" span="3"></display-field>
+	<display-field label="Pass Score" ng-model="simulator.data.PassScore" span="3"></display-field>
+	<display-field label="Effect" ng-model="simulator.data.Effect" span="8"></display-field>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Morale Test</button>
+
+</div>
+</form>
+
+

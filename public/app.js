@@ -1850,7 +1850,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("MEMoraleCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("MEMoraleCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "ME Morale Test";
@@ -1859,6 +1859,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 5.1A";
 	$scope.Entity = "MEMoraleTest";
 	$scope.Entity2 = "MEMoraleMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1877,7 +1878,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Score', width: 80}, 
-           	{field:'Descr', displayName: 'Description', width: 600}, 
+           	{field:'Descr', displayName: 'Description', width: 460}, 
            	{field:'Broken', width: 80, editableCellTemplate: 'tpl/moraleBrokenTemplate.html'}, 
            	{field:'Retreat', width: 80, editableCellTemplate: 'tpl/moraleRetreatTemplate.html'}, 
            	{field:'Shaken', width: 80, editableCellTemplate: 'tpl/moraleShakenTemplate.html'}, 
@@ -1903,7 +1904,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 120}, 
-           	{field:'Descr', displayName:'Description',width: 300},
+           	{field:'Descr', displayName:'Description',width: 400},
            	{field:'Value', width: 60},
         ]
 	};
@@ -1955,13 +1956,63 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
+
+	$scope.simulator = {
+		data: {
+			Rating: 'Regular',
+			CFatigue: 0,
+			Good: 0,
+			Fatigue: 0,
+			BadI: 0,
+			BadC: 0,
+			BadA: 0,
+			CAW: 0,
+			CAD: 0,
+			Cold: false,
+			Interp: false,
+			PrevSH: false,
+			SPQ: false,
+			ESP: false,
+			Sown: 0,
+			SE: 0,
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "ME Morale & Determination Simulator",
+				contentTemplate: "sims/MEMorale.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Fatigue = 0;
+			this.data.CFatigue = 0;
+			this.data.BadI = this.data.BadC = this.data.BadA = 0;
+			this.data.CAW = this.data.CAD = 0;
+			this.data.Cold = false;
+			this.data.Interp = false;
+			this.data.PrevSH = false;
+			this.data.SPQ = false;
+			this.data.ESP = false;
+			this.data.Sown = this.data.SE = 0;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"UnitMoraleTest","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData}
 	]);
 	
 }])
-.controller("MEPanicCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("MEPanicCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.ModData = [];
 	$scope.maintitle = "ME Panic Test";
@@ -1970,6 +2021,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.moddocs = "Table 6.1A";
 	$scope.Entity = "MEPanicTest";
 	$scope.ModEntity = "MEPanicMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -2062,9 +2114,49 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+	$scope.simulator = {
+		data: {
+			Rating: 'Regular',
+			CFatigue: 0,
+			Fatigue: 0,
+			Status: 0,
+			Interp: false,
+			PrevSH: false,
+			Sown: 0,
+			OGB: false,
+			OGS: false,
+			TRAP: false,
+			WITH: false,
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "ME Panic Simulator",
+				contentTemplate: "sims/MEPanic.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Fatigue = 0;
+			this.data.CFatigue = 0;
+			this.data.Interp = false;
+			this.data.PrevSH = false;
+			this.data.Sown = 0;
+			this.data.OGB = this.data.OGS = false;
+			this.data.TRAP = this.data.WITH = false;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"UnitMoraleTest","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	
@@ -2185,6 +2277,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			HvWoods: false,
 			Fatigue: 0,
 			Leader: '',
+
 		},
 		showForm: function() {
 			var myEditor = {
