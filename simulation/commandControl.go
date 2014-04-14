@@ -98,6 +98,10 @@ func CorpsOrder(col *db.Col, params map[string]interface{}) map[string]interface
 			params["ResultAccept"] = false
 			return params
 		}
+		if sptCount < 1 {
+			params["Result"] = "Should we allocate anyone to Support the Line of Defence, Sir ?"
+			params["ResultAccept"] = true
+		}
 		if defCount > 2 {
 			params["Result"] = "Jolly Good Show, Sir ..  Such determination !"
 			params["ResultAccept"] = true

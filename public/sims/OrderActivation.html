@@ -1,0 +1,93 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+<img src="images/OrderActivation.jpg">
+	<h3 class="bg-info">Order Details</h3>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Order Type</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="ME" ng-model="simulator.data.OrderType" bs-radio>ME Order</label>
+    		<label class="btn btn-default" type="radio" value="Elite" ng-model="simulator.data.OrderType" bs-radio>Elite ME Order</label>
+    		<label class="btn btn-default" type="radio" value="Corps" ng-model="simulator.data.OrderType" bs-radio>Corps Order</label>
+    	</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Issuing Commander</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="Superior" ng-model="simulator.data.Commander" bs-radio>Superior</label>
+    		<label class="btn btn-default" type="radio" value="Good" ng-model="simulator.data.Commander" bs-radio>Good</label>
+    		<label class="btn btn-default" type="radio" value="Average" ng-model="simulator.data.Commander" bs-radio>Average</label>
+    		<label class="btn btn-default" type="radio" value="Poor" ng-model="simulator.data.Commander" bs-radio>Poor</label>
+    		<label class="btn btn-default" type="radio" value="Despicable" ng-model="simulator.data.Commander" bs-radio>Despicable</label>
+    	</div>
+	</div>
+   	<div class="form-group">
+		<label class="col-sm-3 control-label">Staff Rating</label>
+		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Staff" bs-radio>Good</label>
+		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Staff" bs-radio>Average</label>
+		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Staff" bs-radio>Poor</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Commander Inspiration</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="Charismatic" ng-model="simulator.data.Inspiration" bs-radio>Charismatic</label>
+    		<label class="btn btn-default" type="radio" value="Inspirational" ng-model="simulator.data.Inspiration" bs-radio>Inspirational</label>
+    		<label class="btn btn-default" type="radio" value="Average" ng-model="simulator.data.Inspiration" bs-radio>Average</label>
+    		<label class="btn btn-default" type="radio" value="Uninspiring" ng-model="simulator.data.Inspiration" bs-radio>Uninspiring</label>
+    		<label class="btn btn-default" type="radio" value="Despicable" ng-model="simulator.data.Inspiration" bs-radio>Despicable</label>
+    	</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Order</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="" ng-model="simulator.data.Order" bs-radio>Other</label>
+    		<label class="btn btn-default" type="radio" value="BreakOff" ng-model="simulator.data.Order" bs-radio>BreakOff</label>
+    		<label class="btn btn-default" type="radio" value="Attack" ng-model="simulator.data.Order" bs-radio>Attack</label>
+    		<label class="btn btn-default" type="radio" value="GB" ng-model="simulator.data.Order" bs-radio>Form Grand Bty</label>
+    	</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Range in Grids</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Grids" bs-radio>Same</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Grids" bs-radio>1</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Grids" bs-radio>2</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Grids" bs-radio>3+</label>
+    	</div>
+	</div>
+   	<div class="form-group">
+		<label class="col-sm-3 control-label">Positive Factors</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.CAUrge" bs-checkbox>CA Urge</button>
+	</div>
+   	<div class="form-group">
+		<label class="col-sm-3 control-label">Negative Factors</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.NoLOS" bs-checkbox>No LOS</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Rivalry" bs-checkbox>Rivalry</button>
+	</div>
+   	<div class="form-group">
+		<label class="col-sm-3 control-label">Weather Factors</label>
+		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Weather" bs-radio>Clear</label>
+		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Weather" bs-radio>Rain</label>
+		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Weather" bs-radio>Heavy Rain</label>
+		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Weather" bs-radio>Snow</label>
+	</div>
+
+	<entry-field label="Activation Points" ng-model="simulator.data.ActivationPoints" span="2"></entry-field>
+
+	<h3 class="bg-success">Results</h3>
+	<display-field label="Dice" ng-model="simulator.data.Dice" span="4"></display-field>
+	<display-field label="Activation Points" ng-model="simulator.data.ResultPoints" span="2"></display-field>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Activate Orders</button>
+
+</div>
+</form>
+
+

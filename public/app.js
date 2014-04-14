@@ -1689,7 +1689,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("OrderActivationCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("OrderActivationCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.ModData = [];
 	$scope.maintitle = "Order Activation";
@@ -1698,6 +1698,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.moddocs = "Table 8.1B";
 	$scope.Entity = "OrderActivation";
 	$scope.ModEntity = "OrderActivationMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1786,24 +1787,52 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Dice: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
-	$scope.changeModData = function(d) {
-		$scope.$apply();
-	}
+	$scope.simulator = {
+		data: {
+			OrderType: 'ME',
+			ActivationPoints: 0,
+			Commander: 'Average',
+			Inspiration: 'Average',
+			Order: '',
+			Grids: 0,
+			CAUrge: false,
+			NoLOS: false,
+			Rivalry: false,
+			Weather: 0,
+			Staff: 2,
+			ResultPoints: '',
+			Dice: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Order Activation Simulator",
+				contentTemplate: "sims/OrderActivation.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+			this.calc();
+		},
+		clear: function() {
+			this.data.ActivationPoints = 0;
+			this.data.ResultPoints = this.data.Dice = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
-		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
+		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	
 }])
