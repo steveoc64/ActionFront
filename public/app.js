@@ -5417,7 +5417,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 	]);
 }])
-.controller("BridgeFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("BridgeFireCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.title = "Set Bridges and Buildings Aflame";
 	$scope.docs = "Table 17.8  (+1 for each additional Howitzer section in Bty)";
@@ -5476,16 +5476,47 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Cover: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			HWType: 0,
+			NumHW: 1,
+			FireMission: 1,
+			Hits: 1,
+			Cover: 0,
+			Dice: '',
+			Effect: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Set Bridges and Buildings on Fire",
+				contentTemplate: "sims/BridgeFire.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.HWType = 0,
+			this.data.NumHW = 1;
+			this.data.FireMission = this.data.Hits = 1;
+			this.data.Cover = 0;
+			this.data.Dice = this.data.Effect = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 	]);
 }])
 .controller("DefFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
