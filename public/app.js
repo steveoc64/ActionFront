@@ -1533,12 +1533,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);	
 
 }])
-.controller("MEOrdersCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("MEOrdersCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.MEOrders = MEOrders;
 	$scope.title = "ME Orders";
 	$scope.docs = "Table 4.1";
 	$scope.Entity = "MEOrder";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1582,16 +1583,49 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		} 
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Order: '~ ??? ~'})
-    }
-
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
 
+	$scope.simulator = {
+		data: {
+			CorpsOrder: 'Manoeuvre',
+			MEOrders: ['Attack','Defend','Bombard','Support','March','Rest','Redeploy','BreakOff','Screen','RearGuard'],	
+			METype: 'Infantry',
+			Engaged: 0,
+			Purpose: '',
+			Notes: '',
+			ResultDefend: '',
+			ResultShaken: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Manoeuvre Element Orders Simulator",
+				contentTemplate: "sims/MEOrders.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+			this.calc();
+		},
+		clear: function() {
+			this.data.CorpsOrder = 'Manoeuvre',
+			this.data.METype = 'Infantry';
+			this.data.Engaged = 0;
+			this.data.Purpose = this.data.Notes = this.data.ResultDefend = this.data.ResultShaken = '';
+			this.calc();
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
+		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData, Simulator: $scope.simulator}
 	]);
 
 }])
