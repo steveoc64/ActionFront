@@ -14,11 +14,13 @@ var DeploymentStates = ['Deployed','Bde Out','Deploying','Condensed Col','Regula
 var TerrainTypes = ['Marchfeld','Rolling','Rough','Hill','Town'];
 var WeatherStates = ['Clear','Calm','Cold','Frost','Fog','Hot','HvRain','HvSnow','LtRain','Mud','Sleet','Snow'];
 var DeploymentRatings = ['Average','French Guard','French 1792-1799','French 1800-1807','French 1808-1812','French 1815','French Allied 1807','French Conscript','British','Austrian 1792-1805','Russian 1802-1805','Prussian 1792-1806','Militia'];
-var TacMoveTypes = ['Artillery','Infantry','Cavalry','LightCav']
-var TacFormations = ['AttackColumn','ClosedColumn','Line','Square','Skirmish',"MarchColumn"]
-var TacFormationTos = ['AttackColumn','ClosedColumn','Line Centre','Line Left','Line Right','Square','Skirmish',"MarchColumn"]
-var TrainedTypes = ['Trained','UnTrained']
-var LeaderInspiration = ['','Despicable','Poor','Average','Inspirational','Charismatic']
+var TacMoveTypes = ['Artillery','Infantry','Cavalry','LightCav'];
+var TacFormations = ['AttackColumn','ClosedColumn','Line','Square','Skirmish',"MarchColumn"];
+var TacFormationTos = ['AttackColumn','ClosedColumn','Line Centre','Line Left','Line Right','Square','Skirmish',"MarchColumn"];
+var TrainedTypes = ['Trained','UnTrained'];
+var LeaderInspiration = ['','Despicable','Poor','Average','Inspirational','Charismatic'];
+var BBTargets = ['OpenOrder','Line','Column','ClosedCol','Square','Limbered'];
+var BBCovers = ['Open','LtCover','HvCover','Town'];
 
 var Lookups = {
 	Ratings: Ratings,
@@ -42,6 +44,8 @@ var Lookups = {
 	TacFormationTos: TacFormationTos,
 	TrainedTypes: TrainedTypes,
 	LeaderInspiration: LeaderInspiration,
+	BBTargets: BBTargets,
+	BBCovers: BBCovers,
 }
 
 var defaultGridOptions = { 
@@ -5155,7 +5159,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("BouncethruCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("BouncethruCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Bounce Through Effect";
@@ -5164,6 +5168,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 18.3";
 	$scope.Entity = "Bouncethru";
 	$scope.Entity2 = "BouncethruMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -5252,20 +5257,61 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+	$scope.simulator = {
+		data: {
+			ArtyWeight: 'Medium',
+			Bases: 2,
+			FireMission: 0,
+			Grid: 0,
+			SGrid: 0,
+			T1: '',
+			T2: '',
+			T3: '',
+			T4: '',
+			T5: '',
+			C1: 'Open',
+			C2: 'Open',
+			C3: 'Open',
+			C4: 'Open',
+			C5: 'Open',
+			H1: '',
+			H2: '',
+			H3: '',
+			H4: '',
+			H5: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Bombardment & Bouncethrough Simulator",
+				contentTemplate: "sims/ArtyBB.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.FireMission = 0;
+			this.data.Grid = this.data.SGrid = 0;
+			this.data.T1 = this.data.T2 = this.data.T3 = this.data.T4 = this.data.T5 = '';
+			this.data.C1 = this.data.C2 = this.data.C3 = this.data.C4 = this.data.C5 = 'Open';
+			this.data.H1 = this.data.H2 = this.data.H3 = this.data.H4 = this.data.H5 = 'Open';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"ArtyBB","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+		{Entity: 'ArtyBB', Simulator: $scope.simulator},
 	]);
 	
 }])
