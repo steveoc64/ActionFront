@@ -5260,6 +5260,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
 	$scope.simulator = {
 		data: {
 			ArtyWeight: 'Medium',
@@ -5315,7 +5316,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("CounterBtyFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("CounterBtyFireCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.title = "Counter Bty Fire Results";
 	$scope.docs = "Table 17.5";
@@ -5375,16 +5376,45 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			Deploy: 0,
+			Hits: 1,
+			Cover: false,
+			Shrapnel: false,
+			EffectCrew: '',
+			EffectHorse: '',
+			EffectCaisson: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Artillery Hit Simulator",
+				contentTemplate: "sims/ArtyHit.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Hits = 1;
+			this.data.Cover = this.data.Schrapnel = false;
+			this.data.EffectCrew = this.data.EffectHorse = this.data.EffectCaisson = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"ArtyBB","Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 	]);
 }])
 .controller("BridgeFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
