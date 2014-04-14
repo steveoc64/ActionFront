@@ -7,7 +7,7 @@ var GunneryClasses = [0,1,2,3];
 var GunTypes = ['12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
 var ArtyWeights = ['Light','Medium','MdHeavy','Heavy'];
 var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
-var MEOrders = ['Attack','Defend','Bombard','Support/Intercept','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
+var MEOrders = ['Attack','Defend','Bombard','Support','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
 var StaffRatings = ['Good','Average','Poor'];
 var METypes = ['A Infantry','B Infantry','Cavalry','Class I Arty', 'Class II III Arty','Corps Baggage', 'Horse Arty', 'Pontoon Train'];
 var DeploymentStates = ['Deployed','Bde Out','Deploying','Condensed Col','Regular Col','Extended Col'];
@@ -1432,12 +1432,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);	
 	
 }])
-.controller("CorpsOrdersCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("CorpsOrdersCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.MEOrders = MEOrders;
 	$scope.title = "Corps Orders";
 	$scope.docs = "Table 3.1";
 	$scope.Entity = "CorpsOrder";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -1481,16 +1482,54 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		} 
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Order: '~ ??? ~', MEOrders: ['Attack','Defend','Withdraw'], Stipulation: 'Enter constraints for the Corps under this order'})
-    }
 
     $scope.changeData = function(d) {
     	$scope.$apply();
     }
 
+	$scope.simulator = {
+		data: {
+			CorpsOrder: 'Manoeuvre',
+			Stipulation: '',
+			NumME: 3,
+			ME1: 'March',
+			ME2: 'March',
+			ME3: 'March',
+			ME4: 'March',
+			ME5: 'March',
+			ME6: 'March',
+			MEOrders: ['Attack','Defend','Bombard','Support','March','Rest','Redeploy','BreakOff','Screen','RearGuard'],		
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Corps Orders Simulator",
+				contentTemplate: "sims/CorpsOrders.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+			this.calc();
+		},
+		clear: function() {
+			this.data.CorpsOrder = 'Manoeuvre',
+			this.data.Stipulation = '',
+			this.data.NumME = 3;
+			this.calc();
+		},
+		canSee: function(i)	{
+			return (i <= this.data.NumME);
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData}
+		{"Entity": $scope.Entity, "Data": $scope.Data, "Callback": $scope.changeData, Simulator: $scope.simulator}
 	]);	
 
 }])

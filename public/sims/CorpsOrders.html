@@ -1,0 +1,85 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+<img src="images/CorpsOrders.jpg">
+	<h3 class="bg-info">Corps</h3>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Corps Order</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="Manoeuvre" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Manoeuvre</label>
+	    		<label class="btn btn-default" type="radio" value="Defend" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Defend</label>
+	    		<label class="btn btn-default" type="radio" value="Attack" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Attack</label>
+	    		<label class="btn btn-default" type="radio" value="Engaged" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Engaged</label>
+	    		<label class="btn btn-default" type="radio" value="Withdraw" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Withdraw</label>
+	    	</div>
+		</label>
+	</div>
+	<display-field label="Description" ng-model="simulator.data.Stipulation" span="8"></display-field>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Number of MEs</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-change="simulator.calc()" ng-model="simulator.data.NumME" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-change="simulator.calc()" ng-model="simulator.data.NumME" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-change="simulator.calc()" ng-model="simulator.data.NumME" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-change="simulator.calc()" ng-model="simulator.data.NumME" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-change="simulator.calc()" ng-model="simulator.data.NumME" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-change="simulator.calc()" ng-model="simulator.data.NumME" bs-radio>6+</label>
+	    	</div>
+		</label>
+	</div>
+
+	<h3 class="bg-info">Manoeuvre Elements</h3>	
+	<div class="form-group">
+		<label class="col-sm-3 control-label"></label>
+		<table class="table">
+			<tr>
+				<th></th>
+				<th>ME 1</th>
+				<th ng-show="simulator.canSee(2)">ME 2</th>
+				<th ng-show="simulator.canSee(3)">ME 3</th>
+				<th ng-show="simulator.canSee(4)">ME 4</th>
+				<th ng-show="simulator.canSee(5)">ME 5</th>
+				<th ng-show="simulator.canSee(6)">ME 6</th>
+			</tr>
+			<tr>
+				<td>Orders</td>
+				<td>
+					<select id="UnitType" ng-model="simulator.data.ME1" ng-change="simulator.calc()" ng-options="t for t in simulator.data.MEOrders"></select>
+				</td>
+				<td ng-show="simulator.canSee(2)">
+					<select id="UnitType" ng-model="simulator.data.ME2" ng-change="simulator.calc()" ng-options="t for t in simulator.data.MEOrders"></select>
+				</td>
+				<td ng-show="simulator.canSee(3)">
+					<select id="UnitType" ng-model="simulator.data.ME3" ng-change="simulator.calc()" ng-options="t for t in simulator.data.MEOrders"></select>
+				</td>
+				<td ng-show="simulator.canSee(4)">
+					<select id="UnitType" ng-model="simulator.data.ME4" ng-change="simulator.calc()" ng-options="t for t in simulator.data.MEOrders"></select>
+				</td>
+				<td ng-show="simulator.canSee(5)">
+					<select id="UnitType" ng-model="simulator.data.ME5" ng-change="simulator.calc()" ng-options="t for t in simulator.data.MEOrders"></select>
+				</td>
+				<td ng-show="simulator.canSee(6)">
+					<select id="UnitType" ng-model="simulator.data.ME6" ng-change="simulator.calc()" ng-options="t for t in simulator.data.MEOrders"></select>
+				</td>
+			</tr>
+		</table>
+	</div>	
+
+	<h3 class="bg-success">Analysis of Orders</h3>
+	<display-field label="ADC Says" ng-model="simulator.data.Result" span="8"></display-field>
+	<display-field label="Acceptable" ng-model="simulator.data.ResultAccept" span="2"></display-field>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Check Orders</button>
+
+</div>
+</form>
+
+
