@@ -2613,7 +2613,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
-		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	
 }])
@@ -2717,28 +2717,17 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
-		$scope.$apply();
-	}
-
-	$scope.changeModData = function(d) {
 		$scope.$apply();
 	}
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
-		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	
 }])
-.controller("MEFatigueCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("MEFatigueCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.ModData = [];
 	$scope.maintitle = "ME Fatigue Test";
@@ -2747,6 +2736,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.moddocs = "Table 22.1A";
 	$scope.Entity = "MEFatigue";
 	$scope.ModEntity = "MEFatigueMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -2835,24 +2825,60 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
-	$scope.changeModData = function(d) {
-		$scope.$apply();
-	}
+	$scope.simulator = {
+		data: {
+			CADefeat: 0,
+			FF: 0,
+			BBM: 0,
+			LostColor: 0,
+			CFatigue: 0,
+			Leadership: 0,
+			BBOnly: false,
+			TookStandard: false,
+			NoLoss: false,
+			TookSP: false,
+			TookST: false,
+			FirstBlood: false,
+			ForcedMarch: false,
+			BonusImpulse: false,
+			LeaderKilled: false,
+			CorpsCmdKilled: false,
+			Mud: false,
+			Cold: false,
+			LastTurn: false,
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "ME Fatigue Test Simulator",
+				contentTemplate: "sims/MEFatigue.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.CADefeat = this.data.FF = this.data.BBM = this.data.LostColor = this.data.CFatigue = this.data.Leadership = 0;
+			this.data.BBOnly = this.data.TookStandard = this.data.NoLoss = this.data.TookSP = this.data.TookST = false;
+			this.data.FirstBlood = this.data.ForcedMarch = this.data.BonusImpulse = this.data.LeaderKilled = this.data.CorpsCmdKilled = false;
+			this.data.Mud = this.data.Cold = false;
+			this.data.LastTurn = false;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
-		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
+		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	
 }])
