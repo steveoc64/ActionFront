@@ -125,6 +125,10 @@ func VolleyFire(col *db.Col, params map[string]interface{}) map[string]interface
 			if params["Cover"].(float64) == 3 {
 				adder += val
 			}
+		case "C4":
+			if params["Cover"].(float64) == 4 {
+				adder += val
+			}
 		case "FTG":
 			adder += (val * firerFatigue)
 		case "HIT":

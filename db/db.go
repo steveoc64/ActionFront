@@ -2516,8 +2516,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireMod", FireMod{"C1", "Target in Lt Cover", -4}))
 	gameData.Insert(DataMap("FireMod", FireMod{"C2", "Target in Md Cover", -8}))
 	gameData.Insert(DataMap("FireMod", FireMod{"C3", "Target in Hv Cover", -12}))
-	gameData.Insert(DataMap("FireMod", FireMod{"C1", "Target in SuperHv Cover", -16}))
-	gameData.Insert(DataMap("FireMod", FireMod{"C1", "Target in SuperHv Cover", -16}))
+	gameData.Insert(DataMap("FireMod", FireMod{"C4", "Target in SuperHv Cover", -16}))
 	gameData.Insert(DataMap("FireMod", FireMod{"FTG", "Per Fatigue Level over Fresh", -2}))
 	gameData.Insert(DataMap("FireMod", FireMod{"HIT", "Per Hit", -1}))
 

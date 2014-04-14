@@ -2327,7 +2327,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("FireDiscCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("FireDiscCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.ModData = [];
 	$scope.maintitle = "Fire Discipline Test";
@@ -2336,6 +2336,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.moddocs = "Table 13.3A";
 	$scope.Entity = "FireDisciplineTest";
 	$scope.ModEntity = "FireDisciplineMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -2424,28 +2425,56 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
-	$scope.changeModData = function(d) {
-		$scope.$apply();
-	}
+	$scope.simulator = {
+		data: {
+			Rating: 'Regular',
+			Leader: '',
+			Hits: 0,
+			HitsNow: 0,
+			BnGuns: false,
+			Fire: '',
+			FireDisordered: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Fire Discipline Simulator",
+				contentTemplate: "sims/FireDisc.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		setHits: function() {
+			if (this.data.Hits < this.data.HitsNow) {
+				this.data.Hits = this.data.HitsNow;
+			}
+
+		},
+		clear: function() {
+			this.data.Hits = this.data.HitsNow = 0;
+			this.data.BnGuns = false;
+			this.data.Fire = this.data.FireDisordered = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
-		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
+		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	
 }])
-.controller("InitBadMoraleCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("InitBadMoraleCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.ModData = [];
 	$scope.maintitle = "Initial Bad Morale Test";
@@ -2454,6 +2483,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.moddocs = "Table 22.2A";
 	$scope.Entity = "InitialBadMorale";
 	$scope.ModEntity = "InitialBadMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -2543,23 +2573,46 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.ModData.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
-	$scope.changeModData = function(d) {
-		$scope.$apply();
-	}
+	$scope.simulator = {
+		data: {
+			Fatigue: 0,
+			CFatigue: 0,
+			Hits: 0,
+			Leadership: 0,
+			Ejected: false,
+			LostColors: false,
+			ReluctantAllies: false,
+			SQP: false,
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Initial Bad Morale Simulator",
+				contentTemplate: "sims/InitBadMorale.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Fatigue = this.data.CFatigue;
+			this.data.Hits = this.data.Leadership = 0;
+			this.data.Ejected = this.data.LostColors = this.data.ReluctantAllies = this.data.SQP = false;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeModData}
 	]);
 	
@@ -3153,7 +3206,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 		showForm: function() {
 			var myEditor = {
-				title: "GT Movement Simulator",
+				title: "Grand Tactical Movement Simulator",
 				contentTemplate: "sims/GTMovementSim.html",
 				scope: $scope
 			}
