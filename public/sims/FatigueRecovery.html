@@ -6,6 +6,19 @@
 	<h3 class="bg-info">Manoeuvre Element</h3>
 
 	<div class="form-group">
+		<label class="col-sm-3 control-label">Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Fatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Fatigue" bs-radio>Winded</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Fatigue" bs-radio>Worn</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Fatigue" bs-radio>Tired</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Fatigue" bs-radio>Exhausted</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
 		<label class="col-sm-3 control-label">Campaign Fatigue</label>
     	<label>
 			<div class="btn-group">
@@ -51,7 +64,7 @@
 
   <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
   <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
-  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Recover Morale</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Recover Fatigue</button>
 
 </div>
 </form>

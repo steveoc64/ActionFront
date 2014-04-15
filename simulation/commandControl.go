@@ -103,7 +103,7 @@ func CorpsOrder(col *db.Col, params map[string]interface{}) map[string]interface
 			params["ResultAccept"] = true
 		}
 		if defCount > 2 {
-			params["Result"] = "Jolly Good Show, Sir ..  Such determination !"
+			params["Result"] = "Jolly Good Show, Sir ..  They wont get through that lot !"
 			params["ResultAccept"] = true
 		}
 	case "Withdraw":

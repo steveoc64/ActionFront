@@ -779,12 +779,12 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'Nation', width: 80, visible: false}, 
            	{field:'From', width: 50}, 
            	{field:'To', width: 50}, 
-        	{field:'Name', width: 160}, 
+        	{field:'Name', width: 240}, 
         	{field:'Rating', width: 100, editableCellTemplate: 'tpl/ratingTemplate.html'},
         	{field:'DrillBook', width: 100, editableCellTemplate: 'tpl/drillBookTemplate.html'},
         	{field:'Layout', width: 80},
-        	{field:'Fire', width: 40},
-        	{field:'Elite', width: 40},
+        	{field:'Fire', width: 80},
+        	{field:'Elite', width: 80},
         	{field:'Equip', width: 100, editableCellTemplate: 'tpl/equipTemplate.html'},
         	{field:'Skirmish', width: 100, editableCellTemplate: 'tpl/skirmishRatingTemplate.html'},
         	{field:'Street', width: 100, editableCellTemplate: 'tpl/streetRatingTemplate.html'},
@@ -1272,7 +1272,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
-        	fields: ['Long'],
+        	fields: ['Max'],
         	directions: ['asc']
         },
         columnDefs: [
@@ -1738,7 +1738,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 120}, 
-           	{field:'Descr', displayName:'Description',width: 300},
+           	{field:'Descr', displayName:'Description',width: 400},
            	{field:'Points', displayName: 'ME', width: 60},
            	{field:'CorpsPoints', displayName: 'Corps', width: 80}
         ]
@@ -1805,6 +1805,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Weather: 0,
 			Staff: 2,
 			ResultPoints: '',
+			ResultActivated: '',
 			Dice: '',
 		},
 		showForm: function() {
@@ -1818,7 +1819,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		},
 		clear: function() {
 			this.data.ActivationPoints = 0;
-			this.data.ResultPoints = this.data.Dice = '';
+			this.data.ResultPoints = this.data.Dice = this.data.ResultActivated = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
@@ -3092,6 +3093,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.simulator = {
 		data: {
+			Fatigue: 4,
 			CFatigue: 0,
 			BBC: 0,
 			RestedLast: false,
@@ -3108,6 +3110,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		clear: function() {
 			this.data.CFatigue = this.data.BBC = 0;
 			this.data.RestedLast = false;
+			this.data.Fatigue = 4;
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
