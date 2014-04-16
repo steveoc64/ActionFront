@@ -23,17 +23,29 @@
 		</div>
 	</div>
 	<div class="form-group">
+		<label class="col-sm-3 control-label">Commander Attachment Status</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Attachment" bs-radio>Not Attached</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Attachment" bs-radio>Attached This Unit</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Attachment" bs-radio>Attached Other Unit</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
 		<label class="col-sm-3 control-label">Action Attempt Number</label>
     	<label>
 			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Action" bs-radio>Actions Exhausted</label>
 	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Action" bs-radio>1st</label>
 	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Action" bs-radio>2nd</label>
 	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Action" bs-radio>3rd</label>
 	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Action" bs-radio>4th</label>
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Action" bs-radio>Actions Exhausted</label>
 	    	</div>
 		</label>
 	</div>
+
+
 
 	<h3 class="bg-success">Results</h3>
 

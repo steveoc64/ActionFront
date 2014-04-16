@@ -1950,6 +1950,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Dice: '',
 			Result: '',
 			Action: 1,
+			Attachment: 0,
 		},
 		showForm: function() {
 			var myEditor = {
@@ -1962,6 +1963,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		clear: function() {
 			this.data.PassScore = this.data.Dice = this.data.Result = '';
 			this.data.Action = 1;
+			this.data.Attachment = 0;
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
