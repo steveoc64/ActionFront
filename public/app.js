@@ -2748,7 +2748,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("BonusImpulseCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("BonusImpulseCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.ModData = [];
 	$scope.maintitle = "Bonus Impulse Test";
@@ -2757,6 +2757,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.moddocs = "Tables 20.1A";
 	$scope.Entity = "BonusImpulse";
 	$scope.ModEntity = "BonusImpulseMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -2776,10 +2777,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Score', width: 60}, 
            	{field:'Descr', displayName:'Description',width: 280}, 
-           	{field:'Another', displayName:'Bonus',width: 80, editableCellTemplate: 'tpl/anotherTemplate.html'},
-           	{field:'Fatigue', width: 80, editableCellTemplate: 'tpl/fatigueTemplate.html'},
-           	{field:'OneUnitOnly', width: 80, editableCellTemplate: 'tpl/oneUnitOnlyTemplate.html'},
-           	{field:'FFOnly', width: 80, editableCellTemplate: 'tpl/FFOnlyTemplate.html'}
+           	{field:'Another', displayName:'Bonus',width: 100, editableCellTemplate: 'tpl/anotherTemplate.html'},
+           	{field:'Fatigue', width: 100, editableCellTemplate: 'tpl/fatigueTemplate.html'},
+           	{field:'OneUnitOnly', width: 120, editableCellTemplate: 'tpl/oneUnitOnlyTemplate.html'},
+           	{field:'FFOnly', width: 100, editableCellTemplate: 'tpl/FFOnlyTemplate.html'}
         ]
 	};
 
@@ -2800,7 +2801,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 80}, 
-           	{field:'Descr', displayName:'Description',width: 300},
+           	{field:'Descr', displayName:'Description',width: 400},
            	{field:'Value', width: 60},
         ]
 	};
@@ -2852,8 +2853,64 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			ArmyCommander: '',
+			CorpsCommander: '',
+			BoldLeader: false,
+			ArmyCA: false,
+			CorpsCA: false,
+			MECA: false,
+			Defend: false,
+			Impetus: false,
+			Shaken: false,
+			Moved: false,
+			Fatigue: 0,
+			Holding: 0,
+			CAW: 0,
+			CAD: 0,
+			TookFlag: false,
+			Interp: false,
+			LostSP: false,
+			Town: false,
+			Fog: false,
+			Mud: false,
+			Dice: '',
+			Result: '',
+			ResultBonus: '',
+			ResultFatigue: '',
+			ResultOneUnit: '',
+			ResultFirefight: '',		
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Bonus Impulse Simulator",
+				contentTemplate: "sims/BonusImpulse.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.CAW = this.data.CAD = 0;
+			this.data.ArmyCA = this.data.CorpsCA = this.data.MECA = false;
+			this.data.Defend = this.data.Impetus = this.data.Shaken = this.data.Moved = false;
+			this.data.Fatigue = this.data.Holding = 0;
+			this.data.TookFlag = this.data.Interp = this.data.LostSP = this.data.Town = false;
+			this.data.Fog = this.data.Mud = false;
+			this.data.Result = this.data.Dice = this.data.ResultBonus = this.data.ResultFatigue = this.data.OneUnit = this.data.Firefight = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.ModEntity, Data: $scope.ModData, Callback: $scope.changeData}
 	]);
 	

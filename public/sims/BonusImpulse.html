@@ -1,0 +1,109 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+<img src="images/BonusImpulse.jpg">
+	<h3 class="bg-info">Manoeuvre Element</h3>
+
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Attached Army Commander</label>
+		<div class="col-sm-9">
+			<select id="Leader" ng-model="simulator.data.ArmyCommander" ng-change="simulator.clear()" ng-options="t for t in Lookups.LeaderInspiration"></select>
+			<button type="button" class="btn btn-default" ng-model="simulator.data.ArmyCA" bs-checkbox>CA Spent</button>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Attached Corps Commander</label>
+		<div class="col-sm-9">
+			<select id="Leader" ng-model="simulator.data.CorpsCommander" ng-change="simulator.clear()" ng-options="t for t in Lookups.LeaderInspiration"></select>
+			<button type="button" class="btn btn-default" ng-model="simulator.data.CorpsCA" bs-checkbox>CA Spent</button>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">ME Status</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.BoldLeader" bs-checkbox>Bold Leader</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.MECA" bs-checkbox>CA Spent</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Defend" bs-checkbox>Defend Unengaged</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Impetus" bs-checkbox>Impetus</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Shaken" bs-checkbox>Shaken</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Moved" bs-checkbox>Moved > Grid</button>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Fatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Fatigue" bs-radio>Winded</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Fatigue" bs-radio>Worn</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Fatigue" bs-radio>Tired</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Fatigue" bs-radio>Exhausted</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Units in Holding Area</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Holding" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Holding" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Holding" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Holding" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Holding" bs-radio>4+</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Close Actions<br>(this turn)</label>
+    	<label>
+    		Won:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.CAW" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.CAW" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.CAW" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.CAW" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.CAW" bs-radio>4+</label>
+	    	</div>
+	    	Lost:
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.CAD" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.CAD" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.CAD" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.CAD" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.CAD" bs-radio>4+</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Tactical Factors</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.TookFlag" bs-checkbox>Took Standard</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Interp" bs-checkbox>Interpenetrated</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.LostSP" bs-checkbox>Lost Strongpoint</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Town" bs-checkbox>Town Captured</button>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Weather Factors</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Fog" bs-checkbox>Fog or Smoke</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Mud" bs-checkbox>Rain, Snow, Mud</button>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+	<display-field label="Dice" ng-model="simulator.data.Dice" span="3"></display-field>
+	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
+	<display-field label="Bonus Received" ng-model="simulator.data.ResultBonus" span="2"></display-field>
+	<display-field label="Fatigued" ng-model="simulator.data.ResultFatigue" span="2"></display-field>
+	<display-field label="One Unit Only" ng-model="simulator.data.ResultOneUnit" span="2"></display-field>
+	<display-field label="Firefight Only" ng-model="simulator.data.ResultFirefight" span="2"></display-field>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Attempt Commander Action</button>
+
+</div>
+</form>
+
+
