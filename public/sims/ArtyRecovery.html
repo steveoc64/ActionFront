@@ -1,0 +1,36 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<img src="images/RecoverGuns.jpg">
+	<h3 class="bg-info">Recover Guns</h3>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Who's Guns Are These ?</label>
+   		<label class="btn btn-default" type="radio" value="1" ng-model="simulator2.data.Owner" bs-radio>Own Guns</label>
+   		<label class="btn btn-default" type="radio" value="2" ng-model="simulator2.data.Owner" bs-radio>Enemy Guns</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Other Factors</label>
+		<button type="button" class="btn btn-default" ng-model="simulator2.data.NE" bs-checkbox>Not Engaged</button>
+		<button type="button" class="btn btn-default" ng-model="simulator2.data.CA" bs-checkbox>CA Used</button>
+		<button type="button" class="btn btn-default" ng-model="simulator2.data.EN" bs-checkbox>Engineers Present</button>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+
+	<display-field label="Dice" ng-model="simulator2.data.Dice" span="4"></display-field>
+	<display-field label="Result" ng-model="simulator2.data.Result" span="8"></display-field>
+	<display-field label="Recovered" ng-model="simulator2.data.ResultRecovered" span="3"></display-field>
+	<display-field label="Disabled" ng-model="simulator2.data.ResultDisabled" span="3"></display-field>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator2.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator2.calc()">Recover Guns</button>
+
+</div>
+</form>
+
+

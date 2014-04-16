@@ -4314,6 +4314,39 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
 	};
 
+	$scope.simulator2 = {
+		data: {
+			Owner: 1,
+			NE: false,
+			CA: false,
+			EN: false,
+			Dice: '',
+			Result: '',
+			ResultRecovered: '',
+			ResultDisabled: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Recover Guns Simulator",
+				contentTemplate: "sims/ArtyRecovery.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Dice = this.data.Result = this.data.ResultRecovered = this.data.ResultDisabled = '';
+			this.data.CA = this.data.NE = this.data.EN = false;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity3,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
