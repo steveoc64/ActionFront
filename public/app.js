@@ -7775,7 +7775,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
 }])
-.controller("CALeaderDeathCtrl", ["$scope", "DataSocket", "$rootScope", "$http", function($scope, DataSocket,$rootScope, $http){
+.controller("CALeaderDeathCtrl", ["$scope", "DataSocket", "$modal","$rootScope", function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Leader Injury (Close Action)";
@@ -7875,6 +7875,52 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
+
+	$scope.simulator = {
+		data: {
+			Charmed: 2,
+			POD: false,
+			Foolish: false,
+			Situation: 0,
+			Nation: 0,
+			Hits: 0,
+			Rifle: false,
+			LoseCA: false,
+			Dice: '',
+			Results: '',
+			Severity: '',
+		},
+		rifles: function() {
+			if (this.data.Situation >= 3) {
+				return true;
+			}
+			if (this.data.Nation == 1 && this.data.Situation == 2) {
+				return true;
+			}
+			return false;
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Leader Death and Injury Simulator",
+				contentTemplate: "sims/LeaderDeath.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.POD = this.data.Rifle = this.data.LoseCA = this.data.Foolish = false;
+			this.data.Situation = this.data.Nation = this.data.Hits = 0;
+			this.data.Dice = this.data.Results = this.data.Severity = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
 
 	DataSocket.connect([
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
