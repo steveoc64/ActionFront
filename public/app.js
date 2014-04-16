@@ -6490,6 +6490,51 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.simulator = {
 		data: {
+			AACE: 16,
+			ACav: 3,
+			ACondition: 0,
+			Leader: '',
+			BdeLeader: '',
+			Approach: 0,
+			Wave: 1,
+			ABases: 1,
+			AHits: 0,
+			AFatigue: 0,
+			AMorale: 1,
+			AUnformed: false,
+			AUphill: false,
+			DType: 'I',
+			DRating: 'Regular',
+			DACE: 16,
+			DCav: 3,
+			DCondition: 2,
+			DLeader: '',
+			DBdeLeader: '',
+			DBases: 1,
+			DHits: 0,
+			DFatigue: 0,
+			DMorale: 1,
+			Cover: 0,
+			Formation: 'LN',
+			DUnformed: false,
+			DUphill: false,
+			Steephill: false,
+			BUA: false,
+			Weather: 0,
+			Result: '',
+			ADice: '',
+			DDice: '',
+			Odds: '',
+			AFinalResult: '',
+			AFinalHits: '',
+			AFinalBreaththrough: '',
+			AFinalFallback: '',
+			AFinalMorale: '',
+			DFinalResult: '',
+			DFinalHits: '',
+			DFinalBreaththrough: '',
+			DFinalFallback: '',
+			DFinalMorale: '',
 		},
 
 		showForm: function() {
@@ -6501,6 +6546,26 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			$modal(myEditor);
 		},
 		clear: function() {
+			this.data.Leader = this.data.BdeLeader = this.data.DLeader = this.data.DBdeLeader = '';
+			this.data.Approach = 0;
+			this.data.Shock = this.data.DShock = false;
+			this.data.ABases = this.data.DBases = 1;
+			this.data.AHits = this.data.DHits = this.data.AFatigue = this.data.DFatigue = 0;
+			this.data.AMorale = this.data.DMorale = 1;
+			this.data.AUnformed = this.data.DUnformed = false;
+			this.data.AUphill = this.data.DUphill = this.data.Steephill = false;
+			this.data.Weather = 0;
+			this.data.AACE = this.data.DACE = 16;
+			this.data.Wave = 1;
+			this.data.ACav = this.data.DCav = 3;
+			this.data.ACondition = 0;
+			this.data.DCondition = 2;
+			this.data.Cover = 0;
+			this.data.Formation = 'LN';
+			this.data.BUA = false;
+			this.data.Result = this.data.ADice = this.data.DDice = this.data.Odds = this.data.AFinalResult = '';
+			this.data.AFinalHits = this.data.AFinalBreaththrough = this.data.AFinalFallback = this.data.AFinalMorale = '';
+			this.data.DFinalResult = this.data.DFinalHits = this.data.DFinalFallback = this.data.DFinalMorale = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));

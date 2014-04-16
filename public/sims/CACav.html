@@ -2,16 +2,34 @@
 
 <div class="modal-inner-content">
 
-	<img src="images/CAInf.jpg">
+	<img src="images/CACav.jpg">
 	<h3 class="bg-info">Attacking Unit</h3>
 
+	<entry-field label="ACE Rating" ng-model="simulator.data.AACE" span="2"></entry-field>
 	<div class="form-group">
-		<label for="UnitType" class="col-sm-3 control-label">Rating</label>
-		<div class="col-sm-9">
-			<select id="UnitType" ng-model="simulator.data.Rating" ng-change="simulator.clear()" ng-options="t for t in Lookups.Ratings"></select>
-			<button type="button" class="btn btn-default" ng-model="simulator.data.Shock" bs-checkbox>Shock Troops</button>		
-		</div>
-	</div>   		
+		<label class="col-sm-3 control-label">Cavalry Type</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.ACav" bs-radio>Light</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.ACav" bs-radio>Lancer</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.ACav" bs-radio>Medium</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.ACav" bs-radio>Heavy</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.ACav" bs-radio>Armoured</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Horse Condition</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.ACondition" bs-radio>Charging</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.ACondition" bs-radio>Trotting</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.ACondition" bs-radio>Steady</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.ACondition" bs-radio>Blown</label>
+	    	</div>
+		</label>
+	</div>
+
 	<div class="form-group">
 		<label for="UnitType" class="col-sm-3 control-label">Leadership</label>
 		<div class="col-sm-9">
@@ -30,6 +48,16 @@
 	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Approach" bs-radio>Diagonal</label>
 	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Approach" bs-radio>Flank</label>
 	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Approach" bs-radio>Rear</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Wave Number</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Wave" bs-radio>1st</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Wave" bs-radio>2nd</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Wave" bs-radio>3rd +</label>
 	    	</div>
 		</label>
 	</div>
@@ -84,7 +112,6 @@
 		<label class="col-sm-3 control-label">Attacker Tactical Factors</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.AUnformed" bs-checkbox>Bold Skirmisher</button>		
 		<button type="button" class="btn btn-default" ng-model="simulator.data.AUphill" bs-checkbox>Attacking from UpHill</button>		
-		<button type="button" class="btn btn-default" ng-model="simulator.data.EN" bs-checkbox>Attacking With Engineers</button>		
 	</div>
 
 	<h3 class="bg-warning">Defending Unit</h3>
@@ -102,12 +129,62 @@
 		<label for="UnitType" class="col-sm-3 control-label">Infantry Rating</label>
 		<div class="col-sm-9">
 			<select id="UnitType" ng-model="simulator.data.DRating" ng-change="simulator.clear()" ng-options="t for t in Lookups.Ratings"></select>
-			<button type="button" class="btn btn-default" ng-model="simulator.data.DShock" bs-checkbox>Shock Troops</button>		
 		</div>
+	</div>   	
+	<div class="form-group" ng-show="simulator.data.DType=='I'">
+		<label class="col-sm-3 control-label">Weather Conditions</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Weather" bs-radio>Clear</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Weather" bs-radio>Mud</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Weather" bs-radio>Rain</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Weather" bs-radio>Snow</label>
+	    	</div>
+		</label>
+	</div>		
+	<div class="form-group" ng-show="simulator.data.DType=='I'">
+		<label class="col-sm-3 control-label">Defender Formation</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="LN" ng-model="simulator.data.Formation" bs-radio>Line</label>
+	    		<label class="btn btn-default" type="radio" value="AL" ng-model="simulator.data.Formation" bs-radio>Anchored</label>
+	    		<label class="btn btn-default" type="radio" value="SP" ng-model="simulator.data.Formation" bs-radio>Supported</label>
+	    		<label class="btn btn-default" type="radio" value="AC" ng-model="simulator.data.Formation" bs-radio>AttackCol</label>
+	    		<label class="btn btn-default" type="radio" value="CC" ng-model="simulator.data.Formation" bs-radio>ClosedCol</label>
+	    		<label class="btn btn-default" type="radio" value="SQ" ng-model="simulator.data.Formation" bs-radio>Square</label>
+	    		<label class="btn btn-default" type="radio" value="HS" ng-model="simulator.data.Formation" bs-radio>HastySquare</label>
+	    		<label class="btn btn-default" type="radio" value="KL" ng-model="simulator.data.Formation" bs-radio>Klumpen</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group" ng-show="simulator.data.DType=='C'">
+		<entry-field label="ACE Rating" ng-model="simulator.data.DACE" span="2"></entry-field>		
 	</div>   		
 	<div class="form-group" ng-show="simulator.data.DType=='C'">
-		<entry-field label="ACE Rating" ng-model="simulator.data.ACE" span="2"></entry-field>
-	</div>   		
+		<label class="col-sm-3 control-label">Cavalry Type</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.DCav" bs-radio>Light</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.DCav" bs-radio>Lancer</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.DCav" bs-radio>Medium</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.DCav" bs-radio>Heavy</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.DCav" bs-radio>Armoured</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group" ng-show="simulator.data.DType=='C'">
+		<label class="col-sm-3 control-label">Horse Condition</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.DCondition" bs-radio>Charging</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.DCondition" bs-radio>Trotting</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.DCondition" bs-radio>Steady</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.DCondition" bs-radio>Blown</label>
+	    	</div>
+		</label>
+	</div>
+
 	<div class="form-group" ng-show="simulator.data.DType=='A'">
 		<label for="UnitType" class="col-sm-3 control-label">Artillery Rating</label>
 		<div class="col-sm-9">
@@ -187,19 +264,6 @@
 	    	</div>
 		</label>
 	</div>
-	<div class="form-group" ng-show="simulator.data.DType=='I'">
-		<label class="col-sm-3 control-label">Defender Formation</label>
-    	<label>
-			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="LN" ng-model="simulator.data.Formation" bs-radio>Line</label>
-	    		<label class="btn btn-default" type="radio" value="AL" ng-model="simulator.data.Formation" bs-radio>Anchored Line</label>
-	    		<label class="btn btn-default" type="radio" value="AC" ng-model="simulator.data.Formation" bs-radio>Attack Col</label>
-	    		<label class="btn btn-default" type="radio" value="CC" ng-model="simulator.data.Formation" bs-radio>Closed Col</label>
-	    		<label class="btn btn-default" type="radio" value="SQ" ng-model="simulator.data.Formation" bs-radio>Square</label>
-	    		<label class="btn btn-default" type="radio" value="OO" ng-model="simulator.data.Formation" bs-radio>Open Order</label>
-	    	</div>
-		</label>
-	</div>
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Defender Tactical Factors</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.DUnformed" bs-checkbox>Unformed Skirmishers</button>		
@@ -230,7 +294,7 @@
 
 		<display-field label="Final Result" ng-model="simulator.data.DFinalResult" span="8"></display-field>
 		<display-field label="Hits" ng-model="simulator.data.DFinalHits" span="2"></display-field>
-		<display-field label="Breakthrough" ng-model="simulator.data.AFinalBreakthrough" span="4" ng-show="simulator.data.DType=='C'"></display-field>
+		<display-field label="Breakthrough" ng-model="simulator.data.DFinalBreakthrough" span="4" ng-show="simulator.data.DType=='C' && simulator.data.DCondition==0"></display-field>
 		<display-field label="Fallback" ng-model="simulator.data.DFinalFallback" span="4"></display-field>
 		<display-field label="Morale" ng-model="simulator.data.DFinalMorale" span="4"></display-field>
 	</span>
@@ -242,7 +306,7 @@
 
   <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
   <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
-  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Infantry Bayonet Attack</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Cavalry Charge !</button>
 
 </div>
 </form>

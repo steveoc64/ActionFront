@@ -2783,7 +2783,11 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CACav", CACav{"C2", "Medium vs Light", 1}))
 	gameData.Insert(DataMap("CACav", CACav{"C3", "Heavy vs Medium", 1}))
 	gameData.Insert(DataMap("CACav", CACav{"C4", "Round 1, Lancer vs Non Lancer", 2}))
-	gameData.Insert(DataMap("CACav", CACav{"C5", "Charging vs Non Charging", 3}))
+	gameData.Insert(DataMap("CACav", CACav{"C5", "Charging vs Trotting", 2}))
+	gameData.Insert(DataMap("CACav", CACav{"C6", "Charging vs Steady", 3}))
+	gameData.Insert(DataMap("CACav", CACav{"C7", "Charging vs Blown", 4}))
+	gameData.Insert(DataMap("CACav", CACav{"C8", "Trotting vs Steady", 1}))
+	gameData.Insert(DataMap("CACav", CACav{"C9", "Trotting vs Blown", 3}))
 
 	gameData.Insert(DataMap("CAInf", CAInf{"I1", "vs Infantry - Shock Infantry", 1}))
 	gameData.Insert(DataMap("CAInf", CAInf{"I2", "vs Infantry - Defending in Square", -3}))
