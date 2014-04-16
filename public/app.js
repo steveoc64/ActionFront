@@ -4466,7 +4466,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("SKRelocateCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("SKRelocateCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.Data3 = [];
@@ -4479,6 +4479,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.Entity = "SKRelocate";
 	$scope.Entity2 = "SKRelocateMod";
 	$scope.Entity3 = "SKSupport";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -4598,19 +4599,52 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			Rating: 'Average',
+			Leader: '',
+			Bold: false,
+			Terrain: 1,
+			Ammo: 0,
+			Hits: 0,
+			Fatigue: 0,
+			Range: 1,
+			Dice: '',
+			Result: '',
+			ResultRetire: '',
+			ResultMove: '',
+			ResultBold: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Skirmisher Relocation Simulator",
+				contentTemplate: "sims/SKRelocate.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Dice = this.data.Result = this.data.ResultRetire = this.data.ResultMove = this.data.ResultBold = '';
+			this.data.Terrain = 1;
+			this.data.Ammo = this.data.Hits = this.data.Fatigue = 0;
+			this.data.Range = 1;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
 	]);
