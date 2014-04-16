@@ -1,0 +1,108 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<img src="images/FormSquare.jpg">
+	<h3 class="bg-info">Unit Forming Square (Under Some Duress)</h3>
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Unit Rating</label>
+		<div class="col-sm-9">
+			<select id="Rating" ng-model="simulator.data.Rating" ng-options="t for t in Lookups.Ratings"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="Formation" class="col-sm-3 control-label">Current Formation</label>
+		<div class="col-sm-9">
+			<select id="Formation" ng-model="simulator.data.Formation" ng-options="t for t in Lookups.TacFormations"></select>
+			<button type="button" class="btn btn-default" ng-model="simulator.data.Disordered" bs-checkbox>Disordered</button>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Attached Leader</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Attached" bs-radio>None</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Attached" bs-radio>Bde Leader</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Attached" bs-radio>ME Commander</label>
+    	</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Carrying Hits</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Hits" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Hits" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Hits" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Hits" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Hits" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.Hits" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.Hits" bs-radio>6+</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Fatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Fatigue" bs-radio>Winded</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Fatigue" bs-radio>Worn</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Fatigue" bs-radio>Tired</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Fatigue" bs-radio>Exhausted</label>
+	    	</div>
+		</label>
+	</div>
+
+	<hr>	
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Distance to Enemy Cavalry<br>(in Grids)</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Range" bs-radio>Same Grid</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Range" bs-radio>Next Grid</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Range" bs-radio>Diagonal</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Range" bs-radio>2+ Grids</label>
+    	</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Enemy Approach</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Approach" bs-radio>Directly Ahead</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Approach" bs-radio>Diagonal</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Approach" bs-radio>Flank</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Approach" bs-radio>Rear</label>
+    	</div>
+	</div>
+	<div class="form-group">
+		<label for="Formation" class="col-sm-3 control-label">Enemy Situation</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.OppCharge" bs-checkbox>Opportunity Charge</button>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Action to Take</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Action" bs-radio>Hold Ground</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Action" bs-radio>Form Closed Column</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Action" ng-show="simulator.data.Range > 0" bs-radio>Form Square</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Action" ng-show="simulator.data.Range==3" bs-radio>Run For Cover</label>
+    	</div>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+
+	<display-field label="Score Needed" ng-model="simulator.data.PassScore" span="4"></display-field>
+	<display-field label="Dice" ng-model="simulator.data.Dice" span="4"></display-field>
+	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
+	<display-field label="Disordered" ng-model="simulator.data.ResultDisorder" span="2"></display-field>
+
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Tactical Move</button>
+
+</div>
+</form>
+
+

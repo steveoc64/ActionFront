@@ -6011,7 +6011,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("FormSquareCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("FormSquareCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Form Square";
@@ -6020,6 +6020,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 14.5A";
 	$scope.Entity = "FormSquare";
 	$scope.Entity2 = "FormSquareMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -6111,19 +6112,56 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-//    	$scope.Data.push({"@id": '0', Target: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-  //  	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
 
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			Rating: 'Regular',
+			Formation: 'AttackColumn',
+			Disordered: false,
+			OppCharge: false,
+			Attached: 0,
+			Hits: 0,
+			Fatigue: 0,
+			Range: 3,
+			Approach: 0,
+			Action: 2,
+			PassScore: '',
+			Dice: '',
+			Result: '',
+			ResultDisorder: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Form Square Simulator",
+				contentTemplate: "sims/FormSquare.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Formation = 'AttackColumn';
+			this.data.Disordered = this.data.OppCharge = false;
+			this.data.Attached = this.data.Hits = this.data.Fatigue = this.data.Approach = 0;
+			this.data.Range = 3;
+			this.data.Action = 2;
+			this.data.PassScore = this.data.Dice = this.data.Result = this.data.ResultDisorder = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 	
