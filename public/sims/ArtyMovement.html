@@ -1,0 +1,61 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<img src="images/ArtyMovement.jpg">
+	<h3 class="bg-info">Moving Unit</h3>
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Firing Weight</label>
+		<div class="col-sm-9">
+			<select id="UnitType" ng-model="simulator.data.ArtyWeight" ng-change="simulator.clear()" ng-options="t for t in Lookups.ArtyWeights"></select>
+			Class: 
+			<select id="UnitType" ng-model="simulator.data.GunneryClass" ng-change="simulator.clear()" ng-options="t for t in Lookups.GunneryClasses"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Pace of Movement</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Pace" bs-radio>Prolong</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Pace" bs-radio>Regular Limbered</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Pace" bs-radio>Gallop</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Terrain</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Terrain" bs-radio>Marchfeld</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Terrain" bs-radio>Rolling</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Terrain" bs-radio>Rough</label>
+	    	</div>
+		</label>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+
+	<div class="form-group">
+		<label class="col-sm-3"></label>
+		<label>
+			<button type="button" class="btn btn-default" ng-model="simulator.data.Diagonal" bs-checkbox>Diagonal</button>
+		</label>
+	</div>
+
+	<display-field label="Quadrants" ng-model="simulator.data.Quadrants" span="2"></display-field>
+
+	<display-field label="Inches" ng-model="simulator.data.Inches" span="2"></display-field>
+	<display-field label="Accumulated" ng-model="simulator.data.Accumulated" span="2"></display-field>
+	<display-field label="Horse Loss" ng-model="simulator.data.HorseLoss" span="4"></display-field>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Artillery Move</button>
+
+</div>
+</form>
+
+

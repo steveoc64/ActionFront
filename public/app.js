@@ -445,6 +445,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		template: '<button type="button" class="btn btn-danger" ng-click="simulator.showForm()"><i class="fa fa-fw fa-cogs fa-lg"></i></button>'
 	}
 })
+.directive('simBtn2', function(){
+	return {
+		restrict: 'E',
+		scope: true,
+		template: '<button type="button" class="btn btn-danger" ng-click="simulator2.showForm()"><i class="fa fa-fw fa-cogs fa-lg"></i></button>'
+	}
+})
 .directive('entryField', function(){
 	return {
 		restrict: 'E',
@@ -3876,7 +3883,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("ArtyMovementCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("ArtyMovementCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.Data3 = [];
@@ -3893,6 +3900,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.Entity2 = "ArtyHorseLoss";
 	$scope.Entity3 = "ArtyRelocate";
 	$scope.Entity4 = "ArtyRelocateMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -4057,27 +4065,72 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Class: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', Terrain: '~ ??? ~'})
-    }
-    $scope.newRow3 = function() {
-    	$scope.Data3.push({"@id": '0', Class: '~ ??? ~'})
-    }
-    $scope.newRow4 = function() {
-    	$scope.Data4.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			ArtyWeight: 'Medium',
+			GunneryClass: 2,
+			Diagonal: false,
+			Pace: 1,
+			Terrain: 1,
+			Quadrants: '',
+			Inches: '',
+			Accumulated: '',
+			HorseLoss: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Artillery Movement Simulator",
+				contentTemplate: "sims/ArtyMovement.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Quadrants = this.data.Inches = this.data.Accumulated = this.data.HorseLoss = '';
+			this.data.Terrain = this.data.Pace = 1;
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
+	$scope.simulator2 = {
+		data: {
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Artillery Relocation Simulator",
+				contentTemplate: "sims/ArtyRelocate.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity3,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
-		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData, Simulator: $scope.simulator2},
 		{Entity: $scope.Entity4, Data: $scope.Data4, Callback: $scope.changeData},
 	]);
 	
