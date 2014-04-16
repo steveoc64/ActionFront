@@ -6008,6 +6008,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			DieScore: 0,
 			Bayonet: false,
 			Disordered: false,
+			Shaken: false,
 			DGuns: false,
 			Result: '',
 			ResultClose: '',
@@ -6037,7 +6038,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.DieScore = 0;
 			this.data.Hits = 0;
 			this.data.Bayonet = false;
-			this.data.Disordered = this.data.DGuns = false;
+			this.data.Disordered = this.data.DGuns = this.Shaken = false;
 			this.data.Result = this.data.ResultClose = this.data.ResultFirefight = this.data.ResultFireRetire = '';
 			this.data.ResultRout = this.data.ResultDisorder = this.data.ResultHits = this.data.ResultHalt = '';
 		},
@@ -6386,7 +6387,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 	]);
 }])
-.controller("CACavCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("CACavCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Cavalry Close Action Factors";
@@ -6395,6 +6396,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 16.2A & C";
 	$scope.Entity = "CACav";
 	$scope.Entity2 = "CAFactor";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -6482,24 +6484,41 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-//    	$scope.Data.push({"@id": '0', Target: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-  //  	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+		},
+
+		showForm: function() {
+			var myEditor = {
+				title: "Cavalry Attack Simulator",
+				contentTemplate: "sims/CACav.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 
 }])
-.controller("CAInfCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("CAInfCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Infantry Close Action Factors";
@@ -6508,6 +6527,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 16.2A & C";
 	$scope.Entity = "CAInf";
 	$scope.Entity2 = "CAFactor";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -6527,7 +6547,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Code', visible:false,width: 80},
            	{field:'Value', width:80},
-           	{field:'Descr', displayName:'Description',width:300},
+           	{field:'Descr', displayName:'Description',width:400},
         ]
 	};
 
@@ -6550,7 +6570,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'Code', visible:false,width: 80}, 
            	{field:'Type', width: 120}, 
            	{field:'Value', width: 80},
-           	{field:'Descr', displayName:'Description',width: 250},
+           	{field:'Descr', displayName:'Description',width: 300},
         ]
 	};
 
@@ -6595,19 +6615,94 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-//    	$scope.Data.push({"@id": '0', Target: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-  //  	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			Rating: 'Regular',
+			Shock: false,
+			Leader: '',
+			BdeLeader: '',
+			Approach: 0,
+			ABases: 3,
+			AHits: 0,
+			AFatigue: 0,
+			AMorale: 1,
+			AUnformed: false,
+			AUphill: false,
+			EN: false,
+			DType: 'I',
+			DRating: 'Regular',
+			DShock: false,
+			ACE: 16,
+			DLeader: '',
+			DBdeLeader: '',
+			DBases: 3,
+			DHits: 0,
+			DFatigue: 0,
+			DMorale: 1,
+			Cover: 0,
+			Formation: 'LN',
+			DUnformed: false,
+			DUphill: false,
+			Steephill: false,
+			BUA: false,
+			Result: '',
+			ADice: '',
+			DDice: '',
+			Odds: '',
+			AFinalResult: '',
+			AFinalHits: '',
+			AFinalBreaththrough: '',
+			AFinalFallback: '',
+			AFinalMorale: '',
+			DFinalResult: '',
+			DFinalHits: '',
+			DFinalFallback: '',
+			DFinalMorale: '',
+		},
+
+		showForm: function() {
+			var myEditor = {
+				title: "Infantry Bayonet Attack Simulator",
+				contentTemplate: "sims/CAInf.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Leader = this.data.BdeLeader = this.data.DLeader = this.data.DBdeLeader = '';
+			this.data.Approach = 0;
+			this.data.Shock = this.data.DShock = false;
+			this.data.ABases = this.data.DBases = 3;
+			this.data.AHits = this.data.DHits = this.data.AFatigue = this.data.DFatigue = 0;
+			this.data.AMorale = this.data.DMorale = 1;
+			this.data.AUnformed = this.data.DUnformed = false;
+			this.data.AUphill = this.data.DUphill = this.data.Steephill = false;
+			this.data.EN = false;
+			this.data.DType = 'I';
+			this.data.ACE = 16;
+			this.data.Cover = 0;
+			this.data.Formation = 'LN';
+			this.data.BUA = false;
+			this.data.Result = this.data.ADice = this.data.DDice = this.data.Odds = this.data.AFinalResult = '';
+			this.data.AFinalHits = this.data.AFinalBreaththrough = this.data.AFinalFallback = this.data.AFinalMorale = '';
+			this.data.DFinalResult = this.data.DFinalHits = this.data.DFinalFallback = this.data.DFinalMorale = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 
@@ -6670,7 +6765,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'ID', visible: false,width: 60}, 
            	{field:'Code', displayName:'Code',width: 60}, 
-           	{field:'Descr', displayName:'Description',width: 180}, 
+           	{field:'Descr', displayName:'Description',width: 300}, 
         ]
 	};
 
