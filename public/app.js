@@ -4354,7 +4354,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("BUAMovementCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("BUAMovementCtrl", ["$scope", "DataSocket", "$modal", "$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Occupy / Exit Structure";
@@ -4363,6 +4363,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 14.7A";
 	$scope.Entity = "BUAMove";
 	$scope.Entity2 = "BUAMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -4403,7 +4404,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 60}, 
-           	{field:'Descr', displayName:'Description',width: 250},
+           	{field:'Descr', displayName:'Description',width: 400},
            	{field:'Value',width:80}
         ]
 	};
@@ -4449,19 +4450,53 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Rating: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-    	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			Action: 'O',
+			SRating: 2,
+			CA: '',
+			UnitsMoved: 0,
+			Rain: false,
+			Cold: false,
+			Hits: 0,
+			Fatigue: 0,
+			Special: '',
+			Dice: '',
+			Result: '',
+			ResultOrdered: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Town Occupy/Exit Simulator",
+				contentTemplate: "sims/BUAOccupy.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Special = '';
+			this.data.CA = '';
+			this.data.UnitsMoved = 0;
+			this.data.Hits = this.data.Fatigue = 0;
+			this.data.Rain = this.data.Cold = false;
+			this.data.Dice = this.data.Result = this.data.ResultOrdered = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 	

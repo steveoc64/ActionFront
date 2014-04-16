@@ -2340,6 +2340,10 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BUAMod", BUAMod{"JN", "Janissaries", 2}))
 	gameData.Insert(DataMap("BUAMod", BUAMod{"RU", "Russian Grenadiers", 3}))
 	gameData.Insert(DataMap("BUAMod", BUAMod{"AU", "Austrian Grenadiers", 3}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"COLD", "Extreme Cold", 3}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"RAIN", "Heavy Rain / Snow", 3}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"HIT", "Hits", -1}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"FT", "Per Fatigue Level over Fresh", -1}))
 
 	gameData.Insert(DataMap("SKRelocate", SKRelocate{"Superior", 4, 8, 12}))
 	gameData.Insert(DataMap("SKRelocate", SKRelocate{"Excellent", 5, 9, 13}))
@@ -2353,6 +2357,8 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"IL", "Inspirational Leader Attached", 4}))
 	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"AL", "Average Leader Attached", 2}))
 	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"UL", "Uninspiring Leader Attached", -1}))
+	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"HIT", "Per Hit", -1}))
+	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"FT", "Per Fatigue Level Over Fresh", -1}))
 
 	gameData.Insert(DataMap("SKSupport", SKSupport{"Normal", 9, 6, 12}))
 	gameData.Insert(DataMap("SKSupport", SKSupport{"Bold", 30, 30, 18}))
