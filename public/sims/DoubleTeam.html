@@ -1,0 +1,38 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<img src="images/DoubleTeamGuns.jpg">
+	<h3 class="bg-info">Battery to Double Team</h3>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Battery Type</label>
+   		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Type" bs-radio>French Guard</label>
+   		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Type" bs-radio>Horse Bty</label>
+   		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Type" bs-radio>French Foot</label>
+   		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Type" bs-radio>British Foot</label>
+   		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.Type" bs-radio>Other Foot</label>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+
+	<div class="form-group">
+		<label class="col-sm-3"></label>
+		<label>
+			<button type="button" class="btn btn-default" ng-model="simulator.data.Exhausted" bs-checkbox>Attempts Exhausted</button>
+		</label>
+	</div>
+
+	<display-field label="Dice" ng-model="simulator.data.Dice" span="4"></display-field>
+	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Double Team</button>
+
+</div>
+</form>
+
+
