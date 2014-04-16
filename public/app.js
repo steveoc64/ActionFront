@@ -6166,7 +6166,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("LimberIfChargedCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("LimberIfChargedCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.title = "Limber Artillery if Charged";
 	$scope.docs = "Table 17.4 (-1 Per Fatigue Level over Fresh)";
@@ -6225,16 +6225,48 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			Fatigue: 0,
+			Enemy: 'C',
+			Range: 2,
+			Action: 1,
+			Dice: '',
+			Result: '',
+			ResultDisorder: '',
+			ResultEscape: '',
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Limber if Charged Simulator",
+				contentTemplate: "sims/LimberIfCharged.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Fatigue = 0;
+			this.data.Range = 2;
+			this.data.Action = 1;
+			this.data.Enemy = 'C';
+			this.data.PassScore = this.data.Dice = this.data.Result = this.data.ResultDisorder = this.data.ResultEscape = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 	]);
 }])
 .controller("ShockValueCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){

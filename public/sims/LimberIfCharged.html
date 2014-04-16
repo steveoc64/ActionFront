@@ -1,0 +1,72 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<img src="images/LimberIfCharged.jpg">
+	<h3 class="bg-info">Battery Being Charged</h3>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Fatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Fatigue" bs-radio>Winded</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Fatigue" bs-radio>Worn</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Fatigue" bs-radio>Tired</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Fatigue" bs-radio>Exhausted</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Charged By</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="I" ng-model="simulator.data.Enemy" bs-radio>Infantry</label>
+    		<label class="btn btn-default" type="radio" value="C" ng-model="simulator.data.Enemy" bs-radio>Cavalry</label>
+    	</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Enemy Range</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Range" bs-radio>Same Quadrant</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Range" bs-radio>Same Grid</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Range" bs-radio>Next Grid</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Range" bs-radio>Diagonal</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Range" bs-radio>2+ Grids</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Action to Take</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Action" bs-radio>Stand Ground</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Action" bs-radio>Limber and Run</label>
+	    	</div>
+		</label>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+
+	<display-field label="Score Needed" ng-model="simulator.data.PassScore" span="2"></display-field>
+	<display-field label="Dice" ng-model="simulator.data.Dice" span="4"></display-field>
+	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
+	<display-field label="Disordered" ng-model="simulator.data.ResultDisorder" span="2"></display-field>
+	<display-field label="Escape" ng-model="simulator.data.ResultEscape" span="2"></display-field>
+
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()" ng-show="simulator.data.Action==0">Stand Ground</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()" ng-show="simulator.data.Action==1">Limber and Run</button>
+
+</div>
+</form>
+
+
