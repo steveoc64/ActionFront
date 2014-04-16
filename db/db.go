@@ -2616,11 +2616,11 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("ArtMod", ArtMod{"B5", "Bombardment - Target Moved 1 Grid", -7}))
 	gameData.Insert(DataMap("ArtMod", ArtMod{"B5", "Bombardment - Target Moved more than 1 Grid", -10}))
 
-	gameData.Insert(DataMap("ArtLimber", ArtLimber{1, "IC", "Infantry Close", 12, "Same Grid"}))
+	gameData.Insert(DataMap("ArtLimber", ArtLimber{1, "IC", "Infantry Close", 12, "1 Quadrant"}))
 	gameData.Insert(DataMap("ArtLimber", ArtLimber{2, "IS", "Infantry Same Grid", 8, "1 Grid"}))
 	gameData.Insert(DataMap("ArtLimber", ArtLimber{3, "IN", "Infantry Next Grid", 6, "Up to 2 Grids"}))
 	gameData.Insert(DataMap("ArtLimber", ArtLimber{4, "ID", "Infantry Diag Grid", 4, "Up to 2 Grids"}))
-	gameData.Insert(DataMap("ArtLimber", ArtLimber{5, "CC", "Cavalry Close", 18, "Same Grid"}))
+	gameData.Insert(DataMap("ArtLimber", ArtLimber{5, "CC", "Cavalry Close", 18, "1 Quadrant"}))
 	gameData.Insert(DataMap("ArtLimber", ArtLimber{6, "CS", "Cavalry Same Grid", 12, "1 Grid"}))
 	gameData.Insert(DataMap("ArtLimber", ArtLimber{7, "CN", "Cavalry Next Grid", 8, "1 Grid"}))
 	gameData.Insert(DataMap("ArtLimber", ArtLimber{8, "CD", "Cavalry Diag Grid", 6, "1 Grid"}))

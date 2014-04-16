@@ -1,0 +1,146 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<img src="images/DefFire.jpg">
+	<h3 class="bg-warning">Attacking Unit Attempting to Close</h3>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Type</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="I" ng-change="simulator.setType()" ng-model="simulator.data.Type" bs-radio>Infantry</label>
+	    		<label class="btn btn-default" type="radio" value="S" ng-change="simulator.setType()" ng-model="simulator.data.Type" bs-radio>Shock Troops</label>
+	    		<label class="btn btn-default" type="radio" value="C" ng-change="simulator.setType()" ng-model="simulator.data.Type" bs-radio>Cavalry</label>
+	    		<label class="btn btn-default" type="radio" value="D" ng-change="simulator.setType()" ng-model="simulator.data.Type" bs-radio>DUB Cavalry</label>
+	    		<label class="btn btn-default" type="radio" value="Z" ng-change="simulator.setType()" ng-model="simulator.data.Type" bs-radio>Cossacks !</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group" ng-show="simulator.data.Type=='I'">
+		<label class="col-sm-3 control-label">Infantry Attack</label>
+		<span class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Regular Attack</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Attack with Impetus</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Storming Attack</label>
+    	</span>
+    	<span>
+		<i class="fa fa-lg fa-share"></i>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Bayonet" ng-change="simulator.calc()" bs-checkbox>with Bayonet</button>		   		
+    	</span>
+	</div>
+	<div class="form-group" ng-show="simulator.data.Type=='S'">
+		<label class="col-sm-3 control-label">Shock Troops Attack</label>
+		<span class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Regular Attack</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Attack with Impetus</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Storming Attack</label>
+    	</span>
+    	<span>
+		<i class="fa fa-lg fa-share"></i>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Bayonet" ng-change="simulator.calc()" bs-checkbox>with Bayonet</button>		   		
+    	</span>
+	</div>
+	<div class="form-group" ng-show="simulator.data.Type=='C'">
+		<label class="col-sm-3 control-label">Cavalry Charge</label>
+		<span class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Regular Attack</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Attack with Impetus</label>
+    	</span>
+    	<span>
+		<i class="fa fa-lg fa-share"></i>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Bayonet" ng-change="simulator.calc()" bs-checkbox>with Sabres Drawn</button>		   		
+    	</span>
+	</div>
+	<div class="form-group" ng-show="simulator.data.Type=='D'">
+		<label class="col-sm-3 control-label">DUB Cavalry Charge</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Regular Attack</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Mode" ng-change="simulator.calc()" bs-radio>Attack with Impetus</label>
+    	</div>
+    	<span>
+		<i class="fa fa-lg fa-share"></i>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Bayonet" ng-change="simulator.calc()" bs-checkbox>with Sabres Drawn</button>		   		
+    	</span>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Charge Range</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Range" ng-change="simulator.calc()" bs-radio>Same Quadrant</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Range" ng-change="simulator.calc()" bs-radio>Same Grid</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Range" ng-change="simulator.calc()" bs-radio>Next Grid</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Range" ng-change="simulator.calc()" bs-radio>Diagonal</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Range" ng-change="simulator.calc()" bs-radio>2+ Grids</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Raw Die Score<br>(On Def Fire)</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>< 15</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>15</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>16</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>17</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>18+</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Hits on Attacker<br>(In Total)</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>None</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>3</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>4</label>
+	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>5</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>6</label>
+	    		<label class="btn btn-default" type="radio" value="7" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>7</label>
+	    		<label class="btn btn-default" type="radio" value="8" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>8</label>
+	    		<label class="btn btn-default" type="radio" value="9" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>9</label>
+	    		<label class="btn btn-default" type="radio" value="10" ng-model="simulator.data.Hits" ng-change="simulator.calc()" bs-radio>10+</label>
+	    	</div>
+		</label>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Tactical Factors</label>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Disordered" ng-change="simulator.calc()" bs-checkbox>Attacker Disordered</button>		
+		<button type="button" class="btn btn-default" ng-model="simulator.data.DGuns" ng-change="simulator.calc()" bs-checkbox>Defence includes Artillery</button>		
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+
+	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
+
+	<span class="col-sm-3"></span><span class="label label-success col-sm-8">Attack Closes with Bayonet/Sabre</span><br>
+	<display-field label="Close At" ng-model="simulator.data.ResultClose" span="8"></display-field>
+	<display-field label="Attacker Disordered" ng-model="simulator.data.ResultDisorder" span="8"></display-field>
+
+	<span class="col-sm-3"></span><span class="label label-info col-sm-8">Fire Fight</span><br>
+	<display-field label="Enter Firefight" ng-model="simulator.data.ResultFirefight" span="8"></display-field>
+
+	<span class="col-sm-3"></span><span class="label label-warning col-sm-8">Attacker Discouraged</span><br>
+	<display-field label="Fire & Retire" ng-model="simulator.data.ResultFireRetire" span="8"></display-field>
+	<display-field label="Halt Distance" ng-model="simulator.data.ResultHalt" span="8"></display-field>
+
+	<span class="col-sm-3"></span><span class="label label-danger col-sm-8">Attack Collapses and Breaks Down</span><br>
+	<display-field label="Attacker Routs" ng-model="simulator.data.ResultRout" span="8"></display-field>
+	<display-field label="Additional Hits" ng-model="simulator.data.ResultHits" span="8"></display-field>
+
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Defensive Fire Effect</button>
+
+</div>
+</form>
+
+

@@ -5896,7 +5896,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 	]);
 }])
-.controller("DefFireCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("DefFireCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Defensive Fire Effect";
@@ -5905,6 +5905,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 16.1A";
 	$scope.Entity = "DefFire";
 	$scope.Entity2 = "DefFireNote";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -5994,19 +5995,64 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-//    	$scope.Data.push({"@id": '0', Target: '~ ??? ~'})
-    }
-    $scope.newRow2 = function() {
-  //  	$scope.Data2.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			Type: 'I',
+			Mode: 0,
+			Range: 2,
+			Hits: 0,
+			DieScore: 0,
+			Bayonet: false,
+			Disordered: false,
+			DGuns: false,
+			Result: '',
+			ResultClose: '',
+			ResultFirefight: '',
+			ResultFireRetire: '',
+			ResultRout: '',
+			ResultDisorder: '',
+			ResultHits: '',	
+			ResultHalt: '',		
+		},
+		showForm: function() {
+			var myEditor = {
+				title: "Defensive Fire Efect / Elan Test Simulator",
+				contentTemplate: "sims/DefFire.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+			this.calc();
+		},
+		setType: function() {
+			this.data.Mode = 0;
+
+		},
+		clear: function() {
+			this.data.Mode = 0;
+			this.data.Range = 2;
+			this.data.DieScore = 0;
+			this.data.Hits = 0;
+			this.data.Bayonet = false;
+			this.data.Disordered = this.data.DGuns = false;
+			this.data.Result = this.data.ResultClose = this.data.ResultFirefight = this.data.ResultFireRetire = '';
+			this.data.ResultRout = this.data.ResultDisorder = this.data.ResultHits = this.data.ResultHalt = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 	
@@ -6239,6 +6285,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Result: '',
 			ResultDisorder: '',
 			ResultEscape: '',
+			ResultDistance: '',
 		},
 		showForm: function() {
 			var myEditor = {
@@ -6254,6 +6301,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.Action = 1;
 			this.data.Enemy = 'C';
 			this.data.PassScore = this.data.Dice = this.data.Result = this.data.ResultDisorder = this.data.ResultEscape = '';
+			this.data.ResultDistance = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
@@ -6382,7 +6430,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         showFooter: true,
         footerTemplate: 'gridFooterTemplate.html',
         sortInfo: {
-        	fields:['Code'],
+        	fields:['Type'],
         	directions:['asc']
         },
         columnDefs: [
