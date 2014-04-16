@@ -1,0 +1,107 @@
+<form role="form" class="form-horizontal">
+
+<div class="modal-inner-content">
+
+	<img src="images/StreetFight.jpg">
+	<h3 class="bg-info">Attacking Unit</h3>
+
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Rating</label>
+		<div class="col-sm-9">
+			<select id="UnitType" ng-model="simulator.data.Rating" ng-change="simulator.clear()" ng-options="t for t in Lookups.Ratings"></select>
+			<button type="button" class="btn btn-default" ng-model="simulator.data.Shock" bs-checkbox>Shock Troops</button>		
+			<button type="button" class="btn btn-default" ng-model="simulator.data.Nasty" bs-checkbox>No Quarter</button>		
+		</div>
+	</div>   		
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Street Fight Rating</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.ASRating" bs-radio>Excellent</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.ASRating" bs-radio>Good</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.ASRating" bs-radio>Average</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.ASRating" bs-radio>Poor</label>
+    	</div>
+	</div>
+
+
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Leadership</label>
+		<div class="col-sm-9">
+			<select id="Leader" ng-model="simulator.data.Leader" ng-options="t for t in Lookups.LeaderInspiration"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Bases</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.ABases" bs-radio>1</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.ABases" bs-radio>2</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.ABases" bs-radio>3</label>
+    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.ABases" bs-radio>4</label>
+    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.ABases" bs-radio>5</label>
+    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.ABases" bs-radio>6+</label>
+    	</div>
+	</div>
+
+	<h3 class="bg-warning">Defending Unit</h3>
+
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Rating</label>
+		<div class="col-sm-9">
+			<select id="UnitType" ng-model="simulator.data.DRating" ng-change="simulator.clear()" ng-options="t for t in Lookups.Ratings"></select>
+			<button type="button" class="btn btn-default" ng-model="simulator.data.DShock" bs-checkbox>Shock Troops</button>		
+			<button type="button" class="btn btn-default" ng-model="simulator.data.DNasty" bs-checkbox>No Quarter</button>		
+		</div>
+	</div>   		
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Street Fight Rating</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.DSRating" bs-radio>Excellent</label>
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.DSRating" bs-radio>Good</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.DSRating" bs-radio>Average</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.DSRating" bs-radio>Poor</label>
+    	</div>
+	</div>
+
+	<div class="form-group">
+		<label for="UnitType" class="col-sm-3 control-label">Leadership</label>
+		<div class="col-sm-9">
+			<select id="Leader" ng-model="simulator.data.DLeader" ng-options="t for t in Lookups.LeaderInspiration"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Bases</label>
+		<div class="btn-group">
+    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.DBases" bs-radio>1</label>
+    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.DBases" bs-radio>2</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.DBases" bs-radio>3</label>
+    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.DBases" bs-radio>4</label>
+    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.DBases" bs-radio>5</label>
+    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.DBases" bs-radio>6+</label>
+    	</div>
+	</div>
+
+	<h3 class="bg-success">Results</h3>
+
+	<div class="col-sm-12">
+		<span class="col-sm-6">
+			<h3 class="bg-primary">Attacker</h3>
+			<display-field label="Attacker Dice" ng-model="simulator.data.ADice" span="4"></display-field>
+			<display-field label="Hits on Defender" ng-model="simulator.data.DResultHits" span="4"></display-field>
+		</span>
+		<span class="col-sm-6">
+			<h3 class="bg-primary">Defender</h3>
+			<display-field label="Defender Dice" ng-model="simulator.data.DDice" span="4"></display-field>
+			<display-field label="Hits on Attacker" ng-model="simulator.data.AResultHits" span="4"></display-field>
+		</span>
+	</div>
+</div>
+
+<div class="modal-footer" style="margin: 15px -20px -20px;">
+  <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
+  <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Street Fight</button>
+</div>
+
+</form>
+
+

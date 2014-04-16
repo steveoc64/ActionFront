@@ -6535,6 +6535,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			DFinalBreaththrough: '',
 			DFinalFallback: '',
 			DFinalMorale: '',
+			ACaptureFlag: '',
+			DCaptureFlag: '',
 		},
 
 		showForm: function() {
@@ -6566,6 +6568,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.Result = this.data.ADice = this.data.DDice = this.data.Odds = this.data.AFinalResult = '';
 			this.data.AFinalHits = this.data.AFinalBreaththrough = this.data.AFinalFallback = this.data.AFinalMorale = '';
 			this.data.DFinalResult = this.data.DFinalHits = this.data.DFinalFallback = this.data.DFinalMorale = '';
+			this.data.ACaptureFlag = this.data.DCaptureFlag = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
@@ -6727,6 +6730,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			DFinalHits: '',
 			DFinalFallback: '',
 			DFinalMorale: '',
+			DCaptureFlag: '',
+			ACaptureFlag: '',
 		},
 
 		showForm: function() {
@@ -6755,6 +6760,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.Result = this.data.ADice = this.data.DDice = this.data.Odds = this.data.AFinalResult = '';
 			this.data.AFinalHits = this.data.AFinalBreaththrough = this.data.AFinalFallback = this.data.AFinalMorale = '';
 			this.data.DFinalResult = this.data.DFinalHits = this.data.DFinalFallback = this.data.DFinalMorale = '';
+			this.data.ACaptureFlag = this.data.DCaptureFlag = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
@@ -6928,7 +6934,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	]);
 	
 }])
-.controller("CAStreetFightCtrl", ["$scope", "DataSocket", "$rootScope",function($scope, DataSocket,$rootScope){
+.controller("CAStreetFightCtrl", ["$scope", "DataSocket", "$modal","$rootScope",function($scope, DataSocket,$modal,$rootScope){
 	$scope.Data = [];
 	$scope.Data2 = [];
 	$scope.title = "Street Fight Results";
@@ -6937,6 +6943,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.docs2 = "Table 16.5";
 	$scope.Entity = "StreetFight";
 	$scope.Entity2 = "StreetMod";
+	$scope.Lookups = Lookups;
 
 	$scope.gridOptions = { 
 		data: 'Data',
@@ -7022,19 +7029,54 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-    }
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Code: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
+	$scope.simulator = {
+		data: {
+			Rating: 'Regular',
+			Shock: false,
+			Nasty: false,
+			ASRating: 2,
+			Leader: '',
+			ABases: 4,
+			DRating: 'Regular',
+			DShock: false,
+			DNasty: false,
+			DSRating: 2,
+			DLeader: '',
+			DBases: 4,
+			ADice: '',
+			DDice: '',
+			AResultHits: '',
+			DResultHits: '',
+		},
+
+		showForm: function() {
+			var myEditor = {
+				title: "Street Fight Simulator",
+				contentTemplate: "sims/CAStreetFight.html",
+				scope: $scope
+			}
+			$modal(myEditor);
+		},
+		clear: function() {
+			this.data.Leader = this.data.DLeader = '';
+			this.data.ADice = this.data.DDice = this.data.AResultHits = this.data.DResultHits = '';
+		},
+		calc: function() {
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+		},
+		results: function(data) {
+			console.log("SIM Results", data);
+			angular.copy(data, this.data);
+			$scope.$apply();
+		}
+	};
+
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 }])
@@ -7830,19 +7872,12 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		}
     });
 
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Code: '~ ??? ~'})
-    }
-    $scope.newRow = function() {
-    	$scope.Data.push({"@id": '0', Score: '~ ??? ~'})
-    }
-
 	$scope.changeData = function(d) {
 		$scope.$apply();
 	}
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
 	]);
 }])
