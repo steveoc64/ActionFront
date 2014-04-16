@@ -3999,7 +3999,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 80}, 
-           	{field:'Descr', displayName:'Description',width: 180},
+           	{field:'Descr', displayName:'Description',width: 300},
            	{field:'Value', width: 80},
         ]
 	};
@@ -4105,6 +4105,15 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.simulator2 = {
 		data: {
+			GunneryClass: 2,
+			Action: 0,
+			Horses: 6,
+			Fatigue: 0,
+			Attached: 0,
+			Mud: false,
+			Attempt: 1,
+			Dice: '',
+			Result: '',
 		},
 		showForm: function() {
 			var myEditor = {
@@ -4115,6 +4124,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			$modal(myEditor);
 		},
 		clear: function() {
+			this.data.Data = this.data.Result = '';
+			this.data.Action = 0;
+			this.data.Horses = 6;
+			this.data.Fatigue = 0;
+			this.data.Attached = 0;
+			this.data.Mud = false;
+			this.data.Attempt = 1;
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity3,"Data":this.data}));
