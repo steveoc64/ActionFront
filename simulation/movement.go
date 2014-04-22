@@ -597,3 +597,99 @@ func ArtyMove(col *db.Col, params map[string]interface{}) map[string]interface{}
 
 	return params
 }
+
+// Withdraw or Relocate an artillery unit
+func ArtyRelocate(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	GunneryClass := ""
+	switch params["GunneryClass"].(float64) {
+	case 0:
+		GunneryClass = "Guard"
+	case 1:
+		GunneryClass = "Class I"
+	case 2:
+		GunneryClass = "Class II"
+	case 3:
+		GunneryClass = "Class III"
+	}
+
+	Action := params["Action"].(float64)
+	Horses := params["Horses"].(float64)
+	Fatigue := params["Fatigue"].(float64)
+	Attached := params["Attached"].(float64)
+	Attempt := params["Attempt"].(float64)
+	params["Dice"] = ""
+	params["Result"] = ""
+
+	adder := float64(0)
+	RMods, _ := list.Get(col, "ArtyRelocateMod")
+	for _, rmod := range RMods.Data.([]interface{}) {
+		myRMod := rmod.(map[string]interface{})
+
+		code := myRMod["Code"].(string)
+		val := myRMod["Value"].(float64)
+		switch code {
+		case "MD":
+			if params["Mud"].(bool) {
+				adder += val
+			}
+		case "FT":
+			adder += val * Fatigue
+		case "AT":
+			adder += val * (Attempt - 1)
+		case "LA":
+			if Attached == 1 {
+				adder += val
+			}
+		case "CA":
+			if Attached == 2 {
+				adder += val
+			}
+		case "AA":
+			if Attached == 3 {
+				adder += val
+			}
+		}
+	}
+
+	// Now get the relocation record
+	Relocations := list.Lookup(col, "ArtyRelocate", "Class")
+	Relocation := Relocations[GunneryClass]
+	Field := ""
+	ActionString := ""
+	if Fatigue >= 4 {
+		Action = 0
+		params["Action"] = 0
+	}
+	switch Action {
+	case 0: // Withdraw
+		Field = "W"
+		ActionString = "Withdraw to Reserve"
+	case 1: // Relocate
+		Field = "R"
+		ActionString = "Relocate"
+		Fatigue++
+		params["Fatigue"] = Fatigue
+	}
+	FieldName := fmt.Sprintf("%s%d", Field, int(Horses))
+	log.Println("Field Name", FieldName)
+	Value := int(Relocation[FieldName].(float64))
+	log.Println("Value Needed", Value)
+	params["ScoreNeeded"] = Value
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+	if TotalDice >= Value {
+		params["Result"] = fmt.Sprintf("Battery will %s", ActionString)
+		params["Attempt"] = 1
+	} else {
+		params["Result"] = fmt.Sprintf("Failed to %s", ActionString)
+		Attempt++
+		if Attempt > 3 {
+			Attempt = 3
+		}
+		params["Attempt"] = Attempt
+	}
+
+	return params
+}

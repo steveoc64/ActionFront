@@ -4118,6 +4118,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Mud: false,
 			Attempt: 1,
 			Dice: '',
+			ScoreNeeded: '',
 			Result: '',
 		},
 		showForm: function() {
@@ -4129,7 +4130,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			$modal(myEditor);
 		},
 		clear: function() {
-			this.data.Data = this.data.Result = '';
+			this.data.Data = this.data.Result = this.data.ScoreNeeded = '';
 			this.data.Action = 0;
 			this.data.Horses = 6;
 			this.data.Fatigue = 0;

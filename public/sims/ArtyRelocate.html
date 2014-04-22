@@ -5,10 +5,15 @@
 	<img src="images/ArtyRelocate.jpg">
 	<h3 class="bg-info">Relocating Unit</h3>
 	<div class="form-group">
-		<label for="UnitType" class="col-sm-3 control-label">Battery Class</label>
-		<div class="col-sm-9">
-			<select id="UnitType" ng-model="simulator2.data.GunneryClass" ng-options="t for t in Lookups.GunneryClasses"></select>
-		</div>
+		<label class="col-sm-3 control-label">Class</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator2.data.GunneryClass" bs-radio>Guard</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator2.data.GunneryClass" bs-radio>Class I</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator2.data.GunneryClass" bs-radio>Class II</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator2.data.GunneryClass" bs-radio>Class III</label>
+	    	</div>
+		</label>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Action</label>
@@ -68,6 +73,7 @@
 	<h3 class="bg-success">Results</h3>
 
 	<display-field label="Dice" ng-model="simulator2.data.Dice" span="4"></display-field>
+	<display-field label="Score Needed" ng-model="simulator2.data.ScoreNeeded" span="2"></display-field>
 	<display-field label="Result" ng-model="simulator2.data.Result" span="8"></display-field>
 </div>
 
