@@ -84,19 +84,9 @@ func GTMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 // For a given set of parameters, calculate the Deployment stats, and return this as a result set
 func Deployment(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
-	retval := make(map[string]interface{})
-
-	retval["DepRating"] = params["DepRating"]
-	retval["DepState"] = params["DepState"]
-	retval["MarchCol"] = params["MarchCol"]
-	retval["Darkness"] = params["Darkness"]
-	retval["Choke"] = params["Choke"]
-	retval["Mud"] = params["Mud"]
-	retval["Fog"] = params["Fog"]
-	retval["Grids"] = params["Grids"]
-	retval["Dice"] = 0
-	retval["DieMods"] = 0
-	retval["Result"] = ""
+	params["Dice"] = 0
+	params["DieMods"] = 0
+	params["Result"] = ""
 
 	// get the adjustment bonus for this rating
 
@@ -132,11 +122,11 @@ func Deployment(col *db.Col, params map[string]interface{}) map[string]interface
 		}
 	}
 
-	retval["DieMods"] = adjust
+	params["DieMods"] = adjust
 	d := dice.DieRoll()
 	Score := d + adjust
 
-	retval["Dice"] = fmt.Sprintf("%d + %d = %d", d, adjust, Score)
+	params["Dice"] = fmt.Sprintf("%d + %d = %d", d, adjust, Score)
 
 	// Convert the DepState to a number
 	depState := 0
@@ -180,59 +170,41 @@ func Deployment(col *db.Col, params map[string]interface{}) map[string]interface
 		depState = 6
 	}
 	if change == 0 {
-		retval["Result"] = "No Change"
+		params["Result"] = "No Change"
 	} else {
 		resString := params["DepState"].(string) + " -> "
 		switch depState {
 		case 1:
-			retval["DepState"] = "Deployed"
+			params["DepState"] = "Deployed"
 		case 2:
-			retval["DepState"] = "Bde Out"
+			params["DepState"] = "Bde Out"
 		case 3:
-			retval["DepState"] = "Deploying"
+			params["DepState"] = "Deploying"
 		case 4:
-			retval["DepState"] = "Condensed Col"
+			params["DepState"] = "Condensed Col"
 		case 5:
-			retval["DepState"] = "Regular Col"
+			params["DepState"] = "Regular Col"
 		case 6:
-			retval["DepState"] = "Extended Col"
+			params["DepState"] = "Extended Col"
 		}
-		retval["Result"] = resString + retval["DepState"].(string)
+		params["Result"] = resString + params["DepState"].(string)
 	}
 
-	return retval
+	return params
 }
 
 // For a given set of parameters, calculate the Tactical Move stats, and return this as a result set
 func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
-	retval := make(map[string]interface{})
-
-	retval["UnitType"] = params["UnitType"]
-	retval["DrillBook"] = params["DrillBook"]
-	retval["Formation"] = params["Formation"]
-	retval["FormationTo"] = params["FormationTo"]
-	retval["Terrain"] = params["Terrain"]
-	retval["Extra"] = params["Extra"]
-	retval["Mud"] = params["Mud"]
-	retval["Marsh"] = params["Marsh"]
-	retval["Diagonal"] = params["Diagonal"]
-	retval["LoWall"] = params["LoWall"]
-	retval["HiWall"] = params["HiWall"]
-	retval["LtWood"] = params["LtWood"]
-	retval["HvWood"] = params["HvWood"]
-	retval["Weather"] = params["Weather"]
-	retval["Accumulated"] = params["Accumulated"]
-	retval["Trained"] = params["Trained"]
-	retval["Disorder"] = false
-	retval["Fire"] = false
-	retval["Quadrants"] = 0
-	retval["Inches"] = 0
-	retval["Frontage"] = 0
-	retval["SK"] = ""
+	params["Disorder"] = false
+	params["Fire"] = false
+	params["Quadrants"] = 0
+	params["Inches"] = 0
+	params["Frontage"] = 0
+	params["SK"] = ""
 
 	// Get the TacMove record for this unit type
-	TacMoves, _ := list.Get(col, "TacMove")
+	TacMoves := list.Lookup(col, "TacMove", "UnitType")
 	Drills, _ := list.Get(col, "Drill")
 	FormationChanges, _ := list.Get(col, "FormationChange")
 	baseMove := float64(10)
@@ -260,14 +232,7 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 	}
 
 	// Adjust for the unit type
-	for _, tacMove := range TacMoves.Data.([]interface{}) {
-		myTacMove := tacMove.(map[string]interface{})
-
-		// Adjust for Type of unit
-		if myTacMove["UnitType"] == params["UnitType"] {
-			baseMove = myTacMove["Move"].(float64)
-		}
-	}
+	baseMove = TacMoves[params["UnitType"].(string)]["Move"].(float64)
 
 	// Adjust for the drill type and formation, applies to infantry only
 	if isInf {
@@ -280,7 +245,7 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 				startDrill := entries[params["Formation"].(string)].(map[string]interface{})
 
 				frontage = startDrill["FR"].(float64)
-				retval["SK"] = fmt.Sprintf("%d / %d", int(startDrill["OO"].(float64)), int(startDrill["SK"].(float64)))
+				params["SK"] = fmt.Sprintf("%d / %d", int(startDrill["OO"].(float64)), int(startDrill["SK"].(float64)))
 				multiplier = startDrill["EF"].(float64) / 10
 			}
 		}
@@ -323,7 +288,7 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 						canFire = true
 					case 0:
 						// Not allowed
-						retval["FormationTo"] = retval["Formation"]
+						params["FormationTo"] = params["Formation"]
 					default:
 						baseMove = fceffect
 					}
@@ -547,7 +512,7 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 	// Perform final calculations
 	startInches := params["Accumulated"].(float64)
 	inches := (baseMove * multiplier) + adder
-	retval["Inches"] = math.Trunc(inches)
+	params["Inches"] = math.Trunc(inches)
 	inchesPerQuad := float64(5)
 	if params["Diagonal"].(bool) {
 		inchesPerQuad = 7
@@ -558,11 +523,77 @@ func TacMove(col *db.Col, params map[string]interface{}) map[string]interface{} 
 	if isSK {
 		disorder = false
 	}
-	retval["Quadrants"] = math.Trunc(quads)
-	retval["Accumulated"] = math.Trunc(math.Mod(totalInches, inchesPerQuad))
-	retval["Disorder"] = disorder
-	retval["Frontage"] = frontage
-	retval["Fire"] = canFire
+	params["Quadrants"] = math.Trunc(quads)
+	params["Accumulated"] = math.Trunc(math.Mod(totalInches, inchesPerQuad))
+	params["Disorder"] = disorder
+	params["Frontage"] = frontage
+	params["Fire"] = canFire
 
-	return retval
+	return params
+}
+
+// For a given set of parameters, calculate the Artillery Move stats, and return this as a result set
+func ArtyMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	MoveType := params["MoveType"].(string)
+	MoveWeight := params["MoveWeight"].(string)
+	Accumulated := params["Accumulated"].(float64)
+	Pace := params["Pace"].(float64)
+	Terrain := params["Terrain"].(float64)
+	params["Quadrants"] = 0
+	params["Inches"] = 0
+	params["HorseLoss"] = 0
+
+	// Get the right movement record
+	baseMove := int(0)
+	ArtyMoves, _ := list.Get(col, "ArtyMove")
+	for _, move := range ArtyMoves.Data.([]interface{}) {
+		myMove := move.(map[string]interface{})
+		if myMove["Class"] == MoveType && myMove["Weight"] == MoveWeight {
+			log.Println(myMove)
+			switch Pace {
+			case 1:
+				baseMove = int(myMove["Prolong"].(float64))
+			case 2:
+				baseMove = int(myMove["Regular"].(float64))
+			case 3:
+				baseMove = int(myMove["Gallop"].(float64))
+
+				// Calc horse loss due to Galloping
+				HorseLosses := list.Lookup(col, "ArtyHorseLoss", "Terrain")
+				useTerrain := ""
+				switch Terrain {
+				case 1:
+					useTerrain = "Marchfeld"
+				case 2:
+					useTerrain = "Rolling"
+				case 3:
+					useTerrain = "Rough"
+				}
+				HorseLossChance := int(HorseLosses[useTerrain]["Loss"].(float64))
+				if dice.DieRoll() <= HorseLossChance {
+					params["HorseLoss"] = 1
+				}
+			}
+		}
+	}
+
+	if baseMove == 0 {
+		log.Println("Unknown class/weight", MoveType, MoveWeight)
+		return params
+	}
+
+	// Perform final calculations
+	params["Inches"] = baseMove
+	inchesPerQuad := float64(5)
+	if params["Diagonal"].(bool) {
+		inchesPerQuad = 7
+	}
+
+	totalInches := float64(baseMove + int(Accumulated))
+	quads := totalInches / inchesPerQuad
+	params["Quadrants"] = math.Trunc(quads)
+	params["Accumulated"] = math.Trunc(math.Mod(totalInches, inchesPerQuad))
+
+	return params
 }

@@ -8,8 +8,8 @@
 		<label for="UnitType" class="col-sm-3 control-label">Unit Type</label>
 		<div class="col-sm-9">
 			<select id="UnitType" ng-model="simulator.data.UnitType" ng-change="simulator.clear()" ng-options="t for t in Lookups.TacMoveTypes"></select>
-			<select id="DrillBook" ng-model="simulator.data.DrillBook" ng-change="simulator.clear()" ng-options="t for t in Lookups.DrillBooks"></select>
-			<select id="DrillBook" ng-model="simulator.data.Trained" ng-change="simulator.clear()" ng-options="t for t in Lookups.TrainedTypes"></select>
+			<select id="DrillBook" ng-model="simulator.data.DrillBook" ng-show="simulator.data.UnitType=='Infantry'" ng-change="simulator.clear()" ng-options="t for t in Lookups.DrillBooks"></select>
+			<select id="DrillBook" ng-model="simulator.data.Trained" ng-show="simulator.data.UnitType=='Infantry'" ng-change="simulator.clear()" ng-options="t for t in Lookups.TrainedTypes"></select>
 		</div>
 	</div>
 	<div class="form-group">

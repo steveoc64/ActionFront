@@ -250,6 +250,7 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			startTime := time.Now()
 
 			switch theEntity {
+			// Movement Simulators
 			case "GTMove":
 				results := simulation.GTMove(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
@@ -262,6 +263,16 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				results := simulation.TacMove(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+			case "ArtyMove":
+				results := simulation.ArtyMove(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
+			case "ArtyRelocate":
+				results := simulation.ArtyRelocate(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
+
+			// Musket and Cannon fire Simulators
 			case "VolleyFire":
 				results := simulation.VolleyFire(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
@@ -274,14 +285,18 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				results := simulation.FireFight(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+
 			case "InitTable":
 				results := simulation.Initiative(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+
 			case "ArtyFire":
 				results := simulation.ArtyFire(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+
+			// Morale and Fatigue SImulators
 			case "UnitMoraleTest":
 				results := simulation.UnitMoraleTest(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
@@ -294,6 +309,8 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				results := simulation.MEPanicTest(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+
+			// Command and Control Simulators
 			case "CorpsOrder":
 				results := simulation.CorpsOrder(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})

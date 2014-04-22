@@ -5,11 +5,11 @@
 	<img src="images/ArtyMovement.jpg">
 	<h3 class="bg-info">Moving Unit</h3>
 	<div class="form-group">
-		<label for="UnitType" class="col-sm-3 control-label">Firing Weight</label>
+		<label for="UnitType" class="col-sm-3 control-label">Gun Type</label>
 		<div class="col-sm-9">
-			<select id="UnitType" ng-model="simulator.data.ArtyWeight" ng-change="simulator.clear()" ng-options="t for t in Lookups.ArtyWeights"></select>
+			<select id="UnitType" ng-model="simulator.data.MoveType" ng-change="simulator.clear()" ng-options="t for t in Lookups.ArtyMoveTypes"></select>
 			Class: 
-			<select id="UnitType" ng-model="simulator.data.GunneryClass" ng-change="simulator.clear()" ng-options="t for t in Lookups.GunneryClasses"></select>
+			<select id="UnitType" ng-model="simulator.data.MoveWeight" ng-change="simulator.clear()" ng-options="t for t in Lookups.ArtyMoveWeights"></select>
 		</div>
 	</div>
 	<div class="form-group">

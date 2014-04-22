@@ -314,7 +314,7 @@ type AdditionalMove struct {
 
 type ArtyMove struct {
 	Class   string
-	Guns    string
+	Weight  string
 	Regular uint8
 	Gallop  uint8
 	Prolong uint8
@@ -2283,47 +2283,18 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Rolling", 2, 4, 6}))
 	gameData.Insert(DataMap("AdditionalMove", AdditionalMove{"Rough", 3, 6, 9}))
 
-	// Horse Light
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "2pdr", 13, 20, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "3pdr", 13, 20, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "4pdr", 13, 20, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "6pdr", 13, 20, 2}))
-
-	// Horse Medium
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "8pdr", 10, 16, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard", "9pdr", 10, 16, 1}))
-
-	// Class I light
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "2pdr", 10, 16, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "3pdr", 10, 16, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "4pdr", 10, 16, 2}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "6pdr", 10, 16, 2}))
-
-	// Class I medium
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "8pdr", 8, 13, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "9pdr", 8, 13, 1}))
-
-	// Class I heavy
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "10pdr", 6, 10, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "12pdr", 6, 10, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "18pdr", 6, 10, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I", "24pdr", 6, 10, 1}))
-
-	// Class II light
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "2pdr", 8, 13, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "3pdr", 8, 13, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "4pdr", 8, 13, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "6pdr", 8, 13, 1}))
-
-	// Class II medium
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "8pdr", 6, 10, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "9pdr", 6, 10, 1}))
-
-	// Class II heavy
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "10pdr", 5, 8, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "12pdr", 5, 8, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "18pdr", 5, 8, 1}))
-	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II", "24pdr", 5, 8, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard Horse", "Light", 16, 24, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Guard Horse", "Medium", 16, 24, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I Horse", "Light", 13, 20, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I Horse", "Medium", 10, 16, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II Horse", "Light", 10, 16, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II Horse", "Medium", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I Foot", "Light", 10, 16, 2}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I Foot", "Medium", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class I Foot", "Heavy", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II Foot", "Light", 8, 13, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II Foot", "Medium", 6, 10, 1}))
+	gameData.Insert(DataMap("ArtyMove", ArtyMove{"Class II Foot", "Heavy", 5, 8, 0}))
 
 	gameData.Insert(DataMap("ArtyHorseLoss", ArtyHorseLoss{"Marchfeld", 4}))
 	gameData.Insert(DataMap("ArtyHorseLoss", ArtyHorseLoss{"Rolling", 6}))

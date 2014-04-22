@@ -21,7 +21,7 @@
 	<display-field label="Dice" ng-model="simulator2.data.Dice" span="4"></display-field>
 	<display-field label="Result" ng-model="simulator2.data.Result" span="8"></display-field>
 	<display-field label="Recovered" ng-model="simulator2.data.ResultRecovered" span="3"></display-field>
-	<display-field label="Disabled" ng-model="simulator2.data.ResultDisabled" span="3"></display-field>
+	<display-field label="Disabled" ng-show="simulator2.data.Owner==2" ng-model="simulator2.data.ResultDisabled" span="3"></display-field>
 </div>
 
 <div class="modal-footer" style="margin: 15px -20px -20px;">

@@ -4,7 +4,9 @@ var Equips = ['Musket','Carbine','Superior Musket','Poor Musket','Rifle','Half R
 var SkirmishRatings = ['Superior','Excellent','Good','Average','Poor'];
 var CavMoveTypes = ['Heavy','Medium','Light','Lancer'];
 var GunneryClasses = [0,1,2,3];
-var GunTypes = ['12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
+var GunTypes = ['24pdr','18pdr','12pdr','9pdr','8pdr','6pdr','4pdr','3pdr','2pdr'];
+var ArtyMoveTypes = ['Guard Horse','Class I Horse','Class II Horse','Class I Foot','Class II Foot'];
+var ArtyMoveWeights = ['Light','Medium','Heavy'];
 var ArtyWeights = ['Light','Medium','MdHeavy','Heavy'];
 var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
 var MEOrders = ['Attack','Defend','Bombard','Support','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
@@ -31,6 +33,8 @@ var Lookups = {
 	GunneryClasses: GunneryClasses,
 	GunTypes: GunTypes,
 	ArtyWeights: ArtyWeights,
+	ArtyMoveTypes: ArtyMoveTypes,
+	ArtyMoveWeights: ArtyMoveWeights,
 	HWTypes: HWTypes,
 	MEOrders: MEOrders,
 	StaffRatings: StaffRatings,
@@ -4071,14 +4075,14 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.simulator = {
 		data: {
-			ArtyWeight: 'Medium',
-			GunneryClass: 2,
+			MoveType: 'Class I Foot',
+			MoveWeight: 'Medium',
 			Diagonal: false,
 			Pace: 1,
 			Terrain: 1,
 			Quadrants: '',
 			Inches: '',
-			Accumulated: '',
+			Accumulated: 0,
 			HorseLoss: '',
 		},
 		showForm: function() {
@@ -4090,8 +4094,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			$modal(myEditor);
 		},
 		clear: function() {
-			this.data.Quadrants = this.data.Inches = this.data.Accumulated = this.data.HorseLoss = '';
+			this.data.Quadrants = this.data.Inches = this.data.HorseLoss = '';
 			this.data.Terrain = this.data.Pace = 1;
+			this.data.Accumulated = 0;
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
