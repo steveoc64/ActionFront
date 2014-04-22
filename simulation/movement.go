@@ -668,8 +668,6 @@ func ArtyRelocate(col *db.Col, params map[string]interface{}) map[string]interfa
 	case 1: // Relocate
 		Field = "R"
 		ActionString = "Relocate"
-		Fatigue++
-		params["Fatigue"] = Fatigue
 	}
 	FieldName := fmt.Sprintf("%s%d", Field, int(Horses))
 	log.Println("Field Name", FieldName)
@@ -682,6 +680,10 @@ func ArtyRelocate(col *db.Col, params map[string]interface{}) map[string]interfa
 	if TotalDice >= Value {
 		params["Result"] = fmt.Sprintf("Battery will %s", ActionString)
 		params["Attempt"] = 1
+		if Action == 0 {
+			Fatigue++
+			params["Fatigue"] = Fatigue
+		}
 	} else {
 		params["Result"] = fmt.Sprintf("Failed to %s", ActionString)
 		Attempt++
