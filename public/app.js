@@ -4296,6 +4296,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Type: 5,
 			Exhausted: false,
 			Dice: '',
+			ScoreNeeded: '',
 			Result: '',
 		},
 		showForm: function() {
@@ -4308,10 +4309,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		},
 		clear: function() {
 			this.data.Exhausted = false;
-			this.data.Dice = this.data.Result = '';
+			this.data.Dice = this.data.Result = this.data.ScoreNeeded = '';
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"DoubleTeam","Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);
@@ -4327,6 +4328,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			CA: false,
 			EN: false,
 			Dice: '',
+			ScoreNeeded: '',
 			Result: '',
 			ResultRecovered: '',
 			ResultDisabled: '',
@@ -4340,11 +4342,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			$modal(myEditor);
 		},
 		clear: function() {
-			this.data.Dice = this.data.Result = this.data.ResultRecovered = this.data.ResultDisabled = '';
+			this.data.Dice = this.data.Result = this.data.ResultRecovered = this.data.ResultDisabled = this.data.ScoreNeeded = '';
 			this.data.CA = this.data.NE = this.data.EN = false;
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity3,"Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"RecoverGuns","Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);
@@ -4354,9 +4356,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
-		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData, Simulator: $scope.simulator2},
+		{Entity: $scope.Entity3, Data: $scope.Data3, Callback: $scope.changeData},
+		{Entity: "DoubleTeam", Simulator: $scope.simulator},
+		{Entity: "RecoverGuns", Simulator: $scope.simulator2}
 	]);
 	
 }])

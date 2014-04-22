@@ -693,3 +693,112 @@ func ArtyRelocate(col *db.Col, params map[string]interface{}) map[string]interfa
 
 	return params
 }
+
+// Double Team a Battery
+func DoubleTeam(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Type := params["Type"].(float64)
+	adder := float64(0)
+	Mods, _ := list.Get(col, "DoubleTeamMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "French Guard":
+			if Type == 1 {
+				adder += val
+			}
+		case "Horse Arty":
+			if Type == 2 {
+				adder += val
+			}
+		case "French":
+			if Type == 3 {
+				adder += val
+			}
+		case "British":
+			if Type == 4 {
+				adder += val
+			}
+		case "Other":
+			if Type == 5 {
+				adder += val
+			}
+		}
+	}
+	params["ScoreNeeded"] = 11
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+	if TotalDice >= 11 {
+		params["Result"] = "Successfully Double Teamed the Battery"
+		params["Exhausted"] = false
+	} else {
+		params["Result"] = "Failed to Double Team the Battery"
+		params["Exhausted"] = true
+	}
+
+	return params
+}
+
+// Attempt to Recover Guns
+func RecoverGuns(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Owner := params["Owner"].(float64)
+	adder := float64(0)
+	Mods, _ := list.Get(col, "ArtFateMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "NE":
+			if params["NE"].(bool) {
+				adder += val
+			}
+		case "CA":
+			if params["CA"].(bool) {
+				adder += val
+			}
+		case "EN":
+			if params["EN"].(bool) {
+				adder += val
+			}
+		}
+	}
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	Fates := list.Lookup(col, "ArtFate", "Situation")
+	params["ResultDisabled"] = false
+	params["ResultRecovered"] = false
+
+	switch Owner {
+	case 1: // Own guns - try to recover
+		params["ScoreNeeded"] = Fates["Friendly"]["Score"]
+		if TotalDice >= int(Fates["Friendly"]["Score"].(float64)) {
+			params["Result"] = "Successfully Recovered Guns"
+			params["ResultRecovered"] = true
+		} else {
+			params["Result"] = "Failed to Recover Guns"
+		}
+	case 2: // Enemy Guns
+		params["ScoreNeeded"] = Fates["Capture Enemy"]["Score"]
+		if TotalDice >= int(Fates["Capture Enemy"]["Score"].(float64)) {
+			params["Result"] = "Successfully Captured Enemy Guns"
+			params["ResultRecovered"] = true
+		} else if TotalDice >= int(Fates["Disable Enemy"]["Score"].(float64)) {
+			params["Result"] = "Disabled Enemy Guns"
+			params["ResultDisabled"] = true
+		} else {
+			params["Result"] = "Failed to deal with Enemy Guns"
+		}
+
+	}
+
+	return params
+}

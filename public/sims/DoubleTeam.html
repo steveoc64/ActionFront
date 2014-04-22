@@ -18,11 +18,12 @@
 	<div class="form-group">
 		<label class="col-sm-3"></label>
 		<label>
-			<button type="button" class="btn btn-default" ng-model="simulator.data.Exhausted" bs-checkbox>Attempts Exhausted</button>
+			<button type="button" class="btn btn-default" ng-show="simulator.data.Exhausted==true" ng-model="simulator.data.Exhausted" disabled bs-checkbox>Attempts Exhausted</button>
 		</label>
 	</div>
 
 	<display-field label="Dice" ng-model="simulator.data.Dice" span="4"></display-field>
+	<display-field label="Score Needed" ng-model="simulator.data.ScoreNeeded" span="2"></display-field>
 	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
 </div>
 
@@ -30,7 +31,7 @@
 
   <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
   <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
-  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Double Team</button>
+  <button type="button" class="btn btn-primary" ng-show="simulator.data.Exhausted==false" ng-click="simulator.calc()">Double Team</button>
 
 </div>
 </form>
