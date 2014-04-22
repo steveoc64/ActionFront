@@ -487,6 +487,7 @@ func ArtyFire(col *db.Col, params map[string]interface{}) map[string]interface{}
 	adder := float64(0)
 
 	TFormation := params["TFormation"].(string)
+	Angle := params["Angle"].(float64)
 	TType := params["TType"].(string)
 	isInf := TType == "Infantry"
 	isCav := TType == "Cavalry"
@@ -853,7 +854,17 @@ func ArtyFire(col *db.Col, params map[string]interface{}) map[string]interface{}
 	}
 	log.Println("Score to hit on D12 = ", scoreToHit)
 
-	params["Hits"] = dice.BucketD12(int(NumBases*4), int(scoreToHit))
+	AngleMultiplier := 1.0
+	switch Angle {
+	case 1:
+		AngleMultiplier = 1.5
+	case 2:
+		AngleMultiplier = 2.0
+	}
+
+	numHits := dice.BucketD12(int(NumBases*4), int(scoreToHit))
+	log.Println(numHits, "hits, mult=", AngleMultiplier)
+	params["Hits"] = math.Trunc(AngleMultiplier * float64(numHits))
 
 	Fatigue++
 	if Fatigue > 4 {

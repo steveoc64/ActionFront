@@ -5495,7 +5495,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Screened: false,
 			CounterBty: false,
 			TType: 'Infantry',
-			TFormation: '',
+			TFormation: 'MO',
+			Angle: 0,
 			ReverseSlope: false,
 			NapAttached: false,
 			CCAttached: false,
@@ -5517,14 +5518,15 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			$modal(myEditor);
 		},
 		setFormation: function() {
-			this.data.TFormation = 'Line';
+			this.data.TFormation = 'MO';
 		},
 		clear: function() {
 			this.data.Dice = '';
-			this.data.TFormation = 'Line';
+			this.data.TFormation = 'MO';
 			this.data.Ammo = this.data.Fatigue = 0;
 			this.data.Cavalry = this.data.HvRain = this.data.CounterBty = this.data.Followup = this.data.Screened = false;
 			this.data.FireMission = 'Tactical';
+			this.data.Angle = 0;
 			this.data.ReverseSlope = this.data.Marchfeld = this.data.ThreeGun = false;
 			this.data.Dice = this.data.Effect = this.data.Hits = this.data.EffectAmmo = this.data.EffectRetire = '';
 		},

@@ -107,6 +107,17 @@
 		</label>
 	</div>	
 	<div class="form-group">
+		<label class="col-sm-3 control-label">Angle of Fire</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Angle" bs-radio>Head On</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Angle" bs-radio>Diagonal</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Angle" bs-radio>Enfilade</label>
+	    	</div>
+		</label>
+	</div>	
+
+	<div class="form-group">
 		<label class="col-sm-3 control-label">Other Factors</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.ReverseSlope" bs-checkbox>Reverse Slope</button>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.Marchfeld" bs-checkbox>Marchfeld</button>
