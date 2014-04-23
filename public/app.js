@@ -477,7 +477,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			span: '@',
 			bindModel: '=ngModel'
 		},
-		template: '<div class="form-group"><label for="{{id}}" class="col-sm-3 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" disabled class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
+		template: '<div class="form-group"><label for="{{id}}" class="col-sm-2 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" disabled class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
 	}
 })
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
@@ -7901,7 +7901,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Rifle: false,
 			LoseCA: false,
 			Dice: '',
-			Results: '',
+			Result: '',
 			Severity: '',
 		},
 		rifles: function() {
@@ -7924,10 +7924,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		clear: function() {
 			this.data.POD = this.data.Rifle = this.data.LoseCA = this.data.Foolish = false;
 			this.data.Situation = this.data.Nation = this.data.Hits = 0;
-			this.data.Dice = this.data.Results = this.data.Severity = '';
+			this.data.Dice = this.data.Result = this.data.Severity = '';
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"LeaderDeath","Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);
@@ -7937,8 +7937,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	};
 
 	DataSocket.connect([
-		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData, Simulator: $scope.simulator},
+		{Entity: $scope.Entity, Data: $scope.Data, Callback: $scope.changeData},
 		{Entity: $scope.Entity2, Data: $scope.Data2, Callback: $scope.changeData},
+		{Entity: "LeaderDeath", Simulator: $scope.simulator},
 	]);
 }])
 

@@ -15,6 +15,7 @@ type MessageFormat struct {
 // Make the LIST and LOOKUP cache a global object
 var ListCache map[string]interface{}
 var LookupCache map[string]map[string]map[string]interface{}
+var InjuryCache map[uint16]map[string]interface{}
 
 // This is not as bad as it looks !!    LookupCache is a map of existing cached objects
 // Each object is a collection of records of a particular table, keyed by the Selected Unique Key field
@@ -25,6 +26,7 @@ var LookupCache map[string]map[string]map[string]interface{}
 func Init() {
 	ListCache = make(map[string]interface{})
 	LookupCache = make(map[string]map[string]map[string]interface{})
+	InjuryCache = nil
 }
 
 func Clear(theEntity string) {
@@ -103,5 +105,56 @@ func Lookup(col *db.Col, theEntity string, theKey string) map[string]map[string]
 		results[keyString] = theData
 	}
 	LookupCache[theEntity] = results
+	return results
+}
+
+// Get a Lookup List of Injuries
+// Keyed on [ID]   where ID is 10 * Hi + Lo  + 1000 if CA
+func InjuryLookup(col *db.Col) map[uint16]map[string]interface{} {
+	var myData map[string]interface{}
+
+	if InjuryCache != nil {
+		return InjuryCache
+	}
+
+	results := make(map[uint16]map[string]interface{}, 0)
+
+	// Not cached, so Build a new result set using tiedot embedded query processor
+	var query interface{}
+	queryStr := `{"eq": "Injury", "in": ["Type"]}`
+	json.Unmarshal([]byte(queryStr), &query)
+	queryResult := make(map[uint64]struct{}) // query result (document IDs) goes into map keys
+
+	if err := db.EvalQuery(query, col, &queryResult); err != nil {
+		panic(err)
+	}
+	for id := range queryResult {
+		col.Read(id, &myData)
+
+		theID := myData["@id"].(string)
+		theData := myData["Data"].(map[string]interface{})
+		theData["@id"] = theID
+		theValue := uint16(10*int(theData["Hi"].(float64)) + int(theData["Lo"].(float64)))
+		results[theValue] = theData
+	}
+	// And again for close action injuries
+	queryStr = `{"eq": "CAInjury", "in": ["Type"]}`
+	json.Unmarshal([]byte(queryStr), &query)
+	queryResult = make(map[uint64]struct{}) // query result (document IDs) goes into map keys
+
+	if err := db.EvalQuery(query, col, &queryResult); err != nil {
+		panic(err)
+	}
+	for id := range queryResult {
+		col.Read(id, &myData)
+
+		theID := myData["@id"].(string)
+		theData := myData["Data"].(map[string]interface{})
+		theData["@id"] = theID
+		theValue := uint16(1000 + 10*int(theData["Hi"].(float64)) + int(theData["Lo"].(float64)))
+		results[theValue] = theData
+	}
+
+	InjuryCache = results
 	return results
 }
