@@ -4467,7 +4467,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.simulator = {
 		data: {
 			Action: 'O',
-			SRating: 2,
+			SRating: 'Average',
 			CA: '',
 			UnitsMoved: 0,
 			Rain: false,
@@ -4489,6 +4489,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		},
 		clear: function() {
 			this.data.Special = '';
+			this.data.SRating = 'Average';
 			this.data.CA = '';
 			this.data.UnitsMoved = 0;
 			this.data.Hits = this.data.Fatigue = 0;

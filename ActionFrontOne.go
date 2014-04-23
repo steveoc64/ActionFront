@@ -283,6 +283,10 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				results := simulation.SKRelocate(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+			case "BUAMove":
+				results := simulation.BUAMove(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
 
 			// Musket and Cannon fire Simulators
 			case "VolleyFire":

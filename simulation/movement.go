@@ -952,3 +952,103 @@ func SKRelocate(col *db.Col, params map[string]interface{}) map[string]interface
 
 	return params
 }
+
+// Attempt Occupy or exit a BUA
+func BUAMove(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Action := params["Action"].(string)
+	SRating := params["SRating"].(string)
+	Hits := params["Hits"].(float64)
+	Fatigue := params["Fatigue"].(float64)
+	Special := params["Special"].(string)
+	CA := params["CA"].(string)
+	UnitsMoved := params["UnitsMoved"].(float64)
+	Rain := params["Rain"].(bool)
+	Cold := params["Cold"].(bool)
+
+	// Set default results
+	params["Result"] = ""
+	params["ResultOrdered"] = false
+
+	// Get the lookup records
+	BUAMove := list.Lookup(col, "BUAMove", "Rating")[SRating]
+
+	// Apply all the modifiers
+	adder := float64(0)
+	Mods, _ := list.Get(col, "BUAMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "UN":
+			adder += val * UnitsMoved
+		case "HIT":
+			adder += val * Hits
+		case "FT":
+			adder += val * Fatigue
+		case "LA":
+			if CA == "LA" {
+				adder += val
+			}
+		case "CA":
+			if CA == "CA" {
+				adder += val
+			}
+		case "COLD":
+			if Cold {
+				adder += val
+			}
+		case "RAIN":
+			if Rain {
+				adder += val
+			}
+		case "RU":
+			if Special == "RU" {
+				adder += val
+			}
+		case "AU":
+			if Special == "AU" {
+				adder += val
+			}
+		case "JN":
+			if Special == "JN" {
+				adder += val
+			}
+		}
+	}
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	Ordered := int(BUAMove["Ordered"].(float64))
+	Exit := int(BUAMove["Exit"].(float64))
+
+	switch Action {
+	case "O":
+		if TotalDice < Ordered {
+			params["Result"] = "Occupy structure in a disordered state"
+			params["ResultOrdered"] = false
+		} else {
+			params["Result"] = "Occupy structure in good order"
+			params["ResultOrdered"] = true
+		}
+	case "X":
+		if TotalDice < Exit {
+			params["Result"] = "Remain in the structure in a disordered state"
+			params["ResultOrdered"] = false
+		} else if TotalDice < Ordered {
+			params["Result"] = "Exit the structure in a disordered state"
+			params["ResultOrdered"] = false
+		} else {
+			params["Result"] = "Exit the structure in good order"
+			params["ResultOrdered"] = true
+		}
+
+	}
+
+	return params
+}

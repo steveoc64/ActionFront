@@ -2311,8 +2311,8 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BUAMod", BUAMod{"JN", "Janissaries", 2}))
 	gameData.Insert(DataMap("BUAMod", BUAMod{"RU", "Russian Grenadiers", 3}))
 	gameData.Insert(DataMap("BUAMod", BUAMod{"AU", "Austrian Grenadiers", 3}))
-	gameData.Insert(DataMap("BUAMod", BUAMod{"COLD", "Extreme Cold", 3}))
-	gameData.Insert(DataMap("BUAMod", BUAMod{"RAIN", "Heavy Rain / Snow", 3}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"COLD", "Extreme Cold", -4}))
+	gameData.Insert(DataMap("BUAMod", BUAMod{"RAIN", "Heavy Rain / Snow", -4}))
 	gameData.Insert(DataMap("BUAMod", BUAMod{"HIT", "Hits", -1}))
 	gameData.Insert(DataMap("BUAMod", BUAMod{"FT", "Per Fatigue Level over Fresh", -1}))
 
