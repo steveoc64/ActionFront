@@ -2231,8 +2231,10 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BadMoraleRec", BadMoraleRec{"Militia", 18, 12}))
 	gameData.Insert(DataMap("BadMoraleRec", BadMoraleRec{"Rabble", 19, 14}))
 	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"CF", "Per fatigue on Cavalry ME", -2}))
+	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"AF", "Per fatigue on Artillery ME", -3}))
 	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"MF", "Per fatigue on Mixed/Infantry ME", -1}))
 	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"SL", "Units standard has been lost", -3}))
+	gameData.Insert(DataMap("BadMoraleRecMod", BadMoraleRecMod{"HIT", "Per Hit", -1}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Movement, Relocation and Formation Change Tables

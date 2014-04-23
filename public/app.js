@@ -5783,9 +5783,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Hits: 1,
 			Cover: false,
 			Shrapnel: false,
-			EffectCrew: '',
-			EffectHorse: '',
-			EffectCaisson: '',
+			ResultCrew: '',
+			ResultHorse: '',
+			ResultCaisson: '',
 		},
 		showForm: function() {
 			var myEditor = {
@@ -5798,10 +5798,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		clear: function() {
 			this.data.Hits = 1;
 			this.data.Cover = this.data.Schrapnel = false;
-			this.data.EffectCrew = this.data.EffectHorse = this.data.EffectCaisson = '';
+			this.data.ResultCrew = this.data.ResultHorse = this.data.ResultCaisson = '';
 		},
 		calc: function() {
-			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"ArtyBB","Data":this.data}));
+			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
 		},
 		results: function(data) {
 			console.log("SIM Results", data);

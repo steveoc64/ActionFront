@@ -8,6 +8,7 @@ import (
 	"log"
 	"math"
 	"strconv"
+	"strings"
 )
 
 func VolleyFire(col *db.Col, params map[string]interface{}) map[string]interface{} {
@@ -482,6 +483,7 @@ func FireFight(col *db.Col, params map[string]interface{}) map[string]interface{
 	return params
 }
 
+// Calculate the fire from artillery
 func ArtyFire(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	adder := float64(0)
@@ -871,6 +873,85 @@ func ArtyFire(col *db.Col, params map[string]interface{}) map[string]interface{}
 		Fatigue = 4
 	}
 	params["Fatigue"] = Fatigue
+
+	return params
+}
+
+// Calculate the hits on artillery
+func CounterBty(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	adder := float64(0)
+	Deploy := int(params["Deploy"].(float64))
+	Hits := int(params["Hits"].(float64))
+	Cover := params["Cover"].(bool)
+	Shrapnel := params["Shrapnel"].(bool)
+
+	if Shrapnel {
+		adder += 1
+	}
+
+	DiceResults := make([]string, Hits)
+	CrewHits := 0
+	HorseHits := 0
+	CaissonHits := false
+
+	CounterBty := list.Lookup(col, "CounterBty", "Score")
+
+	for i := 0; i < Hits; i++ {
+		// Roll the Dice
+		Dice := dice.DieRoll()
+		TotalDice := Dice + int(adder)
+		DiceResults[i] = fmt.Sprintf("%d", Dice)
+
+		fid := ""
+		if TotalDice >= 2 {
+			fid = "2"
+			if TotalDice >= 9 {
+				fid = "9"
+				if TotalDice >= 12 {
+					fid = "12"
+					if TotalDice >= 14 {
+						fid = "14"
+						if TotalDice >= 19 {
+							fid = "19"
+						}
+					}
+				}
+			}
+		}
+
+		CBRecord := CounterBty[fid]
+		Horsery := 0
+		if Deploy == 0 {
+			CrewHits += int(CBRecord["Crew"].(float64))
+			Horsery = int(CBRecord["Horses"].(float64))
+			if Cover && Horsery > 1 {
+				Horsery--
+			}
+			HorseHits += Horsery
+			if CBRecord["Caisson"].(bool) {
+				CaissonHits = true
+			}
+		} else {
+			CrewHits += int(CBRecord["LCrew"].(float64))
+			Horsery = int(CBRecord["LHorses"].(float64))
+			if Cover && Horsery > 1 {
+				Horsery--
+			}
+			HorseHits += Horsery
+			if CBRecord["Caisson"].(bool) {
+				CaissonHits = true
+			}
+		}
+	}
+	params["Dice"] = strings.Join(DiceResults, ", ")
+	params["ResultCrew"] = fmt.Sprintf("%d Crew Hits", CrewHits)
+	params["ResultHorse"] = fmt.Sprintf("%d Horse Hits", HorseHits)
+	if CaissonHits {
+		params["ResultCaisson"] = "Explodes !"
+	} else {
+		params["ResultCaisson"] = ""
+	}
 
 	return params
 }
