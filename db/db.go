@@ -2331,8 +2331,8 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"HIT", "Per Hit", -1}))
 	gameData.Insert(DataMap("SKRelocateMod", SKRelocateMod{"FT", "Per Fatigue Level Over Fresh", -1}))
 
-	gameData.Insert(DataMap("SKSupport", SKSupport{"Normal", 9, 6, 12}))
-	gameData.Insert(DataMap("SKSupport", SKSupport{"Bold", 30, 30, 18}))
+	gameData.Insert(DataMap("SKSupport", SKSupport{"Normal", 2, 1, 3}))
+	gameData.Insert(DataMap("SKSupport", SKSupport{"Bold", 6, 6, 4}))
 
 	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{"Guard", 6, 8, 10, 11, 13, 16, 21, 2, 2, 7, 10, 12, 15, 20}))
 	gameData.Insert(DataMap("ArtyRelocate", ArtyRelocate{"Class I", 8, 9, 11, 12, 14, 17, 21, 2, 5, 8, 11, 13, 15, 20}))

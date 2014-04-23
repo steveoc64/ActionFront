@@ -804,3 +804,151 @@ func RecoverGuns(col *db.Col, params map[string]interface{}) map[string]interfac
 
 	return params
 }
+
+// Attempt to Move Skirmishers away from parent unit
+func SKRelocate(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Ammo := params["Ammo"].(float64)
+	Hits := params["Hits"].(float64)
+	Fatigue := params["Fatigue"].(float64)
+	Range := int(params["Range"].(float64))
+	Terrain := params["Terrain"].(float64)
+	Leader := params["Leader"].(string)
+	Rating := params["Rating"].(string)
+
+	// Set default results
+	params["Result"] = ""
+	params["ResultNoMove"] = false
+	params["ResultRetire"] = false
+	params["ResultMove"] = false
+	params["ResultBold"] = false
+
+	// Get the relocation record
+	SKRelocate := list.Lookup(col, "SKRelocate", "Rating")[Rating]
+	SKSupport := list.Lookup(col, "SKSupport", "Mode")
+
+	// Apply all the modifiers
+	adder := float64(0)
+	Mods, _ := list.Get(col, "SKRelocateMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "AM":
+			if Ammo >= 1 {
+				adder += val
+			}
+		case "HIT":
+			adder += val * Hits
+		case "FT":
+			adder += val * Fatigue
+		case "UL":
+			if Leader == "UnInspiring" {
+				adder += val
+			}
+		case "AL":
+			if Leader == "Average" {
+				adder += val
+			}
+		case "IL":
+			if Leader == "Inspirational" {
+				adder += val
+			}
+		case "CL":
+			if Leader == "Charismatic" {
+				adder += val
+			}
+		case "BD":
+			if params["Bold"].(bool) {
+				adder += val
+			}
+
+		}
+	}
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+	params["Bold"] = false
+
+	if TotalDice < int(SKRelocate["Retire"].(float64)) {
+		params["Result"] = "No Move, Lose Initiative"
+		params["ResultNoMove"] = true
+	} else if TotalDice < int(SKRelocate["Move"].(float64)) {
+		supportDistance := SKSupport["Normal"]
+		distance := 0
+		switch Terrain {
+		case 0:
+			distance = int(supportDistance["Marchfeld"].(float64))
+		case 1:
+			distance = int(supportDistance["Rolling"].(float64))
+		case 2:
+			distance = int(supportDistance["Rough"].(float64))
+		}
+
+		if distance > Range {
+			params["Result"] = fmt.Sprintf("Must fallback %d quadrants, to within %d of parent unit", distance-Range, distance)
+			params["Range"] = distance
+		}
+
+		params["Result"] = "May hold position, or retire"
+		params["ResultRetire"] = true
+	} else if TotalDice < int(SKRelocate["Bold"].(float64)) {
+		// Can move - work out how far
+		supportDistance := SKSupport["Normal"]
+		distance := 0
+		switch Terrain {
+		case 0:
+			distance = int(supportDistance["Marchfeld"].(float64))
+		case 1:
+			distance = int(supportDistance["Rolling"].(float64))
+		case 2:
+			distance = int(supportDistance["Rough"].(float64))
+		}
+
+		params["ResultRetire"] = true
+		if distance > Range {
+			params["Result"] = fmt.Sprintf("Advance %d quadrants, keeping within %d of parent unit", distance-Range, distance)
+			params["ResultMove"] = true
+		} else if distance == Range {
+			params["Result"] = fmt.Sprintf("At their limit of %d quadrants from parent unit", distance)
+			params["ResultMove"] = false
+		} else {
+			params["Result"] = fmt.Sprintf("Fallback to the limit of %d quadrants from parent unit", distance)
+			params["ResultMove"] = true
+		}
+		params["Range"] = distance
+	} else {
+		// Can move - work out how far
+		supportDistance := SKSupport["Bold"]
+		distance := 0
+		switch Terrain {
+		case 0:
+			distance = int(supportDistance["Marchfeld"].(float64))
+		case 1:
+			distance = int(supportDistance["Rolling"].(float64))
+		case 2:
+			distance = int(supportDistance["Rough"].(float64))
+		}
+
+		params["ResultRetire"] = true
+		if distance > Range {
+			params["Result"] = fmt.Sprintf("May Boldly Advance %d quadrants, keeping within %d of parent unit", distance-Range, distance)
+			params["ResultMove"] = true
+		} else if distance == Range {
+			params["Result"] = fmt.Sprintf("At their Bold limit of %d quadrants from parent unit", distance)
+			params["ResultMove"] = false
+		} else {
+			params["Result"] = fmt.Sprintf("Fallback to the Bold limit of %d quadrants from parent unit", distance)
+			params["ResultMove"] = true
+		}
+		params["ResultBold"] = true
+		params["Bold"] = true
+		params["Range"] = distance
+	}
+
+	return params
+}

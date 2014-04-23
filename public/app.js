@@ -20,7 +20,7 @@ var TacMoveTypes = ['Artillery','Infantry','Cavalry','LightCav'];
 var TacFormations = ['AttackColumn','ClosedColumn','Line','Square','Skirmish',"MarchColumn"];
 var TacFormationTos = ['AttackColumn','ClosedColumn','Line Centre','Line Left','Line Right','Square','Skirmish',"MarchColumn"];
 var TrainedTypes = ['Trained','UnTrained'];
-var LeaderInspiration = ['','Despicable','Poor','Average','Inspirational','Charismatic'];
+var LeaderInspiration = ['','UnInspiring','Average','Inspirational','Charismatic'];
 var BBTargets = ['OpenOrder','Line','Column','ClosedCol','Square','Limbered'];
 var BBCovers = ['Open','LtCover','HvCover','Town'];
 
@@ -4517,7 +4517,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 	$scope.Data3 = [];
 	$scope.title = "Skirmisher Relocate";
 	$scope.title2 = "Skirmisher Relocate Mods";
-	$scope.title3 = "Support Distance";
+	$scope.title3 = "Support Distance (Quadrants)";
 	$scope.docs = "Table 14.9";
 	$scope.docs2 = "Table 14.9A";
 	$scope.docs3 = "Table 14.10";
@@ -4589,7 +4589,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
            	{field:'Mode', width: 80}, 
            	{field:'Marchfeld', width: 100},
            	{field:'Rolling',width:60},
-           	{field:'Rough',width:60}
+           	{field:'Rough',displayName: 'Rough/Woods',width:60}
         ]
 	};
 
@@ -4662,6 +4662,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Result: '',
 			ResultRetire: '',
 			ResultMove: '',
+			ResultNoMove: '',
 			ResultBold: '',
 		},
 		showForm: function() {
@@ -4673,7 +4674,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			$modal(myEditor);
 		},
 		clear: function() {
-			this.data.Dice = this.data.Result = this.data.ResultRetire = this.data.ResultMove = this.data.ResultBold = '';
+			this.data.Dice = this.data.Result = this.data.ResultRetire = this.data.ResultMove = this.data.ResultBold = this.data.ResultNoMove = '';
 			this.data.Terrain = 1;
 			this.data.Ammo = this.data.Hits = this.data.Fatigue = 0;
 			this.data.Range = 1;

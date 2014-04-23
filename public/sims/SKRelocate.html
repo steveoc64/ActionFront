@@ -11,7 +11,7 @@
 			<select id="UnitType" ng-model="simulator.data.Rating" ng-change="simulator.clear()" ng-options="t for t in Lookups.SkirmishRatings"></select>
 			Attached Leader:
 			<select id="UnitType" ng-model="simulator.data.Leader" ng-change="simulator.clear()" ng-options="t for t in Lookups.LeaderInspiration"></select>
-			<button type="button" class="btn btn-default" ng-model="simulator.data.Bold" bs-checkbox>Unit Is Blood</button>		
+			<button type="button" class="btn btn-default" ng-model="simulator.data.Bold" bs-checkbox>Unit Is BOLD</button>		
 		</div>
 	</div>
 	<div class="form-group">
@@ -67,9 +67,10 @@
 			<div class="btn-group">
 	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Range" bs-radio>Same Quadrant</label>
 	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Range" bs-radio>Next Quadrant</label>
-	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Range" bs-radio>1 Grid</label>
-	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Range" bs-radio>2 Grids</label>
-	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.Range" bs-radio>3+ Grids</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Range" bs-radio>2 Quads</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Range" bs-radio>3 Quads</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Range" bs-radio>4 Quads</label>
+	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.Range" bs-radio>6 Quads</label>
 	    	</div>
 		</label>
 	</div>
@@ -78,8 +79,9 @@
 
 	<display-field label="Dice" ng-model="simulator.data.Dice" span="3"></display-field>
 	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
-	<display-field label="Must Retire" ng-model="simulator.data.ResultRetire" span="2"></display-field>
-	<display-field label="Moves" ng-model="simulator.data.ResultMove" span="2"></display-field>
+	<display-field label="No Move" ng-model="simulator.data.ResultNoMove" span="2"></display-field>
+	<display-field label="Can Retire" ng-model="simulator.data.ResultRetire" span="2"></display-field>
+	<display-field label="Can Move" ng-model="simulator.data.ResultMove" span="2"></display-field>
 	<display-field label="Becomes Bold" ng-model="simulator.data.ResultBold" span="2"></display-field>
 </div>
 
@@ -87,7 +89,7 @@
 
   <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
   <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
-  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Skirmish Fire</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Move Skirmishers</button>
 
 </div>
 </form>
