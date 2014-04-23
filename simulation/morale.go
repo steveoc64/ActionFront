@@ -6,6 +6,7 @@ import (
 	"github.com/steveoc64/ActionFront/list"
 	"github.com/steveoc64/tiedot/db"
 	"log"
+	"math"
 )
 
 func UnitMoraleTest(col *db.Col, params map[string]interface{}) map[string]interface{} {
@@ -509,6 +510,98 @@ func MEPanicTest(col *db.Col, params map[string]interface{}) map[string]interfac
 	} else {
 		params["Effect"] = "Morale Broken"
 	}
+
+	return params
+}
+
+// Recovery from Bad Morale
+func BadMoraleRec(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Rating := params["Rating"].(string)
+	Leader := params["Leader"].(string)
+	METype := params["METype"].(float64)
+	Hits := params["Hits"].(float64)
+	Fatigue := params["Fatigue"].(float64)
+	LostStandard := params["LostStandard"].(bool)
+
+	adder := float64(0)
+	Mods, _ := list.Get(col, "BUAMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "SL":
+			if LostStandard {
+				adder += val
+			}
+		case "HIT":
+			adder += Hits * val
+		case "CF":
+			if METype == 2 {
+				adder += Fatigue * val
+			}
+		case "AF":
+			if METype == 3 {
+				adder += Fatigue * val
+			}
+		case "MF":
+			if METype == 0 || METype == 1 {
+				adder += Fatigue * val
+			}
+		}
+	}
+
+	switch Leader {
+	case "UnInspiring":
+		adder += -1
+	case "Average":
+		adder += 0
+	case "Inspirational":
+		adder += 1
+	case "Charismatic":
+		adder += 3
+	}
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	// Get the BadMorale recovery table
+	BadMoraleRec := list.Lookup(col, "BadMoraleRec", "Rating")[Rating]
+	GoodMoraleScore := int(BadMoraleRec["GoodMorale"].(float64))
+	TryAgainScore := int(BadMoraleRec["TryAgain"].(float64))
+	if TotalDice >= GoodMoraleScore {
+		params["Result"] = "Unit Rallies, and is ready for Battle"
+		params["ResultSteady"] = true
+		params["ResultContinue"] = false
+		params["ResultLeaves"] = false
+		// Get some hits back
+		Hits = math.Trunc(Hits / 2)
+		if Fatigue > 0 {
+			Fatigue--
+		}
+		params["Hits"] = Hits
+		params["Fatigue"] = Fatigue
+	} else if TotalDice >= TryAgainScore {
+		params["Result"] = "Unit continues to rally - carry on and try again next turn"
+		params["ResultSteady"] = false
+		params["ResultContinue"] = true
+		params["ResultLeaves"] = false
+	} else {
+		params["Result"] = "Unit has lost confidence, and leaves the field for the day"
+		params["ResultSteady"] = false
+		params["ResultContinue"] = false
+		params["ResultLeaves"] = true
+	}
+
+	return params
+}
+
+// Initial Bad Morale Test
+func InitialBadMorale(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	return params
 }

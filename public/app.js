@@ -3327,8 +3327,14 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Rating: 'Regular',
 			Leader: '',
 			METype: 0,
+			Hits: 0,
 			Fatigue: 0,
 			LostStandard: false,
+			Dice: '',
+			Result: '',
+			ResultSteady: '',
+			ResultContinue: '',
+			ResultLeaves: '',
 		},
 
 		showForm: function() {
@@ -3340,10 +3346,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			$modal(myEditor);
 		},
 		clear: function() {
-			this.data.METype = this.data.Fatigue = 0;
+			this.data.METype = this.data.Fatigue = this.data.Hits = 0;
 			this.data.LostStandard = false;
 
-			this.data.Dice = this.data.Levels = this.data.Effect = '';
+			this.data.Dice = this.data.Result = this.data.ResultSteady = this.data.ResultContinue = this.data.ResultLeaves = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
