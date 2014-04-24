@@ -37,31 +37,21 @@
 
 	<h3 class="bg-warning">Target Description</h3>
 	<div class="form-group">
-		<label class="col-sm-3 control-label">Number of Hits on Target</label>
-    	<label>
-			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Hits" bs-radio>1</label>
-	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Hits" bs-radio>2</label>
-	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Hits" bs-radio>3</label>
-	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Hits" bs-radio>4</label>
-	    		<label class="btn btn-default" type="radio" value="5" ng-model="simulator.data.Hits" bs-radio>5</label>
-	    		<label class="btn btn-default" type="radio" value="6" ng-model="simulator.data.Hits" bs-radio>6+</label>
-	    	</div>
-		</label>
-	</div>
-	<div class="form-group">
 		<label class="col-sm-3 control-label">Cover Rating</label>
     	<label>
 			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Cover" bs-radio>None</label>
-	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Cover" bs-radio>Light</label>
+	    		<label class="btn btn-default" type="radio" value="Light" ng-model="simulator.data.Cover" bs-radio>Light</label>
+	    		<label class="btn btn-default" type="radio" value="Medium" ng-model="simulator.data.Cover" bs-radio>Medium</label>
+	    		<label class="btn btn-default" type="radio" value="Heavy" ng-model="simulator.data.Cover" bs-radio>Heavy</label>
+	    		<label class="btn btn-default" type="radio" value="SuperHeavy" ng-model="simulator.data.Cover" bs-radio>Super</label>
 	    	</div>
 		</label>
 	</div>
 
 	<h3 class="bg-success">Results</h3>
-	<display-field label="Dice" ng-model="simulator.data.Dice" span="6"></display-field>
-	<display-field label="Effect" ng-model="simulator.data.Effect" span="8"></display-field>
+	<display-field label="Dice" ng-model="simulator.data.Dice" span="4"></display-field>
+	<display-field label="Score Needed" ng-model="simulator.data.ScoreNeeded" span="2"></display-field>
+	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
 </div>
 
 <div class="modal-footer" style="margin: 15px -20px -20px;">

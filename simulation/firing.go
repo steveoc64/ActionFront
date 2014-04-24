@@ -955,3 +955,49 @@ func CounterBty(col *db.Col, params map[string]interface{}) map[string]interface
 
 	return params
 }
+
+// Set buildings on fire
+func Aflame(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	HWType := params["HWType"].(float64)
+	NumHW := int(params["NumHW"].(float64))
+	FireMission := params["FireMission"].(float64)
+	Cover := params["Cover"].(string)
+
+	// Get the appropriate record from the aflame table
+	Aflame := list.Lookup(col, "Aflame", "Cover")[Cover]
+
+	Field := ""
+	switch HWType {
+	case 0: // Medium howitzer
+		switch FireMission {
+		case 0:
+			Field = "TacMd"
+		case 1:
+			Field = "BombardMd"
+		}
+	case 1: // Heavy howitzer
+		switch FireMission {
+		case 0:
+			Field = "TacHv"
+		case 1:
+			Field = "BombardHv"
+		}
+	}
+
+	ScoreToBurn := int(Aflame[Field].(float64))
+	params["Result"] = "No Effect"
+	params["ScoreNeeded"] = ScoreToBurn
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	adder := NumHW - 1
+	TotalDice := Dice + adder
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, adder, TotalDice)
+
+	if TotalDice >= ScoreToBurn {
+		params["Result"] = "Target Set Aflame !"
+	}
+
+	return params
+}

@@ -5882,10 +5882,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			HWType: 0,
 			NumHW: 1,
 			FireMission: 1,
-			Hits: 1,
-			Cover: 0,
+			Cover: 'Light',
 			Dice: '',
-			Effect: '',
+			ScoreNeeded: '',
+			Result: '',
 		},
 		showForm: function() {
 			var myEditor = {
@@ -5898,9 +5898,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		clear: function() {
 			this.data.HWType = 0,
 			this.data.NumHW = 1;
-			this.data.FireMission = this.data.Hits = 1;
-			this.data.Cover = 0;
-			this.data.Dice = this.data.Effect = '';
+			this.data.FireMission = 1;
+			this.data.Cover = 'Light';
+			this.data.Dice = this.data.Result = this.data.ScoreNeeded = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
