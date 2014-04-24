@@ -5375,7 +5375,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'ID', width: 60}, 
+           	{field:'ID', visible: false, width: 60}, 
            	{field:'Dice', width: 60},
            	{field:'Descr', displayName:'Description',width:120}
         ]
@@ -5397,11 +5397,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         	directions:['asc']
         },
         columnDefs: [
-           	{field:'ID', width: 60}, 
-           	{field:'LtArt', displayName:'Light',width: 60}, 
-           	{field:'MdArt', displayName:'Medium',width: 60}, 
-           	{field:'MdHvArt', displayName:'MdHeavy',width: 60}, 
-           	{field:'HvArt', displayName:'Heavy',width: 60}, 
+           	{field:'ID', visible: false, width: 60}, 
+           	{field:'LtArt', displayName:'Light',width: 100}, 
+           	{field:'MdArt', displayName:'Medium',width: 100}, 
+           	{field:'MdHvArt', displayName:'MdHeavy',width: 100}, 
+           	{field:'HvArt', displayName:'Heavy',width: 100}, 
         ]
 	};
 
@@ -5423,7 +5423,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 80}, 
-           	{field:'Descr', displayName:'Description',width: 280},
+           	{field:'Descr', displayName:'Description',width: 400},
            	{field:'Value', width: 60},
         ]
 	};
