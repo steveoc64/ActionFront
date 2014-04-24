@@ -480,6 +480,18 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		template: '<div class="form-group"><label for="{{id}}" class="col-sm-2 control-label">{{label}}</label><div class="col-sm-{{span}}"><input type="text" disabled class="form-control" id="{{id}}" ng-model="bindModel"></div></div>'
 	}
 })
+.directive('displayArea', function(){
+	return {
+		restrict: 'E',
+		scope: {
+			id: '@',
+			label: '@',
+			span: '@',
+			bindModel: '=ngModel'
+		},
+		template: '<div class="form-group"><label for="{{id}}" class="col-sm-2 control-label">{{label}}</label><div class="col-sm-{{span}}"><textarea rows="3" disabled class="form-control" id="{{id}}" ng-model="bindModel">{{bindModel}}</textarea></div></div>'
+	}
+})
 .factory('DataSocket', ["$rootScope", "$state", "$location", "$window", function($rootScope, $state, $location, $window) {
   var service = {};
   $rootScope.FilterValues = {};
@@ -5584,9 +5596,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Score', width: 60}, 
+           	{field:'Effect', width: 200},            	
            	{field:'Light', width: 120},
            	{field:'Medium', width:120},
-           	{field:'MediumHv', width:120},
+           	{field:'MdHeavy', width:120},
            	{field:'Heavy', width:120},
         ]
 	};
@@ -5665,6 +5678,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			FireMission: 0,
 			Grid: 0,
 			SGrid: 0,
+			Contours: 0,
+			SContours: 0,
 			T1: '',
 			T2: '',
 			T3: '',
@@ -5680,6 +5695,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			H3: '',
 			H4: '',
 			H5: '',
+			Dice: '',
+			Effect: '',
 		},
 		showForm: function() {
 			var myEditor = {
@@ -5694,7 +5711,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.Grid = this.data.SGrid = 0;
 			this.data.T1 = this.data.T2 = this.data.T3 = this.data.T4 = this.data.T5 = '';
 			this.data.C1 = this.data.C2 = this.data.C3 = this.data.C4 = this.data.C5 = 'Open';
-			this.data.H1 = this.data.H2 = this.data.H3 = this.data.H4 = this.data.H5 = 'Open';
+			this.data.H1 = this.data.H2 = this.data.H3 = this.data.H4 = this.data.H5 = '';
+			this.data.Dice = this.data.Effect = '';
+			this.data.Contours = this.data.SContours = 0;
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":"ArtyBB","Data":this.data}));

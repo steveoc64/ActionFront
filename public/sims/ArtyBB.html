@@ -7,7 +7,7 @@
 	<div class="form-group">
 		<label for="UnitType" class="col-sm-3 control-label">Firing Weight</label>
 		<div class="col-sm-9">
-			<select id="UnitType" ng-model="simulator.data.ArtyWeight" ng-change="simulator.clear()" ng-options="t for t in Lookups.ArtyWeights"></select>
+			<select id="UnitType" ng-model="simulator.data.ArtyWeight" ng-options="t for t in Lookups.ArtyWeights"></select>
 		</div>
 	</div>
 	<div class="form-group">
@@ -42,6 +42,15 @@
 	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Grid" bs-radio>Rocky</label>
 	    	</div>
 		</label>
+    	<label>
+    		Contour Diff
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Contours" bs-radio>0</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Contours" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Contours" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Contours" bs-radio>3+</label>
+	    	</div>
+		</label>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Secondary Grid</label>
@@ -53,6 +62,16 @@
 	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.SGrid" bs-radio>Rocky</label>
 	    	</div>
 		</label>
+    	<label>
+    		Contour Diff
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.SContours" bs-radio>0</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.SContours" bs-radio>1</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.SContours" bs-radio>2</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.SContours" bs-radio>3+</label>
+	    	</div>
+		</label>
+
 	</div>
 
 	<h3 class="bg-warning">Target Units</h3>	
@@ -125,8 +144,8 @@
 	</div>	
 
 	<h3 class="bg-success">Results</h3>
-	<display-field label="Dice" ng-model="simulator.data.Dice" span="3"></display-field>
-	<display-field label="Fire Effect" ng-model="simulator.data.Effect" span="8"></display-field>
+	<display-field label="Danger %" ng-model="simulator.data.Dice" span="10"></display-field>
+	<display-field label="Fire Effect" ng-model="simulator.data.Effect" span="10"></display-field>
 </div>
 
 <div class="modal-footer" style="margin: 15px -20px -20px;">

@@ -1001,3 +1001,357 @@ func Aflame(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	return params
 }
+
+// Calculate bouncethrough effects for bombardment fire
+
+// Because this is effectively 5 repeat ops, and it is coded as a linear pass through that ... the code is very unDRY, but
+// it is done this way to have a single pass through the modifier tables, and hence greatly reduced IO
+
+// Later on, can refactor this - maybe best done as a multi-pass front end to a simpler simulator ?  Whatever refactoring
+// happens, make sure that it does not involve any more IO than the originaL please.
+
+func ArtyBB(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	ArtyWeight := params["ArtyWeight"].(string)
+	Bases := int(params["Bases"].(float64))
+	FireMission := params["FireMission"].(float64)
+	Grid := params["Grid"].(float64)
+	SGrid := params["SGrid"].(float64)
+	Contours := params["Contours"].(float64)
+	SContours := params["SContours"].(float64)
+
+	T1 := params["T1"].(string)
+	T2 := params["T2"].(string)
+	T3 := params["T3"].(string)
+	T4 := params["T4"].(string)
+	T5 := params["T5"].(string)
+	C1 := params["C1"].(string)
+	C2 := params["C2"].(string)
+	C3 := params["C3"].(string)
+	C4 := params["C4"].(string)
+	C5 := params["C5"].(string)
+
+	// Apply Mods
+	adder := make([]float64, 5)
+	Mods, _ := list.Get(col, "BouncethruMod")
+	i := int(0)
+	for i = 0; i < 5; i++ {
+		adder[i] = float64(0)
+	}
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "B1":
+			if FireMission == 1 {
+				for i = 0; i < 5; i++ {
+					adder[i] += val
+				}
+			}
+		case "B2":
+			if FireMission == 0 {
+				for i = 0; i < 5; i++ {
+					adder[i] += val
+				}
+			}
+		case "CT":
+			for i = 0; i < 3; i++ {
+				adder[i] += Contours * val
+			}
+			for i = 3; i < 5; i++ {
+				adder[i] += SContours * val
+			}
+		case "DT":
+			switch T1 {
+			case "ClosedCol", "Square":
+				adder[0] += val
+			}
+			switch T2 {
+			case "ClosedCol", "Square":
+				adder[1] += val
+			}
+			switch T3 {
+			case "ClosedCol", "Square":
+				adder[2] += val
+			}
+			switch T4 {
+			case "ClosedCol", "Square":
+				adder[3] += val
+			}
+			switch T5 {
+			case "ClosedCol", "Square":
+				adder[4] += val
+			}
+		case "OO":
+			if T1 == "OpenOrder" {
+				adder[0] += val
+			}
+			if T2 == "OpenOrder" {
+				adder[1] += val
+			}
+			if T3 == "OpenOrder" {
+				adder[2] += val
+			}
+			if T4 == "OpenOrder" {
+				adder[3] += val
+			}
+			if T5 == "OpenOrder" {
+				adder[4] += val
+			}
+		case "HC":
+			if C1 == "HvCover" {
+				adder[0] += val
+			}
+			if C2 == "HvCover" {
+				adder[1] += val
+			}
+			if C3 == "HvCover" {
+				adder[2] += val
+			}
+			if C4 == "HvCover" {
+				adder[3] += val
+			}
+			if C5 == "HvCover" {
+				adder[4] += val
+			}
+		case "LA":
+			if T1 == "Limbered" {
+				adder[0] += val
+			}
+			if T2 == "Limbered" {
+				adder[1] += val
+			}
+			if T3 == "Limbered" {
+				adder[2] += val
+			}
+			if T4 == "Limbered" {
+				adder[3] += val
+			}
+			if T5 == "Limbered" {
+				adder[4] += val
+			}
+		case "LW":
+			if C1 == "LtCover" {
+				adder[0] += val
+			}
+			if C2 == "LtCover" {
+				adder[1] += val
+			}
+			if C3 == "LtCover" {
+				adder[2] += val
+			}
+			if C4 == "LtCover" {
+				adder[3] += val
+			}
+			if C5 == "LtCover" {
+				adder[4] += val
+			}
+		case "MD":
+			if Grid == 2 {
+				adder[0] += val
+				adder[1] += val
+				adder[2] += val
+			}
+			if SGrid == 2 {
+				adder[3] += val
+				adder[4] += val
+			}
+		case "MF":
+			if Grid == 0 {
+				adder[0] += val
+				adder[1] += val
+				adder[2] += val
+			}
+			if SGrid == 0 {
+				adder[3] += val
+				adder[4] += val
+			}
+		case "RF":
+			if Grid == 3 {
+				adder[0] += val
+				adder[1] += val
+				adder[2] += val
+			}
+			if SGrid == 3 {
+				adder[3] += val
+				adder[4] += val
+			}
+		case "RG":
+			if Grid == 1 {
+				adder[0] += val
+				adder[1] += val
+				adder[2] += val
+			}
+			if SGrid == 1 {
+				adder[3] += val
+				adder[4] += val
+			}
+		case "TW":
+			if C1 == "Town" {
+				adder[0] += val
+			}
+			if C2 == "Town" {
+				adder[1] += val
+			}
+			if C3 == "Town" {
+				adder[2] += val
+			}
+			if C4 == "Town" {
+				adder[3] += val
+			}
+			if C5 == "Town" {
+				adder[4] += val
+			}
+		}
+	}
+
+	Scores := list.Lookup(col, "Bouncethru", "Score")
+
+	Dice := make([]int, 5)
+	Effects := make([]string, 5)
+	ToHit := make([]int, 5)
+
+	params["H1"] = ""
+	params["H2"] = ""
+	params["H3"] = ""
+	params["H4"] = ""
+	params["H5"] = ""
+
+	if T1 != "" {
+		Dice[0] = dice.DieRoll()
+		TotalDice := Dice[0] + int(adder[0])
+		fid := ""
+		if TotalDice >= 5 {
+			fid = "5"
+			if TotalDice >= 9 {
+				fid = "9"
+				if TotalDice >= 14 {
+					fid = "14"
+					if TotalDice >= 18 {
+						fid = "18"
+						if TotalDice >= 23 {
+							fid = "23"
+						}
+					}
+				}
+			}
+		}
+		Effects[0] = "Miss"
+		if fid != "" {
+			ToHit[0] = int(Scores[fid][ArtyWeight].(float64))
+			Effects[0] = Scores[fid]["Effect"].(string)
+			params["H1"] = dice.BucketD12(Bases, ToHit[0])
+		}
+	}
+	if T2 != "" {
+		Dice[1] = dice.DieRoll()
+		TotalDice := Dice[1] + int(adder[1])
+		fid := ""
+		if TotalDice >= 5 {
+			fid = "5"
+			if TotalDice >= 9 {
+				fid = "9"
+				if TotalDice >= 14 {
+					fid = "14"
+					if TotalDice >= 18 {
+						fid = "18"
+						if TotalDice >= 23 {
+							fid = "23"
+						}
+					}
+				}
+			}
+		}
+		Effects[1] = "Miss"
+		if fid != "" {
+			ToHit[1] = int(Scores[fid][ArtyWeight].(float64))
+			Effects[1] = Scores[fid]["Effect"].(string)
+			params["H2"] = dice.BucketD12(Bases, ToHit[1])
+		}
+	}
+	if T3 != "" {
+		Dice[2] = dice.DieRoll()
+		TotalDice := Dice[2] + int(adder[2])
+		fid := ""
+		if TotalDice >= 5 {
+			fid = "5"
+			if TotalDice >= 9 {
+				fid = "9"
+				if TotalDice >= 14 {
+					fid = "14"
+					if TotalDice >= 18 {
+						fid = "18"
+						if TotalDice >= 23 {
+							fid = "23"
+						}
+					}
+				}
+			}
+		}
+		Effects[2] = "Miss"
+		if fid != "" {
+			ToHit[2] = int(Scores[fid][ArtyWeight].(float64))
+			Effects[2] = Scores[fid]["Effect"].(string)
+			params["H3"] = dice.BucketD12(Bases, ToHit[2])
+		}
+	}
+	if T4 != "" {
+		Dice[3] = dice.DieRoll()
+		TotalDice := Dice[3] + int(adder[3])
+		fid := ""
+		if TotalDice >= 5 {
+			fid = "5"
+			if TotalDice >= 9 {
+				fid = "9"
+				if TotalDice >= 14 {
+					fid = "14"
+					if TotalDice >= 18 {
+						fid = "18"
+						if TotalDice >= 23 {
+							fid = "23"
+						}
+					}
+				}
+			}
+		}
+		Effects[3] = "Miss"
+		if fid != "" {
+			ToHit[3] = int(Scores[fid][ArtyWeight].(float64))
+			Effects[3] = Scores[fid]["Effect"].(string)
+			params["H4"] = dice.BucketD12(Bases, ToHit[3])
+		}
+	}
+	if T5 != "" {
+		Dice[4] = dice.DieRoll()
+		TotalDice := Dice[4] + int(adder[4])
+		fid := ""
+		if TotalDice >= 5 {
+			fid = "5"
+			if TotalDice >= 9 {
+				fid = "9"
+				if TotalDice >= 14 {
+					fid = "14"
+					if TotalDice >= 18 {
+						fid = "18"
+						if TotalDice >= 23 {
+							fid = "23"
+						}
+					}
+				}
+			}
+		}
+		Effects[4] = "Miss"
+		if fid != "" {
+			ToHit[4] = int(Scores[fid][ArtyWeight].(float64))
+			Effects[4] = Scores[fid]["Effect"].(string)
+			params["H5"] = dice.BucketD12(Bases, ToHit[4])
+		}
+	}
+
+	params["Dice"] = fmt.Sprintf("%d0%%, %d0%%, %d0%%, %d0%%, %d0%%", ToHit[0], ToHit[1], ToHit[2], ToHit[3], ToHit[4])
+	params["Effect"] = strings.Join(Effects, ", ")
+
+	return params
+}

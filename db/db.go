@@ -513,11 +513,12 @@ type ArtFateMod struct {
 }
 
 type Bouncethru struct {
-	Score    int8
-	Light    uint8
-	Medium   uint8
-	MediumHv uint8
-	Heavy    uint8
+	Score   int8
+	Effect  string
+	Light   uint8
+	Medium  uint8
+	MdHeavy uint8
+	Heavy   uint8
 }
 
 type BouncethruMod struct {
@@ -2623,11 +2624,11 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("ArtFateMod", ArtFateMod{"NE", "Non Engaged", 2}))
 	gameData.Insert(DataMap("ArtFateMod", ArtFateMod{"EN", "Engineers present", 3}))
 
-	gameData.Insert(DataMap("Bouncethru", Bouncethru{5, 0, 0, 1, 2}))
-	gameData.Insert(DataMap("Bouncethru", Bouncethru{9, 0, 1, 2, 3}))
-	gameData.Insert(DataMap("Bouncethru", Bouncethru{14, 1, 2, 3, 4}))
-	gameData.Insert(DataMap("Bouncethru", Bouncethru{18, 2, 3, 4, 5}))
-	gameData.Insert(DataMap("Bouncethru", Bouncethru{23, 3, 4, 5, 6}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{5, "Ineffective", 0, 0, 1, 2}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{9, "Effective", 0, 1, 2, 3}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{14, "Worrisome", 1, 2, 3, 4}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{18, "Troubling", 2, 3, 4, 5}))
+	gameData.Insert(DataMap("Bouncethru", Bouncethru{23, "Disastrous", 3, 4, 5, 6}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"RF", "Rocky Fields", 2}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"MF", "Marchfeld", 2}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"LA", "Limbered Arty", 1}))
@@ -2640,6 +2641,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"MD", "Muddy conditions", -10}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"LW", "Lt woods", -2}))
 	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"CT", "Per Contour Difference", -2}))
+	gameData.Insert(DataMap("BouncethruMod", BouncethruMod{"OO", "Open Order Target", -2}))
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Close Action - Bayonets and Sabres
