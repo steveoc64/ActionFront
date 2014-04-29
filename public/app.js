@@ -9,7 +9,7 @@ var ArtyMoveTypes = ['Guard Horse','Class I Horse','Class II Horse','Class I Foo
 var ArtyMoveWeights = ['Light','Medium','Heavy'];
 var ArtyWeights = ['Light','Medium','MdHeavy','Heavy'];
 var HWTypes = ['6"','5.5"','10pdr','18pdr L','9pdr L','7pdr'];
-var MEOrders = ['Attack','Defend','Bombard','Support','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
+var MEOrders = ['Attack','Defend','Bombard','Support','Intercept','March','Rest','Redeploy','BreakOff','Screen','RearGuard'];
 var StaffRatings = ['Good','Average','Poor'];
 var METypes = ['A Infantry','B Infantry','Cavalry','Class I Arty', 'Class II III Arty','Corps Baggage', 'Horse Arty', 'Pontoon Train'];
 var DeploymentStates = ['Deployed','Bde Out','Deploying','Condensed Col','Regular Col','Extended Col'];
@@ -1615,6 +1615,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			CorpsOrder: 'Manoeuvre',
 			MEOrders: ['Attack','Defend','Bombard','Support','March','Rest','Redeploy','BreakOff','Screen','RearGuard'],	
 			METype: 'Infantry',
+			MEOrder: '',
 			Engaged: 0,
 			Purpose: '',
 			Notes: '',
@@ -1633,8 +1634,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		clear: function() {
 			this.data.CorpsOrder = 'Manoeuvre',
 			this.data.METype = 'Infantry';
+			this.data.MEOrder = '';
 			this.data.Engaged = 0;
 			this.data.Purpose = this.data.Notes = this.data.ResultDefend = this.data.ResultShaken = '';
+			this.calc();
+		},
+		setCO: function() {
+			this.data.MEOrder = this.data.Purpose = this.data.Notes = '';
 			this.calc();
 		},
 		calc: function() {

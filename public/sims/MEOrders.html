@@ -8,11 +8,11 @@
 		<label class="col-sm-3 control-label">Corps Order</label>
     	<label>
 			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="Manoeuvre" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Manoeuvre</label>
-	    		<label class="btn btn-default" type="radio" value="Defend" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Defend</label>
-	    		<label class="btn btn-default" type="radio" value="Attack" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Attack</label>
-	    		<label class="btn btn-default" type="radio" value="Engaged" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Engaged</label>
-	    		<label class="btn btn-default" type="radio" value="Withdraw" ng-change="simulator.calc()" ng-model="simulator.data.CorpsOrder" bs-radio>Withdraw</label>
+	    		<label class="btn btn-default" type="radio" value="Manoeuvre" ng-change="simulator.setCO()" ng-model="simulator.data.CorpsOrder" bs-radio>Manoeuvre</label>
+	    		<label class="btn btn-default" type="radio" value="Defend" ng-change="simulator.setCO()" ng-model="simulator.data.CorpsOrder" bs-radio>Defend</label>
+	    		<label class="btn btn-default" type="radio" value="Attack" ng-change="simulator.setCO()" ng-model="simulator.data.CorpsOrder" bs-radio>Attack</label>
+	    		<label class="btn btn-default" type="radio" value="Engaged" ng-change="simulator.setCO()" ng-model="simulator.data.CorpsOrder" bs-radio>Engaged</label>
+	    		<label class="btn btn-default" type="radio" value="Withdraw" ng-change="simulator.setCO()" ng-model="simulator.data.CorpsOrder" bs-radio>Withdraw</label>
 	    	</div>
 		</label>
 	</div>
@@ -23,8 +23,8 @@
 	<div class="form-group">
 		<label class="col-sm-8 control-label">ME Type
 			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="Infantry" ng-change="simulator.calc()" ng-model="simulator.data.METype" bs-radio>Infantry</label>
-	    		<label class="btn btn-default" type="radio" value="Cavalry" ng-change="simulator.calc()" ng-model="simulator.data.METype" bs-radio>Cavalry</label>
+	    		<label class="btn btn-default" type="radio" value="Infantry" ng-change="simulator.setCO()" ng-model="simulator.data.METype" bs-radio>Infantry</label>
+	    		<label class="btn btn-default" type="radio" value="Cavalry" ng-change="simulator.setCO()" ng-model="simulator.data.METype" bs-radio>Cavalry</label>
 	    	</div>
 		Status
 			<div class="btn-group">
@@ -35,7 +35,7 @@
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">ME Order</label>
-		<select id="UnitType" ng-model="simulator.data.ME1" ng-change="simulator.calc()" ng-options="t for t in simulator.data.MEOrders"></select>
+		<select id="UnitType" ng-model="simulator.data.MEOrder" ng-change="simulator.calc()" ng-options="t for t in simulator.data.MEOrders"></select>
 	</div>	
 	<display-field label="Purpose" ng-model="simulator.data.Purpose" span="8"></display-field>
 	<display-field label="Notes" ng-model="simulator.data.Notes" span="8"></display-field>

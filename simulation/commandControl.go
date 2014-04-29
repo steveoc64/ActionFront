@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"github.com/steveoc64/ActionFront/list"
 	"github.com/steveoc64/tiedot/db"
+	"log"
 )
 
 func CorpsOrder(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
-	theOrder := params["CorpsOrder"].(string)
+	CorpsOrder := params["CorpsOrder"].(string)
 
-	myCorpsOrder := list.Lookup(col, "CorpsOrder", "Order")[theOrder]
+	myCorpsOrder := list.Lookup(col, "CorpsOrder", "Order")[CorpsOrder]
 
 	params["Stipulation"] = myCorpsOrder["Stipulation"]
 	params["MEOrders"] = myCorpsOrder["MEOrders"]
@@ -30,7 +31,7 @@ func CorpsOrder(col *db.Col, params map[string]interface{}) map[string]interface
 			marchCount++
 		case "Defend":
 			defCount++
-		case "Screen", "Support":
+		case "Screen", "Support", "Intercept":
 			sptCount++
 		case "Attack":
 			attCount++
@@ -56,7 +57,7 @@ func CorpsOrder(col *db.Col, params map[string]interface{}) map[string]interface
 	params["Result"] = "Good Job Sir, Everything is in Order here !"
 	params["ResultAccept"] = true
 
-	switch theOrder {
+	switch CorpsOrder {
 	case "Manoeuvre":
 		if marchCount < 1 {
 			params["Result"] = "There is some confusion over our destination, Sir !"
@@ -111,6 +112,96 @@ func CorpsOrder(col *db.Col, params map[string]interface{}) map[string]interface
 			params["Result"] = "Sir, we really should consider covering our withdrawal with a rearguard at the very least."
 			params["ResultAccept"] = false
 			return params
+		}
+	}
+
+	return params
+}
+
+func stringSliceContains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
+func MEOrder(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	CorpsOrder := params["CorpsOrder"].(string)
+	MEOrder := params["MEOrder"].(string)
+
+	myCorpsOrder := list.Lookup(col, "CorpsOrder", "Order")[CorpsOrder]
+	MEOrders := list.Lookup(col, "MEOrder", "Order")
+
+	params["Stipulation"] = myCorpsOrder["Stipulation"]
+	params["MEOrders"] = myCorpsOrder["MEOrders"]
+	params["Purpose"] = ""
+	params["Notes"] = ""
+
+	isEngaged := params["Engaged"].(float64) == 1
+
+	orders := make([]string, 0)
+	hasDefend := false
+	switch params["METype"] {
+	case "Cavalry":
+		for _, order := range myCorpsOrder["MEOrders"].([]interface{}) {
+			log.Println(order)
+			o := order.(string)
+			if isEngaged {
+				if MEOrders[o]["IfEngaged"].(bool) {
+					orders = append(orders, o)
+					if o == "Defend" {
+						hasDefend = true
+					}
+				}
+			} else {
+				if MEOrders[o]["IfNonEngaged"].(bool) {
+					orders = append(orders, o)
+					if o == "Defend" {
+						hasDefend = true
+					}
+				}
+			}
+		}
+
+	case "Infantry":
+		for _, order := range myCorpsOrder["MEOrders"].([]interface{}) {
+			log.Println(order)
+			o := order.(string)
+			if !MEOrders[o]["CavalryOnly"].(bool) {
+				if isEngaged {
+					if MEOrders[o]["IfEngaged"].(bool) {
+						orders = append(orders, o)
+						if o == "Defend" {
+							hasDefend = true
+						}
+					}
+				} else {
+					if MEOrders[o]["IfNonEngaged"].(bool) {
+						orders = append(orders, o)
+						if o == "Defend" {
+							hasDefend = true
+						}
+					}
+				}
+			}
+		}
+	}
+	if isEngaged && !hasDefend {
+		// Add a defend order if not already there
+		orders = append(orders, "Defend")
+	}
+	params["MEOrders"] = orders
+
+	if MEOrder != "" {
+		myMEOrder := MEOrders[MEOrder]
+		if stringSliceContains(orders, MEOrder) {
+			params["Purpose"] = myMEOrder["Purpose"]
+			params["Notes"] = myMEOrder["Notes"]
+			params["ResultDefend"] = myMEOrder["DefendIfEngaged"]
+			params["ResultShaken"] = myMEOrder["ShakenIfEngaged"]
 		}
 	}
 
