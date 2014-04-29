@@ -416,3 +416,194 @@ func OrderActivation(col *db.Col, params map[string]interface{}) map[string]inte
 
 	return params
 }
+
+// Try for a Bonus Impulse move
+func BonusImpulse(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	ArmyCommander := params["ArmyCommander"].(string)
+	ArmyCA := params["ArmyCA"].(bool)
+	CorpsCommander := params["CorpsCommander"].(string)
+	CorpsCA := params["CorpsCA"].(bool)
+	BoldLeader := params["BoldLeader"].(bool)
+	MECA := params["MECA"].(bool)
+	Defend := params["Defend"].(bool)
+	Impetus := params["Impetus"].(bool)
+	Shaken := params["Shaken"].(bool)
+	Moved := params["Moved"].(bool)
+	Fatigue := params["Fatigue"].(float64)
+	Holding := params["Holding"].(float64)
+	CAW := params["CAW"].(float64)
+	CAD := params["CAD"].(float64)
+	TookFlag := params["TookFlag"].(bool)
+	Interp := params["Interp"].(bool)
+	LostSP := params["LostSP"].(bool)
+	TookSP := params["TookSP"].(bool)
+	Town := params["Town"].(bool)
+	TookHvBty := params["TookHvBty"].(bool)
+	TookLtBty := params["TookLtBty"].(bool)
+	Fog := params["Fog"].(bool)
+	Mud := params["Mud"].(bool)
+
+	// Set default results
+	params["Dice"] = ""
+	params["Result"] = ""
+	params["ResultBonus"] = false
+	params["ResultFatigue"] = false
+	params["ResultOneUnit"] = false
+	params["ResultFirefight"] = false
+
+	// Get the lookup records
+	BonusImpulse := list.Lookup(col, "BonusImpulse", "Score")
+
+	// Apply all the modifiers
+	adder := float64(0)
+	Mods, _ := list.Get(col, "BonusImpulseMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "A1":
+			if TookLtBty {
+				adder += val
+			}
+		case "A2":
+			if TookHvBty {
+				adder += val
+			}
+		case "C1":
+			if ArmyCommander == "Charismatic" {
+				adder += val
+			}
+		case "C2":
+			if ArmyCommander == "Inspirational" {
+				adder += val
+			}
+		case "C3":
+			if ArmyCommander == "Impersonal" {
+				adder += val
+			}
+		case "C4":
+			if CorpsCommander == "Charismatic" {
+				adder += val
+			}
+		case "C5":
+			if CorpsCommander == "Inpsirational" {
+				adder += val
+			}
+		case "C6":
+			if CorpsCommander == "Impersonal" {
+				adder += val
+			}
+		case "C7":
+			if BoldLeader {
+				adder += val
+			}
+		case "CA":
+			if ArmyCA {
+				adder += val
+			}
+			if CorpsCA {
+				adder += val
+			}
+		case "CAD":
+			adder += val * CAD
+		case "CAW":
+			adder += val * CAW
+		case "DEF":
+			if Defend {
+				adder += val
+			}
+		case "FLG":
+			if TookFlag {
+				adder += val
+			}
+		case "FOG":
+			if Fog {
+				adder += val
+			}
+		case "FTG":
+			adder += val * Fatigue
+		case "IMP":
+			if Impetus {
+				adder += val
+			}
+		case "INT":
+			if Interp {
+				adder += val
+			}
+		case "LA":
+			if MECA {
+				adder += val
+			}
+		case "MEH":
+			adder += val * Holding
+		case "MV2":
+			if Moved {
+				adder += val
+			}
+		case "RSM":
+			if Mud {
+				adder += val
+			}
+		case "SHK":
+			if Shaken {
+				adder += val
+			}
+		case "SPL":
+			if TookSP {
+				adder += val
+			}
+			if LostSP {
+				adder -= val
+			}
+		case "TWN":
+			if Town {
+				adder += val
+			}
+
+		}
+	}
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	fid := 0
+	if TotalDice >= 7 {
+		fid = 7
+		if TotalDice >= 12 {
+			fid = 12
+			if TotalDice >= 14 {
+				fid = 14
+				if TotalDice >= 17 {
+					fid = 17
+					if TotalDice >= 19 {
+						fid = 19
+					}
+				}
+			}
+		}
+	}
+
+	DiceRecord := BonusImpulse[fmt.Sprintf("%d", fid)]
+
+	params["Result"] = DiceRecord["Descr"]
+	params["ResultBonus"] = DiceRecord["Bonus"]
+	params["ResultFatigue"] = DiceRecord["Fatigue"]
+	params["ResultOneUnit"] = DiceRecord["OneUnitOnly"]
+	params["ResultFirefight"] = DiceRecord["FFOnly"]
+	params["ResultAnotherME"] = DiceRecord["Another"]
+
+	if DiceRecord["Fatigue"].(bool) {
+		Fatigue++
+		if Fatigue > 4 {
+			Fatigue = 4
+		}
+		params["Fatigue"] = Fatigue
+	}
+
+	return params
+}

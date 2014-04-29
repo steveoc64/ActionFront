@@ -213,6 +213,7 @@ type InitialBadMod struct {
 type BonusImpulse struct {
 	Score       uint8
 	Descr       string
+	Bonus       bool
 	Another     bool
 	Fatigue     bool
 	OneUnitOnly bool
@@ -2160,11 +2161,12 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"CF3", "Campaign Fatigue - Haggard", -2}))
 	gameData.Insert(DataMap("InitialBadMod", InitialBadMod{"CF4", "Campaign Fatigue - Spent", -4}))
 
-	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{19, "ME receives bonus impulse", true, false, false, false}))
-	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{17, "ME receives bonus impulse at the cost of 1 fatigue", true, true, false, false}))
-	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{14, "ME receives bonus impulse for 1 unit only", true, false, true, false}))
-	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{12, "Another round of firefight and streetfight", false, false, false, true}))
-	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{7, "No effect", false, false, false, false}))
+	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{19, "ME receives bonus impulse", true, true, false, false, false}))
+	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{17, "ME receives bonus impulse at the cost of 1 fatigue", true, true, true, false, false}))
+	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{14, "ME receives bonus impulse for 1 unit only", true, true, false, true, false}))
+	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{12, "Another round of firefight and streetfight", false, true, false, false, true}))
+	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{7, "No effect", false, true, false, false, false}))
+	gameData.Insert(DataMap("BonusImpulse", BonusImpulse{0, "Failed, no more bonuses for this Corps", false, false, false, false, false}))
 	gameData.Insert(DataMap("BonusImpulseMod", BonusImpulseMod{"CA", "Commander Action by Army/Corps commander", 4}))
 	gameData.Insert(DataMap("BonusImpulseMod", BonusImpulseMod{"LA", "Leader Action by ME Leader", 2}))
 	gameData.Insert(DataMap("BonusImpulseMod", BonusImpulseMod{"CAW", "Per Close Action win this turn", 3}))

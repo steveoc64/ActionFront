@@ -76,11 +76,17 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">Tactical Factors</label>
-		<button type="button" class="btn btn-default" ng-model="simulator.data.TookFlag" bs-checkbox>Took Standard</button>
+		<label class="col-sm-3 control-label">Captured Enemy</label>	
+		<button type="button" class="btn btn-default" ng-model="simulator.data.TookFlag" bs-checkbox>Standard</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Town" bs-checkbox>Town</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.TookSP" bs-checkbox>Strongpoint</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.TookLtBty" bs-checkbox>Light Battery</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.TookHvBty" bs-checkbox>Heavy Battery</button>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Negative Factors</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.Interp" bs-checkbox>Interpenetrated</button>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.LostSP" bs-checkbox>Lost Strongpoint</button>
-		<button type="button" class="btn btn-default" ng-model="simulator.data.Town" bs-checkbox>Town Captured</button>
 	</div>
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Weather Factors</label>
@@ -95,6 +101,7 @@
 	<display-field label="Fatigued" ng-model="simulator.data.ResultFatigue" span="2"></display-field>
 	<display-field label="One Unit Only" ng-model="simulator.data.ResultOneUnit" span="2"></display-field>
 	<display-field label="Firefight Only" ng-model="simulator.data.ResultFirefight" span="2"></display-field>
+	<display-field label="Another ME" ng-model="simulator.data.ResultAnotherME" span="2"></display-field>
 </div>
 
 <div class="modal-footer" style="margin: 15px -20px -20px;">

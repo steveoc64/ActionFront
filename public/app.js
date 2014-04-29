@@ -2808,10 +2808,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Score', width: 60}, 
            	{field:'Descr', displayName:'Description',width: 280}, 
-           	{field:'Another', displayName:'Bonus',width: 100, editableCellTemplate: 'tpl/anotherTemplate.html'},
+           	{field:'Bonus', width: 100, editableCellTemplate: 'tpl/bonusTemplate.html'},
            	{field:'Fatigue', width: 100, editableCellTemplate: 'tpl/fatigueTemplate.html'},
            	{field:'OneUnitOnly', width: 120, editableCellTemplate: 'tpl/oneUnitOnlyTemplate.html'},
-           	{field:'FFOnly', width: 100, editableCellTemplate: 'tpl/FFOnlyTemplate.html'}
+           	{field:'FFOnly', width: 100, editableCellTemplate: 'tpl/FFOnlyTemplate.html'},
+           	{field:'Another', displayName:'Another ME',width: 100, editableCellTemplate: 'tpl/anotherTemplate.html'},
         ]
 	};
 
@@ -2901,8 +2902,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			CAW: 0,
 			CAD: 0,
 			TookFlag: false,
+			TookLtBty: false,
+			TookHvBty: false,
 			Interp: false,
 			LostSP: false,
+			TookSP: false,
 			Town: false,
 			Fog: false,
 			Mud: false,
@@ -2911,7 +2915,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			ResultBonus: '',
 			ResultFatigue: '',
 			ResultOneUnit: '',
-			ResultFirefight: '',		
+			ResultFirefight: '',	
+			ResultAnotherME: '',	
 		},
 		showForm: function() {
 			var myEditor = {
@@ -2926,9 +2931,11 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.ArmyCA = this.data.CorpsCA = this.data.MECA = false;
 			this.data.Defend = this.data.Impetus = this.data.Shaken = this.data.Moved = false;
 			this.data.Fatigue = this.data.Holding = 0;
-			this.data.TookFlag = this.data.Interp = this.data.LostSP = this.data.Town = false;
+			this.data.TookFlag = this.data.Interp = this.data.LostSP = this.data.Town = this.data.TookSP = false;
+			this.data.TookLtBty = this.data.TookHvBty = false;
 			this.data.Fog = this.data.Mud = false;
-			this.data.Result = this.data.Dice = this.data.ResultBonus = this.data.ResultFatigue = this.data.OneUnit = this.data.Firefight = '';
+			this.data.Result = this.data.Dice = this.data.ResultBonus = this.data.ResultFatigue = this.data.ResultOneUnit = this.data.ResultFirefight = '';
+			this.data.ResultAnotherME = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
