@@ -9,10 +9,10 @@
 		<label class="col-sm-3 control-label">Commander Level</label>
     	<label>
 			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Commander" bs-radio>Army</label>
-	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Commander" bs-radio>Corps</label>
-	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Commander" bs-radio>Brigade</label>
-	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Commander" bs-radio>Replacement</label>
+	    		<label class="btn btn-default" type="radio" value="A" ng-model="simulator.data.Commander" ng-change="simulator.clear()" bs-radio>Army</label>
+	    		<label class="btn btn-default" type="radio" value="B" ng-model="simulator.data.Commander" ng-change="simulator.clear()" bs-radio>Corps / ME</label>
+	    		<label class="btn btn-default" type="radio" value="C" ng-model="simulator.data.Commander" ng-change="simulator.clear()" bs-radio>Brigade</label>
+	    		<label class="btn btn-default" type="radio" value="D" ng-model="simulator.data.Commander" ng-change="simulator.clear()" bs-radio>Replacement</label>
 	    	</div>
 		</label>
 	</div>
@@ -52,13 +52,14 @@
 	<display-field label="Pass Score" ng-model="simulator.data.PassScore" span="3"></display-field>
 	<display-field label="Dice" ng-model="simulator.data.Dice" span="3"></display-field>
 	<display-field label="Result" ng-model="simulator.data.Result" span="8"></display-field>
+	<display-field label="Next Pass Score" ng-model="simulator.data.NextPassScore" span="3"></display-field>
 </div>
 
 <div class="modal-footer" style="margin: 15px -20px -20px;">
 
   <button type="button" class="btn btn-default" ng-click="$hide()">Close</button>
   <button type="button" class="btn btn-warning" ng-click="simulator.clear()">Reset</button>
-  <button type="button" class="btn btn-primary" ng-click="simulator.calc()">Attempt Commander Action</button>
+  <button type="button" class="btn btn-primary" ng-click="simulator.calc()" ng-show="simulator.data.Action != 0">Attempt Commander Action</button>
 
 </div>
 </form>

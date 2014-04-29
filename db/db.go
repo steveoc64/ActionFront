@@ -1980,7 +1980,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("CommanderAction", CommanderAction{"React", "BG", "Form cavalry battle group", 1}))
 
 	gameData.Insert(DataMap("CAScore", CAScore{"A", "Army Commander", 6, 9, 12, 16}))
-	gameData.Insert(DataMap("CAScore", CAScore{"B", "Corps Commander", 8, 11, 14, 18}))
+	gameData.Insert(DataMap("CAScore", CAScore{"B", "Corps/ME Commander", 8, 11, 14, 18}))
 	gameData.Insert(DataMap("CAScore", CAScore{"C", "Brigade Leader", 11, 15, 18, 20}))
 	gameData.Insert(DataMap("CAScore", CAScore{"D", "Replacement", 13, 15, 18, 20}))
 

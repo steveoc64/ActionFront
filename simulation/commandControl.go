@@ -417,6 +417,73 @@ func OrderActivation(col *db.Col, params map[string]interface{}) map[string]inte
 	return params
 }
 
+// Attempt a Commander Action
+func CommanderAction(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Commander := params["Commander"].(string)
+	Leader := params["Leader"].(string)
+	Attachment := params["Attachment"].(float64)
+	Action := params["Action"].(float64)
+
+	CAScore := list.Lookup(col, "CAScore", "Code")[Commander]
+
+	adder := float64(0)
+
+	switch Leader {
+	case "Charismatic":
+		adder += 2
+	case "Inspirational":
+		adder += 1
+	case "Average":
+		adder += 0
+	case "UnInspiring":
+		adder += -1
+	}
+
+	switch Attachment {
+	case 0:
+		adder += 0
+	case 1:
+		adder += 3
+	case 2:
+		adder += -3
+	}
+
+	// Set default results
+	params["Dice"] = ""
+	params["Result"] = ""
+	params["PassScore"] = ""
+	params["NextPassScore"] = ""
+
+	if Action > 0 {
+		Field := fmt.Sprintf("A%d", int(Action))
+		PassScore := int(CAScore[Field].(float64))
+		params["PassScore"] = PassScore
+
+		// Roll the Dice
+		Dice := dice.DieRoll()
+		TotalDice := Dice + int(adder)
+		params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+		if TotalDice >= PassScore {
+			params["Result"] = "Pass"
+			Action++
+			if Action > 4 {
+				Action = 0
+			} else {
+				Field2 := fmt.Sprintf("A%d", int(Action))
+				params["NextPassScore"] = int(CAScore[Field2].(float64))
+			}
+		} else {
+			params["Result"] = "Failed"
+			Action = 0
+		}
+		params["Action"] = Action
+	}
+
+	return params
+}
+
 // Try for a Bonus Impulse move
 func BonusImpulse(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
