@@ -55,32 +55,38 @@
     		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Grids" bs-radio>Same Grid</label>
     		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Grids" bs-radio>1</label>
     		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Grids" bs-radio>2</label>
-    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Grids" bs-radio>3+</label>
+    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Grids" bs-radio>3</label>
+    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Grids" bs-radio>4+</label>
     	</div>
 	</div>
    	<div class="form-group">
 		<label class="col-sm-3 control-label">Positive Factors</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.CAUrge" bs-checkbox>CA Urge</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Vantage" bs-checkbox>Superior Vantage Point</button>
 	</div>
    	<div class="form-group">
 		<label class="col-sm-3 control-label">Negative Factors</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.NoLOS" bs-checkbox>No Line of Sight</button>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.Rivalry" bs-checkbox>InterPersonal Rivalry</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Tired" bs-checkbox>ME is Tired or worse</button>
 	</div>
    	<div class="form-group">
 		<label class="col-sm-3 control-label">Weather Factors</label>
-		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Weather" bs-radio>Clear</label>
-		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Weather" bs-radio>Rain</label>
-		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Weather" bs-radio>Heavy Rain</label>
-		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Weather" bs-radio>Snow</label>
+		<div class="btn-group">
+			<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Weather" bs-radio>Clear</label>
+			<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Weather" bs-radio>Rain</label>
+			<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Weather" bs-radio>Heavy Rain</label>
+			<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Weather" bs-radio>Snow</label>
+		</div>
 	</div>
 
 	<entry-field label="Activation Points" ng-model="simulator.data.ActivationPoints" span="2"></entry-field>
 
 	<h3 class="bg-success">Results</h3>
 	<display-field label="Dice" ng-model="simulator.data.Dice" span="4"></display-field>
+	<display-field label="Order Activated" ng-model="simulator.data.ResultActivated" span="6"></display-field>
 	<display-field label="Activation Points" ng-model="simulator.data.ResultPoints" span="2"></display-field>
-	<display-field label="Order Activated" ng-model="simulator.data.ResultActivated" span="2"></display-field>
+	<display-field label="Order Failed" ng-model="simulator.data.ResultFailed" span="2"></display-field>
 </div>
 
 <div class="modal-footer" style="margin: 15px -20px -20px;">

@@ -2,11 +2,13 @@ package simulation
 
 import (
 	"fmt"
+	"github.com/steveoc64/ActionFront/dice"
 	"github.com/steveoc64/ActionFront/list"
 	"github.com/steveoc64/tiedot/db"
 	"log"
 )
 
+// Validator for Corps Orders
 func CorpsOrder(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	CorpsOrder := params["CorpsOrder"].(string)
@@ -118,6 +120,7 @@ func CorpsOrder(col *db.Col, params map[string]interface{}) map[string]interface
 	return params
 }
 
+// Simple function to test whether a slice of strings contains a given string
 func stringSliceContains(s []string, e string) bool {
 	for _, a := range s {
 		if a == e {
@@ -127,6 +130,7 @@ func stringSliceContains(s []string, e string) bool {
 	return false
 }
 
+// Validator for ME Orders in different situations
 func MEOrder(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	CorpsOrder := params["CorpsOrder"].(string)
@@ -204,6 +208,211 @@ func MEOrder(col *db.Col, params map[string]interface{}) map[string]interface{} 
 			params["ResultShaken"] = myMEOrder["ShakenIfEngaged"]
 		}
 	}
+
+	return params
+}
+
+// Progress the activation of an order
+func OrderActivation(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	OrderType := params["OrderType"].(string)
+	Commander := params["Commander"].(string)
+	Inspiration := params["Inspiration"].(string)
+	Order := params["Order"].(string)
+	Staff := params["Staff"].(float64)
+	Grids := params["Grids"].(float64)
+	Weather := params["Weather"].(float64)
+	ActivationPoints := params["ActivationPoints"].(float64)
+	CAUrge := params["CAUrge"].(bool)
+	Vantage := params["Vantage"].(bool)
+	NoLOS := params["NoLOS"].(bool)
+	Rivalry := params["Rivalry"].(bool)
+	Tired := params["Tired"].(bool)
+
+	// Set default results
+	params["Dice"] = ""
+	params["ResultPoints"] = ""
+	params["ResultActivated"] = false
+	params["ResultFailed"] = false
+
+	// Get the lookup records
+	OrderActivation := list.Lookup(col, "OrderActivation", "Dice")
+
+	// Apply all the modifiers
+	adder := float64(0)
+	Mods, _ := list.Get(col, "OrderActivationMod")
+
+	Value := "Value"
+	switch OrderType {
+	case "Corps":
+		Value = "CorpsValue"
+	}
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod[Value].(float64)
+		switch code {
+		case "BRK":
+			if Order == "BreakOff" {
+				adder += val
+			}
+		case "C1":
+			if Commander == "Superior" {
+				adder += val
+			}
+		case "C2":
+			if Commander == "Excellent" {
+				adder += val
+			}
+		case "C3":
+			if Commander == "Good" {
+				adder += val
+			}
+		case "C4":
+			if Commander == "Average" {
+				adder += val
+			}
+		case "C5":
+			if Commander == "Poor" {
+				adder += val
+			}
+		case "C6":
+			if Commander == "Despicable" {
+				adder += val
+			}
+		case "CC1":
+			if Grids == 0 {
+				adder += val
+			}
+		case "CHAR":
+			if Inspiration == "Charismatic" && Order == "Attack" {
+				adder += val
+			}
+		case "CORP":
+			adder += val
+		case "CU1":
+			if CAUrge {
+				adder += val
+			}
+		case "ELIT":
+			if OrderType == "Elite" {
+				adder += val
+			}
+		case "GRDB":
+			if Order == "GB" {
+				adder += val
+			}
+		case "GSTF":
+			if Staff == 1 {
+				adder += val
+			}
+		case "INSP":
+			if Inspiration == "Inspirational" && Order == "Attack" {
+				adder += val
+			}
+		case "NLOS":
+			if NoLOS {
+				adder += val
+			}
+		case "PSTF":
+			if Staff == 3 {
+				adder += val
+			}
+		case "RAIN":
+			if Weather == 1 {
+				adder += val
+			}
+		case "RETR":
+			if Order == "Retreat" {
+				adder += val
+			}
+		case "RIVL":
+			if Rivalry {
+				adder += val
+			}
+		case "RVAN":
+			if Vantage {
+				adder += val
+			}
+		case "SNOW":
+			if Weather == 2 || Weather == 3 {
+				adder += val
+			}
+		case "TIRD":
+			if Tired {
+				adder += val
+			}
+		case "GRID":
+			adder += val * Grids
+		case "UINS":
+			if Inspiration == "Uninspiring" && Order == "Attack" {
+				adder += val
+			}
+			if Inspiration == "Despicable" && Order == "Attack" {
+				adder += val * 2
+			}
+		}
+	}
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	fid := -1
+	if TotalDice >= 1 {
+		fid = 1
+		if TotalDice >= 3 {
+			fid = 3
+			if TotalDice >= 6 {
+				fid = 6
+				if TotalDice >= 8 {
+					fid = 8
+					if TotalDice >= 9 {
+						fid = 9
+						if TotalDice >= 11 {
+							fid = 11
+							if TotalDice >= 13 {
+								fid = 13
+								if TotalDice >= 16 {
+									fid = 16
+									if TotalDice >= 18 {
+										fid = 18
+										if TotalDice >= 19 {
+											fid = 19
+											if TotalDice >= 20 {
+												fid = 20
+
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if Dice == 2 || fid == -1 {
+		params["ResultActivated"] = "Order has been lost, or disobeyed"
+		params["ResultFailed"] = true
+		params["ResultPoints"] = ""
+		return params
+	}
+
+	DiceRecord := OrderActivation[fmt.Sprintf("%d", fid)]
+	Points := DiceRecord["Points"].(float64)
+	params["ResultPoints"] = Points
+
+	ActivationPoints += Points
+	if ActivationPoints > 10 {
+		ActivationPoints = 10
+		params["ResultActivated"] = true
+	}
+	params["ActivationPoints"] = ActivationPoints
 
 	return params
 }

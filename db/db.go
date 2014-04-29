@@ -121,10 +121,10 @@ type OrderActivation struct {
 }
 
 type OrderActivationMod struct {
-	Code        string
-	Descr       string
-	Points      int8
-	CorpsPoints int8
+	Code       string
+	Descr      string
+	Value      int8
+	CorpsValue int8
 }
 
 type CommanderAction struct {
@@ -1907,7 +1907,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("OrderActivation", OrderActivation{16, 7}))
 	gameData.Insert(DataMap("OrderActivation", OrderActivation{18, 8}))
 	gameData.Insert(DataMap("OrderActivation", OrderActivation{19, 9}))
-	gameData.Insert(DataMap("OrderActivation", OrderActivation{30, 10}))
+	gameData.Insert(DataMap("OrderActivation", OrderActivation{20, 10}))
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"CC1", "Both Commanders in same grid", 4, 6}))
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"CU1", "CA to urge order and commanders are within 2 grids", 3, 5}))
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"NLOS", "No Line of Sight between commanders", -1, -1}))
@@ -1932,6 +1932,7 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C4", "Order is from an Average Commander", 0, 0}))
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C5", "Order is from a Poor Commander", -1, -1}))
 	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"C6", "Order is from a Despicable Commander", -2, -2}))
+	gameData.Insert(DataMap("OrderActivationMod", OrderActivationMod{"GRID", "Per Grid Distant between commanders", -1, -1}))
 
 	// Commander Actions
 	gameData.Insert(DataMap("CommanderAction", CommanderAction{"Corps", "MV1", "Move 1 grid", 0}))

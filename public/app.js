@@ -1768,8 +1768,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Code', width: 120}, 
            	{field:'Descr', displayName:'Description',width: 400},
-           	{field:'Points', displayName: 'ME', width: 60},
-           	{field:'CorpsPoints', displayName: 'Corps', width: 80}
+           	{field:'Value', displayName: 'ME', width: 60},
+           	{field:'CorpsValue', displayName: 'Corps', width: 80}
         ]
 	};
 
@@ -1829,12 +1829,15 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			Order: '',
 			Grids: 0,
 			CAUrge: false,
+			Vantage: false,
 			NoLOS: false,
 			Rivalry: false,
+			Tired: false,
 			Weather: 0,
 			Staff: 2,
 			ResultPoints: '',
 			ResultActivated: '',
+			ResultFailed: '',
 			Dice: '',
 		},
 		showForm: function() {
@@ -1844,11 +1847,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 				scope: $scope
 			}
 			$modal(myEditor);
-			this.calc();
 		},
 		clear: function() {
 			this.data.ActivationPoints = 0;
-			this.data.ResultPoints = this.data.Dice = this.data.ResultActivated = '';
+			this.data.ResultPoints = this.data.Dice = this.data.ResultActivated = this.data.ResultFailed = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
