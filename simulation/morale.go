@@ -354,161 +354,118 @@ func MEMoraleTest(col *db.Col, params map[string]interface{}) map[string]interfa
 	return params
 }
 
+// If an ME breaks, test adjacent MEs from right to left, provided that they are within 2 grids of the failing ME
 func MEPanicTest(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
-	Cover := params["Cover"].(float64)
-	Enfilade := params["Enfilade"].(float64)
-	Hits := params["Hits"].(float64)
-	Fatigue := params["Fatigue"].(float64)
-	Bases := params["Bases"].(float64)
-	Formation := params["Formation"].(string)
 	Rating := params["Rating"].(string)
-	Leader := params["Leader"].(string)
+	Fatigue := params["Fatigue"].(float64)
+	CFatigue := params["CFatigue"].(float64)
+	Status := params["Status"].(float64)
+	Sown := params["Sown"].(float64)
+	OGS := params["OGS"].(bool)
+	OGB := params["OGB"].(bool)
+	Interp := params["Interp"].(bool)
+	PrevSH := params["PrevSH"].(bool)
+	TRAP := params["TRAP"].(bool)
+	WITH := params["WITH"].(bool)
+
 	params["Dice"] = ""
+	params["PassScore"] = ""
 	params["Effect"] = ""
 
 	adder := float64(0)
 
-	UnitMoraleTest := list.Lookup(col, "UnitMoraleTest", "Rating")
-	PassScore := int(UnitMoraleTest[Rating]["Pass"].(float64))
+	MEPanicTest := list.Lookup(col, "MEPanicTest", "Rating")
+	PassScore := int(MEPanicTest[Rating]["CarryOn"].(float64))
+	BrokenScore := int(MEPanicTest[Rating]["Broken"].(float64))
+	ShakenScore := int(MEPanicTest[Rating]["Shaken"].(float64))
+	params["PassScore"] = PassScore
 
 	// Go through the whole UnitMoraleMod table
 
-	UnitMoraleMods, _ := list.Get(col, "UnitMoraleMod")
-	for _, mod := range UnitMoraleMods.Data.([]interface{}) {
-		myUnitMoraleMod := mod.(map[string]interface{})
+	Mods, _ := list.Get(col, "MEPanicMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
 
-		code := myUnitMoraleMod["Code"].(string)
-		val := myUnitMoraleMod["Value"].(float64)
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
 		switch code {
-		case "C1": // Light Cover
-			if Cover == 1 {
+		case "25":
+			if Status == 1 {
 				adder += val
-				log.Println(code, val)
 			}
-		case "C2": // Medium Cover
-			if Cover == 2 {
+		case "50":
+			if Status == 2 {
 				adder += val
-				log.Println(code, val)
 			}
-		case "C3": // Heavy Cover
-			if Cover == 3 {
+		case "CF1":
+			if CFatigue == 1 {
 				adder += val
-				log.Println(code, val)
 			}
-		case "C4": // Super Cover
-			if Cover == 4 {
+		case "CF2":
+			if CFatigue == 2 {
 				adder += val
-				log.Println(code, val)
 			}
-		case "F1": // Enfiladed by Infantry point blank
-			if Enfilade == 1 {
+		case "CF3":
+			if CFatigue == 3 {
 				adder += val
-				log.Println(code, val)
 			}
-		case "F2": // Enfiladed by infantry close
-			if Enfilade == 2 {
-				adder += val
-				log.Println(code, val)
-			}
-		case "F3": // Enfiladed by artillery
-			if Enfilade == 3 {
-				adder += val
-				log.Println(code, val)
-			}
-		case "DIS": // Disordered
-			if params["Disordered"].(bool) {
-				adder += val
-				log.Println(code, val)
-			}
-		case "GC": // Charged by Guard
-			if params["GCharge"].(bool) {
-				adder += val
-				log.Println(code, val)
-			}
-		case "KL": // Unformed - form klumpen
-			if Formation == "OO" {
-				adder += val
-				log.Println(code, val)
-			}
-		case "HW": // Heavy Woods
-			if params["HvWoods"].(bool) {
-				adder += val
-				log.Println(code, val)
-			}
-		case "CX": // Caisson explodes
-			if params["CX"].(bool) {
-				adder += val
-				log.Println(code, val)
-			}
-		case "BB": // Bombardment only
-			if params["BBOnly"].(bool) {
-				adder += val
-				log.Println(code, val)
-			}
-		case "SQ": // Square
-			if Formation == "SQ" {
-				adder += val
-				log.Println(code, val)
-			}
-		case "CC": // Closed Col
-			if Formation == "CC" {
-				adder += val
-				log.Println(code, val)
-			}
-		case "L1": // Veteran in Line
-			if Formation == "Line" && Rating == "Veteran" {
-				adder += val
-				log.Println(code, val)
-			}
-		case "L2": // Regular in Line
-			if Formation == "Line" && Rating == "Regular" {
-				adder += val
-				log.Println(code, val)
-			}
-		case "L3": // Conscript or lower in Line
-			if Formation == "Line" {
-				switch Rating {
-				case "Conscript", "Landwehr", "Militia", "Rabble":
-					if Bases > 2 {
-						adder += val * Bases
-					} else {
-						adder += -2
-					}
-					log.Println(code, val)
-				}
-			}
-
-		case "HIT": // Hits
-			adder += val * Hits
-		case "FT": // Hits
+		case "Fatigue":
 			adder += val * Fatigue
+		case "GOOD":
+			if Status == 0 {
+				adder += val
+			}
+		case "INTER":
+			if Interp {
+				adder += val
+			}
+		case "OG1":
+			if OGS {
+				adder += val
+			}
+		case "OG2":
+			if OGB {
+				adder += val
+			}
+		case "SHK":
+			if PrevSH {
+				adder += val
+			}
+		case "SP":
+			adder += val * Sown
+		case "TRAP":
+			if TRAP {
+				adder += val
+			}
+		case "WTH":
+			if WITH {
+				adder += val
+			}
 		}
 	}
 
-	switch Leader {
-	case "Despicable":
-		adder += -2
-	case "Poor":
-		adder += -1
-	case "Inspirational":
-		adder += 1
-	case "Charismatic":
-		adder += 3
-	}
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
 
-	d := dice.DieRoll()
-	dieScore := d + int(adder)
-	params["Dice"] = fmt.Sprintf("%d + %d (%d)", d, int(adder), dieScore)
-	params["PassScore"] = PassScore - int(adder)
-
-	if dieScore > PassScore {
-		params["Effect"] = "Steady Morale"
-	} else if dieScore > PassScore-1 {
-		params["Effect"] = "Shaken"
-
+	params["Broken"] = false
+	params["ResultShaken"] = false
+	if TotalDice <= BrokenScore {
+		params["Effect"] = "Panic - Entire ME dissolves in Bad Morale, and retires 2 grids"
+		Fatigue++
+		if Fatigue > 4 {
+			Fatigue = 4
+		}
+		params["Fatigue"] = Fatigue
+		params["ResultBroken"] = true
+	} else if TotalDice <= ShakenScore {
+		params["Effect"] = "Shaken - ME is Shaken"
+		params["ResultShaken"] = true
+		params["PrevSH"] = true
 	} else {
-		params["Effect"] = "Morale Broken"
+		params["Effect"] = "ME will Carry On in good order"
 	}
 
 	return params

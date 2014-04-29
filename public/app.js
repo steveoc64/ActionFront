@@ -2301,6 +2301,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			OGS: false,
 			TRAP: false,
 			WITH: false,
+			Effect: '',
+			Dice: '',
+			ResultBroken: '',
+			ResultShaken: '',
 		},
 		showForm: function() {
 			var myEditor = {
@@ -2318,6 +2322,8 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.Sown = 0;
 			this.data.OGB = this.data.OGS = false;
 			this.data.TRAP = this.data.WITH = false;
+			this.data.Effect = this.data.ResultBroken = this.data.ResultShaken = '';
+			this.data.Dice = this.data.PassScore = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
