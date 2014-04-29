@@ -561,6 +561,115 @@ func BadMoraleRec(col *db.Col, params map[string]interface{}) map[string]interfa
 // Initial Bad Morale Test
 func InitialBadMorale(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
+	Hits := params["Hits"].(float64)
+	Fatigue := params["Fatigue"].(float64)
+	CFatigue := params["CFatigue"].(float64)
+	Leadership := params["Leadership"].(float64)
+	Ejected := params["Ejected"].(bool)
+	LostColors := params["LostColors"].(bool)
+	ReluctantAllies := params["ReluctantAllies"].(bool)
+	SQP := params["SQP"].(bool)
+
+	params["Dice"] = ""
+	params["Result"] = ""
+	params["ResultHits"] = ""
+	params["ResultStay"] = ""
+
+	adder := float64(0)
+	Mods, _ := list.Get(col, "InitialBadMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "CF1":
+			if CFatigue == 0 {
+				adder += val
+			}
+		case "CF2":
+			if CFatigue == 1 {
+				adder += val
+			}
+		case "CF3":
+			if CFatigue == 2 {
+				adder += val
+			}
+		case "CF4":
+			if CFatigue == 3 {
+				adder += val
+			}
+		case "ES":
+			if Ejected {
+				adder += val
+			}
+		case "FTG":
+			adder += val * Fatigue
+		case "HIT":
+			adder += val * Hits
+		case "L1":
+			if Leadership == 4 {
+				adder += val
+			}
+		case "L2":
+			if Leadership == 3 {
+				adder += val
+			}
+		case "L3":
+			if Leadership == 2 {
+				adder += val
+			}
+		case "L4":
+			if Leadership == 1 {
+				adder += val
+			}
+		case "LC":
+			if LostColors {
+				adder += val
+			}
+		case "RA":
+			if ReluctantAllies {
+				adder += val
+			}
+		case "SQP":
+			if SQP {
+				adder += val
+			}
+		}
+	}
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	fid := 0
+	if TotalDice >= -4 {
+		fid = -4
+		if TotalDice >= 0 {
+			fid = 0
+			if TotalDice >= 5 {
+				fid = 5
+				if TotalDice >= 9 {
+					fid = 9
+					if TotalDice >= 12 {
+						fid = 12
+
+					}
+				}
+			}
+		}
+	}
+	InitialBad := list.Lookup(col, "InitialBadMorale", "Score")[fmt.Sprintf("%d", fid)]
+	params["Result"] = InitialBad["Descr"]
+	params["ResultHits"] = InitialBad["Hits"]
+	params["ResultStay"] = InitialBad["Stay"]
+	Hits += InitialBad["Hits"].(float64)
+	if Hits > 10 {
+		Hits = 10
+	}
+	params["Hits"] = Hits
+
 	return params
 }
 

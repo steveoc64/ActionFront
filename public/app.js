@@ -2675,7 +2675,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Score', width: 80}, 
-           	{field:'Descr', displayName:'Description',width: 300}, 
+           	{field:'Descr', displayName:'Description',width: 500}, 
            	{field:'Hits', width: 80}, 
            	{field:'Stay', width: 80, editableCellTemplate: 'tpl/stayTemplate.html'}
         ]
@@ -2698,7 +2698,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 80}, 
-           	{field:'Descr', displayName:'Description',width: 220},
+           	{field:'Descr', displayName:'Description',width: 300},
            	{field:'Value', width: 60},
         ]
 	};
