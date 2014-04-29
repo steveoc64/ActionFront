@@ -194,7 +194,7 @@ type FireDisciplineTest struct {
 type FireDisciplineMod struct {
 	Code  string
 	Descr string
-	Value int8
+	Value float64
 }
 
 type InitialBadMorale struct {
@@ -2137,8 +2137,9 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Militia", 17, 13}))
 	gameData.Insert(DataMap("FireDisciplineTest", FireDisciplineTest{"Rabble", 20, 16}))
 	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"SK", "Per hit from SK fire this turn", -1}))
-	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"HIT", "Per hit carried in total", -1}))
-	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"BG", "Battalion Guns attached", 1}))
+	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"HIT", "Per hit carried in total", -0.5}))
+	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"BG", "Battalion Guns attached", 2}))
+	gameData.Insert(DataMap("FireDisciplineMod", FireDisciplineMod{"DIS", "Unit is Disordered", -2}))
 
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{12, "Halt in reserve area. Return to good morale when ME activates Rally order", 1, true}))
 	gameData.Insert(DataMap("InitialBadMorale", InitialBadMorale{9, "Done for the day, march to the rear in good order", 2, false}))

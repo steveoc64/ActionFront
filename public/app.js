@@ -2606,6 +2606,10 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			BnGuns: false,
 			Fire: '',
 			FireDisordered: '',
+			Dice: '',
+			PassScore: '',
+			Result: '',
+			Disordered: false,
 		},
 		showForm: function() {
 			var myEditor = {
@@ -2623,8 +2627,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		},
 		clear: function() {
 			this.data.Hits = this.data.HitsNow = 0;
-			this.data.BnGuns = false;
+			this.data.BnGuns = this.data.Disordered = false;
 			this.data.Fire = this.data.FireDisordered = '';
+			this.data.Dice = this.data.Result = this.data.PassScore = '';
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));

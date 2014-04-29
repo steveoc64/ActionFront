@@ -9,6 +9,7 @@ import (
 	"math"
 )
 
+// Check Unit Morale
 func UnitMoraleTest(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	Cover := params["Cover"].(float64)
@@ -559,6 +560,89 @@ func BadMoraleRec(col *db.Col, params map[string]interface{}) map[string]interfa
 
 // Initial Bad Morale Test
 func InitialBadMorale(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	return params
+}
+
+// Check Fire Discipline in response to taking hits from small arms fire
+func FireDisciplineTest(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Rating := params["Rating"].(string)
+	Leader := params["Leader"].(string)
+	HitsNow := params["HitsNow"].(float64)
+	Hits := params["Hits"].(float64)
+	BnGuns := params["BnGuns"].(bool)
+	Disordered := params["Disordered"].(bool)
+
+	params["Dice"] = ""
+	params["Result"] = ""
+	params["Fire"] = ""
+	params["FireDisordered"] = ""
+	params["PassScore"] = ""
+
+	if HitsNow < 1 {
+		params["Result"] = "No incoming fire, nothing to shoot at !"
+		return params
+	}
+
+	adder := float64(0)
+	Mods, _ := list.Get(col, "FireDisciplineMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "SK":
+			adder += val * HitsNow
+		case "HIT":
+			adder += val * Hits
+		case "BG":
+			if BnGuns {
+				adder += val
+			}
+		case "DIS":
+			if Disordered {
+				adder += val
+			}
+		}
+	}
+
+	switch Leader {
+	case "UnInspiring":
+		adder += -1
+	case "Average":
+		adder += 0
+	case "Inspirational":
+		adder += 1
+	case "Charismatic":
+		adder += 3
+	}
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	// Get the FireDiscipline recovery table
+	FireDiscipline := list.Lookup(col, "FireDisciplineTest", "Rating")[Rating]
+	Pass := int(FireDiscipline["Pass"].(float64))
+	Fire := int(FireDiscipline["Fire"].(float64))
+	params["PassScore"] = Pass
+	if TotalDice >= Pass {
+		params["Result"] = "Fire Discipline Holds"
+		params["ResultFire"] = false
+		params["ResultFireDisordered"] = false
+	} else if TotalDice >= Fire {
+		params["Result"] = "Unit returns fire in good order"
+		params["ResultFire"] = true
+		params["ResultFireDisordered"] = false
+	} else {
+		params["Result"] = "Fire Discipline Fails - unit disorders and returns fire"
+		params["ResultFire"] = true
+		params["ResultFireDisordered"] = true
+	}
+	params["Disordered"] = params["ResultFireDisordered"]
 
 	return params
 }
