@@ -354,6 +354,10 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				results := simulation.MEFatigue(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
+			case "FatigueRecovery":
+				results := simulation.FatigueRecovery(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
 
 			// Command and Control Simulators
 			case "CorpsOrder":

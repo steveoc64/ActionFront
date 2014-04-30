@@ -890,3 +890,84 @@ func MEFatigue(col *db.Col, params map[string]interface{}) map[string]interface{
 
 	return params
 }
+
+// Attempt to recover fatigue for an ME
+func FatigueRecovery(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Fatigue := params["Fatigue"].(float64)
+	CFatigue := params["CFatigue"].(float64)
+	BBC := params["BBC"].(float64)
+	Leadership := params["Leadership"].(float64)
+	RestedLast := params["RestedLast"].(bool)
+
+	params["Dice"] = ""
+	params["Effect"] = ""
+	params["Levels"] = ""
+
+	adder := float64(0)
+	Mods, _ := list.Get(col, "FatigueRecoveryMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "BB":
+			adder += val * BBC
+		case "C1":
+			if CFatigue == 0 {
+				adder += val
+			}
+		case "C2":
+			if CFatigue == 1 {
+				adder += val
+			}
+		case "C3":
+			if CFatigue == 2 {
+				adder += val
+			}
+		case "C4":
+			if CFatigue == 3 {
+				adder += val
+			}
+		case "RS":
+			if RestedLast {
+				adder += val
+			}
+		}
+	}
+
+	adder += Leadership
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	params["Effect"] = "Fatigue remains the same"
+	params["RestedLast"] = false
+
+	recovery := 0
+	if TotalDice >= 8 {
+		params["Effect"] = "Resting"
+		params["RestedLast"] = true
+		if TotalDice >= 12 {
+			params["Effect"] = "Minor Fatigue Recovery"
+			recovery = 1
+			params["RestedLast"] = false
+			if TotalDice >= 22 {
+				params["Effect"] = "Major Fatigue Recovery"
+				recovery = 2
+			}
+		}
+	}
+
+	Fatigue -= float64(recovery)
+	if Fatigue < 0 {
+		Fatigue = 0
+	}
+	params["Fatigue"] = Fatigue
+	params["Levels"] = recovery
+
+	return params
+}

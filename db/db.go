@@ -2219,8 +2219,9 @@ func CreateGameData(gameData *db.Col) {
 	gameData.Insert(DataMap("FatigueRecovery", FatigueRecovery{12, "Recovery", 1}))
 	gameData.Insert(DataMap("FatigueRecovery", FatigueRecovery{8, "Resting (+2 next turn)", 0}))
 	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C1", "Campaign Fresh", 2}))
-	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C2", "Campaign Haggard", -2}))
-	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C3", "Campaign Spent", -4}))
+	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C2", "Campaign Weary", 0}))
+	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C3", "Campaign Haggard", -2}))
+	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"C4", "Campaign Spent", -4}))
 	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"BB", "Per bombardment casualty this turn", -1}))
 	gameData.Insert(DataMap("FatigueRecoveryMod", FatigueRecoveryMod{"RS", "Rested last turn", 2}))
 

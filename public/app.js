@@ -3230,10 +3230,14 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.simulator = {
 		data: {
-			Fatigue: 4,
+			Fatigue: 0,
 			CFatigue: 0,
 			BBC: 0,
 			RestedLast: false,
+			Dice: '',
+			Effect: '',
+			Levels: '',
+			Leadership: 0,
 		},
 
 		showForm: function() {
@@ -3247,7 +3251,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 		clear: function() {
 			this.data.CFatigue = this.data.BBC = 0;
 			this.data.RestedLast = false;
-			this.data.Fatigue = 4;
+			this.data.Fatigue = 0;
+			this.data.Dice = this.data.Effect = this.data.Levels = '';
+			this.data.Leadership = 0;
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
