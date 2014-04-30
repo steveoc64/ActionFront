@@ -8,6 +8,20 @@ import (
 	"log"
 )
 
+var TroopRatings = map[string]int{
+	"OldGuard":  10,
+	"Guard":     9,
+	"Grenadier": 8,
+	"Elite":     7,
+	"CrackLine": 6,
+	"Veteran":   5,
+	"Regular":   4,
+	"Conscript": 3,
+	"Landwehr":  2,
+	"Militia":   1,
+	"Rabble":    0,
+}
+
 func LeaderDeath(col *db.Col, params map[string]interface{}) map[string]interface{} {
 
 	adder := float64(0)
@@ -451,6 +465,178 @@ func ArtLimber(col *db.Col, params map[string]interface{}) map[string]interface{
 		params["ResultDistance"] = ""
 		params["ResultDisorder"] = true
 	}
+
+	return params
+}
+
+// Determine results of a Savage Street Fight
+func StreetFight(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Rating := params["Rating"].(string)
+	ASRating := params["ASRating"].(float64)
+	Shock := params["Shock"].(bool)
+	Nasty := params["Nasty"].(bool)
+	Leader := params["Leader"].(string)
+	ABases := params["ABases"].(float64)
+	DRating := params["DRating"].(string)
+	DSRating := params["DSRating"].(float64)
+	DShock := params["DShock"].(bool)
+	DNasty := params["DNasty"].(bool)
+	DLeader := params["DLeader"].(string)
+	DBases := params["DBases"].(float64)
+
+	if ABases < 1 {
+		ABases = 1
+	}
+	if DBases < 1 {
+		DBases = 1
+	}
+	ARatio := ABases / DBases
+	DRatio := DBases / ABases
+
+	params["ADice"] = ""
+	params["DDice"] = ""
+	params["DResultHits"] = 0
+	params["AResultHits"] = 0
+
+	adder := float64(0)
+	dadder := float64(0)
+
+	switch Leader {
+	case "Charismatic":
+		adder += 4
+	case "Inspirational":
+		adder += 2
+	case "Average", "Impersonal":
+		adder += 1
+	case "UnInspiring":
+		adder -= 1
+	}
+	switch DLeader {
+	case "Charismatic":
+		dadder += 4
+	case "Inspirational":
+		dadder += 2
+	case "Average", "Impersonal":
+		dadder += 1
+	case "UnInspiring":
+		dadder -= 1
+	}
+
+	AR := TroopRatings[Rating]
+	DR := TroopRatings[DRating]
+	GradingDiff := float64((AR-DR)/2) + ASRating - DSRating
+
+	Mods, _ := list.Get(col, "StreetMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "GR":
+			adder += GradingDiff
+			dadder -= GradingDiff
+		case "N1":
+			if ABases > DBases {
+				adder += val
+			}
+			if DBases > ABases {
+				dadder += val
+			}
+		case "N2":
+			if ARatio >= 2 {
+				adder += val
+			}
+			if DRatio >= 2 {
+				dadder += val
+			}
+		case "SH":
+			if Shock {
+				adder += val
+			}
+			if DShock {
+				dadder += val
+			}
+		case "N3":
+			if ARatio >= 3 {
+				adder += val
+			}
+			if DRatio >= 3 {
+				dadder += val
+			}
+		case "NQ":
+			if Nasty {
+				adder += val
+			}
+			if DNasty {
+				dadder += val
+			}
+		}
+	}
+
+	// Roll the Dice
+	ADice := dice.DieRoll()
+	TotalDice := ADice + int(adder)
+	params["ADice"] = fmt.Sprintf("%d +%d (%d)", ADice, int(adder), TotalDice)
+	DDice := dice.DieRoll()
+	DTotalDice := DDice + int(dadder)
+	params["DDice"] = fmt.Sprintf("%d +%d (%d)", DDice, int(dadder), DTotalDice)
+
+	DHits := 0
+	if TotalDice >= 5 {
+		DHits = 1
+		if TotalDice >= 9 {
+			DHits = 2
+			if TotalDice >= 11 {
+				DHits = 3
+				if TotalDice >= 13 {
+					DHits = 4
+					if TotalDice >= 15 {
+						DHits = 5
+						if TotalDice >= 17 {
+							DHits = 6
+							if TotalDice >= 19 {
+								DHits = 7
+								if TotalDice >= 22 {
+									DHits = 8
+
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	params["DResultHits"] = DHits
+
+	AHits := 0
+	if DTotalDice >= 5 {
+		AHits = 1
+		if DTotalDice >= 9 {
+			AHits = 2
+			if DTotalDice >= 11 {
+				AHits = 3
+				if DTotalDice >= 13 {
+					AHits = 4
+					if DTotalDice >= 15 {
+						AHits = 5
+						if DTotalDice >= 17 {
+							AHits = 6
+							if DTotalDice >= 19 {
+								AHits = 7
+								if DTotalDice >= 22 {
+									AHits = 8
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	params["AResultHits"] = AHits
 
 	return params
 }
