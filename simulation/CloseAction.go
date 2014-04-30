@@ -389,3 +389,68 @@ func FormSquare(col *db.Col, params map[string]interface{}) map[string]interface
 
 	return params
 }
+
+// Attempt to limber artillery and run off if charged
+func ArtLimber(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Fatigue := params["Fatigue"].(float64)
+	Enemy := params["Enemy"].(string)
+	Range := params["Range"].(float64)
+	Action := params["Action"].(float64)
+
+	params["PassScore"] = ""
+	params["Dice"] = ""
+	params["Result"] = ""
+	params["ResultDisorder"] = ""
+	params["ResultEscape"] = ""
+	params["ResultDistance"] = ""
+
+	if Action == 0 {
+		params["Result"] = "Stands ground to defend Battery in good order"
+		params["ResultDisorder"] = false
+		params["ResultEscape"] = false
+		return params
+	}
+
+	Code := ""
+	switch Range {
+	case 0:
+		Code = Enemy + "C"
+	case 1:
+		Code = Enemy + "S"
+	case 2:
+		Code = Enemy + "N"
+	case 3:
+		Code = Enemy + "D"
+	case 4:
+		params["Result"] = "Battery limbers and retires to reserve area"
+		params["ResultEscape"] = true
+		params["ResultDistance"] = "To Reserve"
+		return params
+	}
+	ArtLimber := list.Lookup(col, "ArtLimber", "Code")[Code]
+
+	adder := float64(0)
+	adder -= Fatigue
+	PassScore := int(ArtLimber["Score"].(float64))
+	params["PassScore"] = PassScore
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	if TotalDice >= PassScore {
+		params["Result"] = "Battery limbers and retires in good order"
+		params["ResultEscape"] = true
+		params["ResultDistance"] = ArtLimber["Flee"]
+		params["ResultDisorder"] = false
+	} else {
+		params["Result"] = "Battery fails to limber and is caught in disorder"
+		params["ResultEscape"] = false
+		params["ResultDistance"] = ""
+		params["ResultDisorder"] = true
+	}
+
+	return params
+}
