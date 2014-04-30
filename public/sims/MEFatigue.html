@@ -6,6 +6,19 @@
 	<h3 class="bg-info">Manoeuvre Element</h3>
 
 	<div class="form-group">
+		<label class="col-sm-3 control-label">Current Fatigue</label>
+    	<label>
+			<div class="btn-group">
+	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Fatigue" bs-radio>Fresh</label>
+	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Fatigue" bs-radio>Winded</label>
+	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Fatigue" bs-radio>Worn</label>
+	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Fatigue" bs-radio>Tired</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Fatigue" bs-radio>Exhausted</label>
+	    	</div>
+		</label>
+	</div>
+
+	<div class="form-group">
 		<label class="col-sm-3 control-label">Close Action Defeats</label>
     	<label>
 			<div class="btn-group">
@@ -65,14 +78,14 @@
 		</label>
 	</div>
 	<div class="form-group">
-		<label class="col-sm-3 control-label">Commander or Leader in Same Grid</label>
+		<label class="col-sm-3 control-label">Higher Cmdr Attached</label>
     	<label>
 			<div class="btn-group">
 	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.Leadership" bs-radio>None</label>
 	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.Leadership" bs-radio>Uninspiring</label>
 	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.Leadership" bs-radio>Impersonal</label>
 	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Leadership" bs-radio>Inspirational</label>
-	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.Leadership" bs-radio>Charismatic</label>
+	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.Leadership" bs-radio>Charismatic</label>
 	    	</div>
 		</label>
 	</div>
@@ -92,7 +105,11 @@
 		<button type="button" class="btn btn-default" ng-model="simulator.data.FirstBlood" bs-checkbox>First Blood</button>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.ForcedMarch" bs-checkbox>Forced March</button>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.BonusImpulse" bs-checkbox>Took 2nd Impulse</button>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Leader Losses</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.LeaderKilled" bs-checkbox>Leader Killed</button>
+		<button type="button" class="btn btn-default" ng-model="simulator.data.LeaderWounded" bs-checkbox>Wounded</button>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.CorpsCmdKilled" bs-checkbox>Corps Commander Killed</button>
 	</div>
 

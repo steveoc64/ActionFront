@@ -2993,7 +2993,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Score', width: 80}, 
            	{field:'Descr', displayName:'Description',width: 300}, 
-           	{field:'OnlyIfNotLastTurn', displayName:'Only if not last turn',width: 120, editableCellTemplate: 'tpl/onlyIfNotLastTurnTemplate.html'},
+           	{field:'OnlyIfNotLastTurn', displayName:'Only if not last turn',width: 240, editableCellTemplate: 'tpl/onlyIfNotLastTurnTemplate.html'},
         ]
 	};
 
@@ -3068,6 +3068,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 
 	$scope.simulator = {
 		data: {
+			Fatigue: 0,
 			CADefeat: 0,
 			FF: 0,
 			BBM: 0,
@@ -3083,10 +3084,13 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			ForcedMarch: false,
 			BonusImpulse: false,
 			LeaderKilled: false,
+			LeaderWounded: false,
 			CorpsCmdKilled: false,
 			Mud: false,
 			Cold: false,
 			LastTurn: false,
+			Dice: '',
+			Result: '',
 		},
 		showForm: function() {
 			var myEditor = {
@@ -3102,6 +3106,9 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
 			this.data.FirstBlood = this.data.ForcedMarch = this.data.BonusImpulse = this.data.LeaderKilled = this.data.CorpsCmdKilled = false;
 			this.data.Mud = this.data.Cold = false;
 			this.data.LastTurn = false;
+			this.data.Dice = this.data.Result = '';
+			this.data.LeaderWounded = false;
+			this.data.Fatigue = 0;
 		},
 		calc: function() {
 			DataSocket.send(JSON.stringify({"Action":"Simulator","Entity":$scope.Entity,"Data":this.data}));
@@ -7246,7 +7253,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Code', width: 60}, 
            	{field:'Effort', width: 100}, 
-           	{field:'Descr', displayName:'Description',width:250},
+           	{field:'Descr', displayName:'Description',width:400},
         ]
 	};
 
@@ -7292,7 +7299,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         columnDefs: [
            	{field:'Code', visible:false,width: 80}, 
            	{field:'Value', width: 60},
-           	{field:'Descr', displayName:'Description',width: 180},
+           	{field:'Descr', displayName:'Description',width: 300},
         ]
 	};
 
@@ -7464,7 +7471,7 @@ angular.module("app", ['ui.router', 'ngGrid', 'mgcrea.ngStrap'])
         },
         columnDefs: [
            	{field:'Code', width: 80}, 
-           	{field:'Descr',displayName:'Description',width:300},
+           	{field:'Descr',displayName:'Description',width:400},
            	{field:'Sight', displayName:'Initial Visibility',width: 120}, 
            	{field:'Turn1', displayName:'1st Hour',width: 100}, 
            	{field:'Turn2', displayName:'After',width: 80}, 

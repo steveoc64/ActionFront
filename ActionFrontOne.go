@@ -249,6 +249,9 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 			theEntity := RxMsg["Entity"].(string)
 			startTime := time.Now()
 
+			// TODO - convert this into a hash table lookup inside the simulation
+			// sendAll (simulation.Run(gameData,RxMsg))
+
 			switch theEntity {
 			// Movement Simulators
 			case "GTMove":
@@ -345,6 +348,10 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				sendAll(msg)
 			case "InitialBadMorale":
 				results := simulation.InitialBadMorale(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
+			case "MEFatigue":
+				results := simulation.MEFatigue(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
 				sendAll(msg)
 

@@ -755,3 +755,138 @@ func FireDisciplineTest(col *db.Col, params map[string]interface{}) map[string]i
 
 	return params
 }
+
+// Check whether or not the ME accumulates fatigue this turn
+func MEFatigue(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Fatigue := params["Fatigue"].(float64)
+	CADefeat := params["CADefeat"].(float64)
+	FF := params["FF"].(float64)
+	BBM := params["BBM"].(float64)
+	LostColor := params["LostColor"].(float64)
+	CFatigue := params["CFatigue"].(float64)
+	Leadership := params["Leadership"].(float64)
+	BBOnly := params["BBOnly"].(bool)
+	TookStandard := params["TookStandard"].(bool)
+	NoLoss := params["NoLoss"].(bool)
+	TookSP := params["TookSP"].(bool)
+	TookST := params["TookST"].(bool)
+	FirstBlood := params["FirstBlood"].(bool)
+	ForcedMarch := params["ForcedMarch"].(bool)
+	BonusImpulse := params["BonusImpulse"].(bool)
+	LeaderKilled := params["LeaderKilled"].(bool)
+	LeaderWounded := params["LeaderWounded"].(bool)
+	CorpsCmdKilled := params["CorpsCmdKilled"].(bool)
+	Mud := params["Mud"].(bool)
+	Cold := params["Cold"].(bool)
+	LastTurn := params["LastTurn"].(bool)
+
+	params["Dice"] = ""
+	params["Result"] = ""
+
+	adder := float64(0)
+	Mods, _ := list.Get(col, "MEFatigueMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "1ST":
+			if FirstBlood {
+				adder += val
+			}
+		case "BB":
+			if BBOnly {
+				adder += val
+			}
+		case "BI":
+			if BonusImpulse {
+				adder += val
+			}
+		case "BM":
+			adder += val * BBM
+		case "CD":
+			adder += val * CADefeat
+		case "CF":
+			adder += val * CFatigue
+		case "CK":
+			if CorpsCmdKilled {
+				adder += val
+			}
+		case "EC":
+			if Cold {
+				adder += val
+			}
+		case "F1":
+			if TookStandard {
+				adder += val
+			}
+		case "FF":
+			adder += val * FF
+		case "FM":
+			if ForcedMarch {
+				adder += val
+			}
+		case "LK":
+			if LeaderKilled {
+				adder += val
+			}
+		case "LS":
+			adder += val * LostColor
+		case "LW":
+			if LeaderWounded {
+				adder += val
+			}
+		case "MUD":
+			if Mud {
+				adder += val
+			}
+		case "NL":
+			if NoLoss {
+				adder += val
+			}
+		case "S1":
+			if TookSP {
+				adder += val
+			}
+		case "TS":
+			if TookST {
+				adder += val
+			}
+		}
+	}
+
+	adder += Leadership
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	params["Result"] = "No new Fatigue"
+	newFatigue := 0
+	if TotalDice >= 11 {
+		if LastTurn {
+			params["Result"] = "No new fatigue (since incurred last turn)"
+		} else {
+			params["Result"] = "Incurs 1 Fatigue Level (since none last turn)"
+			Fatigue++
+			newFatigue = 1
+		}
+		if TotalDice >= 15 {
+			params["Result"] = "Incurs 1 Fatigue Level"
+			Fatigue++
+			newFatigue = 1
+		}
+	}
+
+	if Fatigue > 4 {
+		Fatigue = 4
+	}
+	params["Fatigue"] = Fatigue
+	params["ResultFatigue"] = newFatigue
+	params["LastTurn"] = newFatigue > 0
+
+	return params
+}
