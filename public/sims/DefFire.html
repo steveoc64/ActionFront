@@ -80,11 +80,11 @@
 		<label class="col-sm-3 control-label">Raw Die Score<br>(On Def Fire)</label>
     	<label>
 			<div class="btn-group">
-	    		<label class="btn btn-default" type="radio" value="0" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>< 15</label>
-	    		<label class="btn btn-default" type="radio" value="1" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>15</label>
-	    		<label class="btn btn-default" type="radio" value="2" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>16</label>
-	    		<label class="btn btn-default" type="radio" value="3" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>17</label>
-	    		<label class="btn btn-default" type="radio" value="4" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>18+</label>
+	    		<label class="btn btn-default" type="radio" value="14" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>< 15</label>
+	    		<label class="btn btn-default" type="radio" value="15" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>15</label>
+	    		<label class="btn btn-default" type="radio" value="16" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>16</label>
+	    		<label class="btn btn-default" type="radio" value="17" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>17</label>
+	    		<label class="btn btn-default" type="radio" value="18" ng-model="simulator.data.DieScore" ng-change="simulator.calc()" bs-radio>18+</label>
 	    	</div>
 		</label>
 	</div>
@@ -110,7 +110,7 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Tactical Factors</label>
 		<button type="button" class="btn btn-default" ng-model="simulator.data.Disordered" ng-change="simulator.calc()" bs-checkbox>Attacker Disordered</button>		
-		<button type="button" class="btn btn-default" ng-model="simulator.data.Shaken" ng-change="simulator.calc()" bs-checkbox>Attacker Shaken/button>		
+		<button type="button" class="btn btn-default" ng-model="simulator.data.Shaken" ng-change="simulator.calc()" bs-checkbox>Attacker Shaken</button>		
 		<button type="button" class="btn btn-default" ng-model="simulator.data.DGuns" ng-change="simulator.calc()" bs-checkbox>Defence includes Artillery</button>		
 	</div>
 

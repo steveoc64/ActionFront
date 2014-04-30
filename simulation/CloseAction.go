@@ -6,6 +6,7 @@ import (
 	"github.com/steveoc64/ActionFront/list"
 	"github.com/steveoc64/tiedot/db"
 	"log"
+	"strings"
 )
 
 var TroopRatings = map[string]int{
@@ -67,7 +68,7 @@ func LeaderDeath(col *db.Col, params map[string]interface{}) map[string]interfac
 	}
 
 	if Rifle {
-		adder += 1
+		adder += -1
 	}
 
 	if POD {
@@ -637,6 +638,406 @@ func StreetFight(col *db.Col, params map[string]interface{}) map[string]interfac
 		}
 	}
 	params["AResultHits"] = AHits
+
+	return params
+}
+
+// Determine results of Defensive Fire prior to close action
+func DefFire(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Type := params["Type"].(string)
+	Mode := params["Mode"].(float64)
+	Bayonet := params["Bayonet"].(bool)
+	Range := params["Range"].(float64)
+	DieScore := params["DieScore"].(float64)
+	Hits := params["Hits"].(float64)
+	Disordered := params["Disordered"].(bool)
+	Shaken := params["Shaken"].(bool)
+	DGuns := params["DGuns"].(bool)
+
+	params["Result"] = ""
+	params["ResultClose"] = ""
+	params["ResultDisorder"] = ""
+	params["ResultFirefight"] = ""
+	params["ResultFireRetire"] = ""
+	params["ResultHalt"] = ""
+	params["ResultRout"] = ""
+	params["ResultHits"] = ""
+
+	adder := float64(0)
+	if Shaken {
+		adder += 2
+	}
+	if Disordered {
+		adder++
+	}
+	if Bayonet {
+		adder -= 1
+	}
+	if DieScore+adder >= 16 {
+		params["Result"] = "Excellent defensive volley halts the Attack in its tracks"
+		params["ResultClose"] = ""
+		if Disordered {
+			params["ResultHalt"] = "1 Grid"
+		} else {
+			params["ResultFireRetire"] = "Halt at 1 Quad and return fire"
+			params["ResultHalt"] = "1 Quad"
+		}
+		switch Range {
+		case 0:
+			params["ResultHits"] = 3
+		case 1:
+			params["ResultHits"] = 2
+		case 2:
+			params["ResultHits"] = 1
+		}
+		return params
+	}
+
+	// Get the lookup table
+	ID := 0
+	switch Type {
+	case "I": // Infantry
+		switch Mode {
+		case 0: // Regular
+			ID = 1
+		case 1: // Impetus
+			ID = 2
+		case 2: // Storm
+			ID = 3
+		}
+	case "S": // Shock troops
+		switch Mode {
+		case 0: // Regular
+			ID = 4
+		case 1: // Impetus
+			ID = 5
+		case 2: // Storm
+			ID = 6
+		}
+	case "C": // Cavalry
+		switch Mode {
+		case 0: // Regular
+			ID = 7
+		case 1: // Impetus
+			ID = 8
+		}
+	case "D": // DUB cavalry
+		switch Mode {
+		case 0: // Regular
+			ID = 9
+		case 1: // Impetus
+			ID = 10
+		}
+	case "Z": // Cossacks
+		ID = 11
+	}
+	DefFire := list.Lookup(col, "DefFire", "ID")[fmt.Sprintf("%d", ID)]
+	//log.Println(DefFire)
+
+	result := ""
+	if Shaken {
+		Hits *= 2
+	}
+	if Hits >= 1 {
+		result = DefFire["Hits1"].(string)
+		if Hits >= 4 {
+			result = DefFire["Hits4"].(string)
+			if Hits >= 6 {
+				result = DefFire["Hits6"].(string)
+				if Hits >= 8 {
+					result = DefFire["Hits8"].(string)
+					if Hits >= 10 {
+						result = DefFire["Hits10"].(string)
+					}
+				}
+			}
+		}
+	}
+	//log.Println(result)
+
+	// Now parse the result string
+	Result := "Attacker closes with greal Elan"
+	params["ResultClose"] = "Close at +1"
+	Fields := strings.Fields(result)
+	for _, field := range Fields {
+		switch field {
+		case "-1":
+			params["ResultClose"] = "Close at -1"
+			Result = "Attacker closes with the bayonet"
+		case "-2":
+			params["ResultClose"] = "Close at -2"
+			Result = "Attacker eventually closes with the bayonet"
+		case "-3":
+			params["ResultClose"] = "Close at -3"
+			Result = "Attacker struggles through to close with the bayonet"
+		case "A":
+			params["ResultClose"] = ""
+			if dice.DieRoll() > 9 {
+				if Range >= 2 {
+					Range = 2
+				}
+				params["ResultFireRetire"] = fmt.Sprintf("Fire at %d quads, retire 2 grids", int(Range))
+				params["ResultHalt"] = "2 Grids"
+			} else {
+				Result = "Attacker Routs"
+				params["ResultRout"] = true
+				switch Range {
+				case 0:
+					params["ResultHits"] = 2
+				case 1:
+					params["ResultHits"] = 1
+				}
+			}
+		case "B":
+			params["ResultClose"] = ""
+			if dice.DieRoll() > 12 {
+				if Range >= 2 {
+					Range = 2
+				}
+				params["ResultFireRetire"] = fmt.Sprintf("Fire at %d quads, retire 2 grids", int(Range))
+				params["ResultHalt"] = "2 Grids"
+			} else {
+				Result = "Attacker Routs"
+				params["ResultRout"] = true
+				switch Range {
+				case 0:
+					params["ResultHits"] = 2
+				case 1:
+					params["ResultHits"] = 1
+				}
+			}
+		case "C":
+			params["ResultClose"] = ""
+			Result = "Cavalry attacker fires and retires"
+			if Range >= 2 {
+				Range = 2
+			}
+			params["ResultFireRetire"] = fmt.Sprintf("Fire at %d quads, retire 2 grids", int(Range))
+			params["ResultHalt"] = "2 Grids"
+		case "D":
+			params["ResultDisorder"] = "true"
+			Result = "Cavalry attacker fires and retires, disordered"
+			if Disordered {
+				params["Result"] = "Fallback in disorder"
+				params["ResultClose"] = ""
+				switch Type {
+				case "I", "S":
+					params["ResultHalt"] = "1 Grid"
+				case "C", "D":
+					params["ResultHalt"] = "2 Grids"
+				case "Z":
+					params["ResultHalt"] = "3 Grids"
+				}
+			}
+		case "DC":
+			params["ResultDisorder"] = "true"
+			if Disordered {
+				Result = "Fallback"
+				params["ResultClose"] = ""
+				switch Type {
+				case "I", "S":
+					params["ResultHalt"] = "1 Grid"
+				case "C", "D":
+					params["ResultHalt"] = "2 Grids"
+				case "Z":
+					params["ResultHalt"] = "3 Grids"
+				}
+			} else {
+				if Range >= 2 {
+					Range = 2
+				}
+				params["ResultFireRetire"] = fmt.Sprintf("Fire at %d quads, retire 2 grids, disordered", int(Range))
+				params["ResultHalt"] = "2 Grids"
+				Result = "Fire and retire"
+			}
+		case "E":
+			if Disordered {
+				Result = "Attacker Breaks"
+				params["ResultClose"] = ""
+				params["ResultRout"] = true
+				switch Range {
+				case 0:
+					params["ResultHits"] = 2
+				case 1:
+					params["ResultHits"] = 1
+				}
+			}
+		case "F":
+			if Bayonet {
+				params["ResultFireRetire"] = "Fallback 1 Quad and return fire"
+				params["ResultHalt"] = "1 Quad"
+				params["ResultClose"] = ""
+			} else {
+				params["ResultFireRetire"] = "Halt in same Quad and enter Firefight"
+				params["ResultHalt"] = "Same Quad"
+				params["ResultClose"] = ""
+				params["ResultFirefight"] = true
+			}
+			Result = params["ResultFireRetire"].(string)
+		case "DF":
+			params["ResultDisorder"] = true
+			Result += ", disordered"
+			if !Bayonet || Disordered {
+				params["ResultFireRetire"] = "Fallback 1 Quad and return fire, disordered"
+				params["ResultHalt"] = "1 Quad"
+				params["ResultClose"] = ""
+				Result = "Attacker falls back 1 quad and returns fire, disordered"
+			}
+			if !Bayonet && !Disordered {
+				params["ResultFireRetire"] = "Halt in same Quad and enter Firefight"
+				params["ResultHalt"] = "Same Quad"
+				params["ResultClose"] = ""
+				params["ResultFirefight"] = true
+			}
+			Result = params["ResultFireRetire"].(string)
+		case "DFG":
+			params["ResultDisorder"] = true
+			Result += ", disordered"
+			if !Bayonet || Disordered || DGuns {
+				params["ResultFireRetire"] = "Fallback 1 Quad and return fire, disordered"
+				params["ResultHalt"] = "1 Quad"
+				params["ResultClose"] = ""
+				if DGuns {
+					Result = "Cannister fire forces the Attacker back 1 quad to return fire, disordered"
+				} else {
+					Result = "Attacker falls back 1 quad and returns fire, disordered"
+				}
+			}
+			if !Bayonet && !Disordered && !DGuns && !Shaken {
+				params["ResultFireRetire"] = "Halt in same Quad and enter Firefight, disordered"
+				Result = params["ResultFireRetire"].(string)
+				params["ResultHalt"] = "Same Quad"
+				params["ResultClose"] = ""
+				params["ResultFirefight"] = true
+			}
+		case "DER":
+			if Disordered {
+				params["ResultDisorder"] = true
+				params["ResultRout"] = true
+				params["ResultClose"] = ""
+				Result = "Attacker Breaks in Disgrace, Shame and Disorder"
+				switch Range {
+				case 0:
+					params["ResultHits"] = 2
+				case 1:
+					params["ResultHits"] = 1
+				}
+			} else {
+				params["ResultDisorder"] = true
+				params["ResultHalt"] = "1 Grid"
+				params["ResultClose"] = ""
+				Result = "Attacker Retreats 1 Grid to hold their position, disordered"
+			}
+		case "G":
+			if DGuns {
+				params["ResultDisorder"] = true
+				params["ResultFireRetire"] = "Fallback 1 Quad and return fire, disordered"
+				params["ResultHalt"] = "1 Quad"
+				params["ResultClose"] = ""
+				Result = "Cannister fire forces the Attacker back 1 quad to return fire, disordered"
+			}
+		case "DG":
+			params["ResultDisorder"] = true
+			Result += ", disordered"
+			if Disordered || DGuns {
+				params["ResultFireRetire"] = "Fallback 1 Quad and return fire, disordered"
+				params["ResultHalt"] = "1 Quad"
+				params["ResultClose"] = ""
+				if DGuns {
+					Result = "Cannister fire forces the Attacker back 1 quad to return fire, disordered"
+				} else {
+					Result = "Attacker is forced back 1 quad to return fire, disordered"
+				}
+			}
+		case "FG":
+			if Bayonet && params["ResultClose"] != "" {
+				Result = "Attacker closes with the Bayonet"
+			} else {
+				params["ResultFireRetire"] = "Fallback 1 Quad and return fire"
+				params["ResultHalt"] = "1 Quad"
+				params["ResultClose"] = ""
+				Result = "Attacker falls back and returns fire"
+				if !Disordered && !DGuns && !Shaken {
+					params["ResultFireRetire"] = "Halt in same Quad and enter Firefight"
+					Result = params["ResultFireRetire"].(string)
+					params["ResultHalt"] = "Same Quad"
+					params["ResultClose"] = ""
+					params["ResultFirefight"] = true
+				}
+
+			}
+		case "DEFG":
+			params["ResultDisorder"] = true
+			Result += ", disordered"
+			if !Disordered {
+				if Bayonet && params["ResultClose"] != "" && !DGuns {
+					Result = "Attacker closes with the Bayonet, disordered"
+				} else {
+					params["ResultFireRetire"] = "Fallback 1 Quad and return fire disordered"
+					params["ResultHalt"] = "1 Quad"
+					params["ResultClose"] = ""
+					Result = "Attacker falls back and returns fire disordered"
+				}
+			} else {
+				Result = "Attacker Breaks"
+				params["ResultClose"] = ""
+				params["ResultRout"] = true
+				switch Range {
+				case 0:
+					params["ResultHits"] = 2
+				case 1:
+					params["ResultHits"] = 1
+				}
+			}
+		case "H":
+			if !Bayonet {
+				params["ResultHalt"] = "Same Quad"
+				params["ResultFirefight"] = true
+				params["ResultClose"] = ""
+				Result = "Halt at close range and enter firefight"
+			}
+		case "R":
+			params["ResultHalt"] = "1 Grid"
+			params["ResultClose"] = ""
+			Result = "Attacker Retreats 1 Grid in good order"
+		case "Z":
+			params["ResultHalt"] = "2 Grid"
+			params["ResultClose"] = ""
+			Result = "Attacker Retreats 2 Grids in good order"
+		case "DR":
+			params["ResultHalt"] = "1 Grid"
+			params["ResultClose"] = ""
+			params["ResultDisorder"] = true
+			Result = "Attacker Retreats 1 Grid in disorder"
+		case "DZ":
+			params["ResultHalt"] = "2 Grid"
+			params["ResultClose"] = ""
+			params["ResultDisorder"] = true
+			Result = "Attacker Retreats 2 Grids in disorder"
+		case "X":
+			Result = "Attacker Breaks"
+			params["ResultClose"] = ""
+			params["ResultRout"] = true
+			switch Range {
+			case 0:
+				params["ResultHits"] = 3
+			case 1:
+				params["ResultHits"] = 2
+			case 2:
+				params["ResultHits"] = 1
+			}
+		}
+	}
+
+	if Shaken && params["ResultClose"] != "" {
+		Result = "Shaken Attacker halts at 1 Quad and fires in disorder"
+		params["ResultClose"] = ""
+		params["ResultHalt"] = "1 Quad"
+		params["ResultDisorder"] = true
+		params["ResultFireRetire"] = "Halts at 1 Quad and fires, disordered"
+	}
+	params["Result"] = Result
 
 	return params
 }

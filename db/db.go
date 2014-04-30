@@ -2651,11 +2651,11 @@ func CreateGameData(gameData *db.Col) {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Close Action - Bayonets and Sabres
 
-	gameData.Insert(DataMap("DefFire", DefFire{1, "Infantry", "-1", "-2 FG", "-1 DFG", "-2 DEFG", "X"}))
-	gameData.Insert(DataMap("DefFire", DefFire{2, "Infantry w/Impetus", "-1", "-2 G", "-1 DG", "-2 DG", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{1, "Infantry", "-1", "-2 FG", "-2 DFG", "-3 DEFG", "X"}))
+	gameData.Insert(DataMap("DefFire", DefFire{2, "Infantry w/Impetus", "-1", "-2 G", "-2 DG", "-3 DG", "X"}))
 	gameData.Insert(DataMap("DefFire", DefFire{3, "Infantry Storming", "", "G", "X", "X", "X"}))
-	gameData.Insert(DataMap("DefFire", DefFire{4, "Shock Infantry", "-1", "-1 H", "DF", "DFG", "DER"}))
-	gameData.Insert(DataMap("DefFire", DefFire{5, "Shock Infantry w/Impetus", "-1", "-1", "D", "-2 DG", "DER"}))
+	gameData.Insert(DataMap("DefFire", DefFire{4, "Shock Infantry", "-1", "-1 H", "-1 DF", "-2 DFG", "DER"}))
+	gameData.Insert(DataMap("DefFire", DefFire{5, "Shock Infantry w/Impetus", "-1", "-1", "-1 D", "-2 DG", "DER"}))
 	gameData.Insert(DataMap("DefFire", DefFire{6, "Shock Infantry Storming", "", "", "X", "X", "X"}))
 	gameData.Insert(DataMap("DefFire", DefFire{7, "Cavalry", "-1", "C", "DC", "DC", "X"}))
 	gameData.Insert(DataMap("DefFire", DefFire{8, "Cavalry w/Impetus", "-1", "-1 D", "-2 D", "-3 C", "X"}))
