@@ -259,3 +259,133 @@ func LeaderDeath(col *db.Col, params map[string]interface{}) map[string]interfac
 
 	return params
 }
+
+// Attempt to form square under duress
+func FormSquare(col *db.Col, params map[string]interface{}) map[string]interface{} {
+
+	Rating := params["Rating"].(string)
+	Formation := params["Formation"].(string)
+	Disordered := params["Disordered"].(bool)
+	Attached := params["Attached"].(float64)
+	Hits := params["Hits"].(float64)
+	Fatigue := params["Fatigue"].(float64)
+	Range := params["Range"].(float64)
+	Approach := params["Approach"].(float64)
+	OppCharge := params["OppCharge"].(bool)
+	Action := params["Action"].(float64)
+
+	params["PassScore"] = ""
+	params["Dice"] = ""
+	params["Result"] = ""
+	params["ResultDisorder"] = ""
+
+	adder := float64(0)
+	Mods, _ := list.Get(col, "FormSquareMod")
+	for _, mod := range Mods.Data.([]interface{}) {
+		myMod := mod.(map[string]interface{})
+
+		code := myMod["Code"].(string)
+		val := myMod["Value"].(float64)
+		switch code {
+		case "CA":
+			if Attached == 2 {
+				adder += val
+			}
+		case "CC":
+			if Action == 1 {
+				adder += val
+			}
+		case "DS":
+			if Disordered {
+				adder += val
+			}
+		case "FA":
+			adder += val * Fatigue
+		case "FL":
+			if Approach == 2 {
+				adder += val
+			}
+		case "HIT":
+			adder += val * Hits
+		case "LA":
+			if Attached == 2 {
+				adder += val
+			}
+		case "OC":
+			if OppCharge {
+				adder += val
+			}
+		case "RR":
+			if Approach == 3 {
+				adder += val
+			}
+		case "SG":
+			if Action == 0 {
+				adder += val
+			}
+		}
+	}
+
+	if Action == 3 {
+		params["Result"] = "Unit runs for cover in disorder"
+		params["ResultDisorder"] = true
+		return params
+	}
+
+	switch Formation {
+	case "MarchColumn":
+		params["Result"] = "Unit in March Column - caught out, and disordered"
+		params["ResultDisorder"] = true
+		return params
+	case "Skirmish":
+		params["Result"] = "Unit in Skirmish Order - attempts to form Klumpen"
+		params["ResultDisorder"] = true
+		return params
+	case "Square":
+		params["Result"] = "Unit already in Square - holds position"
+		return params
+	}
+
+	// Get the pass score
+	gotOne := false
+	PassScore := 0
+
+	Sq, _ := list.Get(col, "FormSquare")
+	for _, sq := range Sq.Data.([]interface{}) {
+		mySq := sq.(map[string]interface{})
+
+		if mySq["Rating"] == Rating && mySq["From"] == Formation {
+			Field := ""
+			switch Range {
+			case 0:
+				Field = "Grid0"
+			case 1:
+				Field = "Grid1"
+			case 2:
+				Field = "Grid1D"
+			case 3:
+				Field = "Grid2"
+			}
+			PassScore = int(mySq[Field].(float64))
+			gotOne = true
+			break
+		}
+	}
+	log.Println(gotOne, PassScore)
+	params["PassScore"] = PassScore
+
+	// Roll the Dice
+	Dice := dice.DieRoll()
+	TotalDice := Dice + int(adder)
+	params["Dice"] = fmt.Sprintf("%d +%d (%d)", Dice, int(adder), TotalDice)
+
+	if TotalDice >= PassScore {
+		params["Result"] = "Successfully changed formation"
+		params["ResultDisorder"] = false
+	} else {
+		params["Result"] = "Failed to change formation, become disordered"
+		params["ResultDisorder"] = true
+	}
+
+	return params
+}

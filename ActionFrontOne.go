@@ -382,6 +382,10 @@ func dataSocketHandler(w http.ResponseWriter, r *http.Request, gameData *db.Col)
 				sendAll(msg)
 
 			// Close Action with Bayonets and Sabres
+			case "FormSquare":
+				results := simulation.FormSquare(gameData, RxMsg["Data"].(map[string]interface{}))
+				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
+				sendAll(msg)
 			case "LeaderDeath":
 				results := simulation.LeaderDeath(gameData, RxMsg["Data"].(map[string]interface{}))
 				msg, _ = json.Marshal(list.MessageFormat{"Simulate", theEntity, results})
